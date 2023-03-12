@@ -5,6 +5,7 @@ user :
     name,
     posts : [
         {
+            id,
             imgs: [],
             timestamp,
             summery,
@@ -19,12 +20,27 @@ user :
     highelights,
     stories: [
         {
+            id,
             img,
             timestamp,
-             
+            viewers:[{name, isLiked}], 
         }
     ],
     username,
     password, 
 }
 
+cmps: 
+1. app-nav 
+2. stories-nav
+3. posts-index
+3a. posts-list
+3b. posts-preview
+4. user-header
+4a. followers-list-modal
+4b. follwing-list-modal
+5. user-highelights
+6a. user-posts-list
+6b. user-posts-preview
+7. user-post-details
+7a. user-post-index-comments
