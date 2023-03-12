@@ -1,5 +1,64 @@
 .side-bar {
+    position: fixed;
+    display: grid;
+    grid-template-rows: 92px 1fr 56px;
+    height: 100vh;
+    width: $nav-medium-width;
+    border-right: solid 1px $nav-border-color;
+    padding: 20px 12px 8px 12px;
+    font-size: 16px;
+
+    .logo {
+        padding: 25px 12px 16px 12px;
+        margin-bottom: 19px;
+    }
+
     .logo-img {
         max-width: 100px;
+    }
+
+    nav {
+        display: flex;
+        flex-direction: column;
+
+        >* {
+            padding: 12px;
+            margin: 4px 0;
+        }
+
+        a {
+            text-decoration-line: none;
+            color: black;
+
+            span {
+                margin-left: 8px;
+            }
+        }
+
+        a.active {
+            font-family: blinker-bold;
+
+            v-icon {
+                background-color: red;
+            }
+        }
+
+        a:hover {
+            background-color: $nav-link-bgc-hover;
+            border-radius: 50px;
+        }
+
+
+    }
+
+    .settings-btn {
+        background: none;
+        border: none;
+        text-align: left;
+
+        &:hover {
+            background-color: $nav-link-bgc-hover;
+            border-radius: 50px;
+        }
     }
 }
