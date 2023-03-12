@@ -1,0 +1,30 @@
+user :
+{
+    id,
+    profilePicture,
+    name,
+    posts : [
+        {
+            imgs: [],
+            timestamp,
+            summery,
+            likes: [{picture, username, name}],
+            comments: [{username, comment}],
+        },
+    ],
+    numOfPosts,
+    followers,
+    following,
+    summery,
+    highelights,
+    stories: [
+        {
+            img,
+            timestamp,
+             
+        }
+    ],
+    username,
+    password, 
+}
+
