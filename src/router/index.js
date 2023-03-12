@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Home from '../pages/home.vue'
-import contactIndex from '../pages/user-profile.vue'
 
 
 const routerOptions = {
@@ -11,10 +10,7 @@ const routerOptions = {
             path: '/',
             component: Home,
         },
-        {
-            path: '/:username',
-            component: contactIndex,
-        },
+
 
     ],
 }
