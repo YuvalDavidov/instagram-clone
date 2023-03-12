@@ -1,5 +1,6 @@
 <script setup>
 import SideBar from "./cmps/side-bar.vue";
+import {userService} from "./services/user.service"
 </script>
 
 <template>
@@ -10,6 +11,6 @@ import SideBar from "./cmps/side-bar.vue";
       <RouterView />
     </main>
 
-    <SideBar />
+    <SideBar v-if="userService.user()"/>
   </section>
 </template>
