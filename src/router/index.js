@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Home from '../pages/home.vue'
+import Search from '../pages/search.vue'
+import Messages from '../pages/messages.vue'
 
 
 const routerOptions = {
@@ -9,6 +11,14 @@ const routerOptions = {
         {
             path: '/',
             component: Home,
+        },
+        {
+            path: '/search',
+            component: Search,
+        },
+        {
+            path: '/messages',
+            component: Messages,
         },
 
 
