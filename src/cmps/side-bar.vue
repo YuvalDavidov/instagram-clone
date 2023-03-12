@@ -1,11 +1,15 @@
 <template>
   <section class="side-bar">
-    <div class="logo">logo</div>
+    <RouterLink to="/">
+      <img class="logo-img" src="../assets/imgs/instagram_logo.png"
+    /></RouterLink>
+
     <nav>
       <RouterLink to="/">Home</RouterLink>
-      <!-- <RouterLink to="/kaka">kaka<RouterLink/> -->
+      <RouterLink to="/search">Search</RouterLink>
+      <RouterLink to="/messages">Messages</RouterLink>
     </nav>
-    <div class="settings">more</div>
+    <button class="settings-btn">more</button>
   </section>
 </template>
 
