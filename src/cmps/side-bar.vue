@@ -77,7 +77,8 @@
   <article class="search-bar" v-if="isSearchOpen">
     <section class="top">
       <h1>Search</h1>
-      <input type="text" placeholder="Search" />
+      <input type="text" placeholder="Search" v-model="this.searchTxt" />
+      <button class="clear-search-input-btn">x</button>
     </section>
   </article>
 </template>
@@ -88,6 +89,8 @@ export default {
     return {
       isSettingsModalOpen: false,
       isSearchOpen: false,
+      searchTxt: "",
+      usersBySearch: [],
     };
   },
   methods: {

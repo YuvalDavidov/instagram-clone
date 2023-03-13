@@ -150,7 +150,8 @@
 }
 
 .search-bar {
-
+    animation-name: search-bar-animasion;
+    animation-duration: 1s;
     position: fixed;
     border-right: 1px solid $nav-border-color;
     height: 100vh;
@@ -160,6 +161,10 @@
     width: 400px;
 
     .top {
+
+        border-bottom: 1px solid $nav-border-color;
+        padding-bottom: 24px;
+
         h1 {
             padding: 12px 14px 36px 24px;
         }
@@ -175,10 +180,27 @@
             padding: 3px 13px;
         }
 
+        .clear-search-input-btn {
+            position: absolute;
+            right: 20px;
+            top: 82px;
+            background: $clear-input-btn-bg-color;
+            border: none;
+            border-radius: 50%;
+        }
+
     }
 
 }
 
-// @keyframes search-bar-animasion {
-//     from{}
-// }
+@keyframes search-bar-animasion {
+    from {
+        width: 200px;
+        left: 20px;
+    }
+
+    to {
+        width: 400px;
+        left: 70px;
+    }
+}
