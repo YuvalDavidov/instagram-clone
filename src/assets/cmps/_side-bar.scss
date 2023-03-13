@@ -55,10 +55,51 @@
         background: none;
         border: none;
         text-align: left;
+        font-family: blinker;
 
         &:hover {
             background-color: $nav-link-bgc-hover;
             border-radius: 50px;
         }
+
+        &.isOpen {
+            font-family: blinker-bold;
+        }
     }
+}
+
+.settings-modal {
+    position: fixed;
+    bottom: 65px;
+    left: 20px;
+
+
+    gap: 5px;
+    display: grid;
+
+    >* {
+        display: grid;
+        box-shadow: 0px 0px 4px #c2bfbf;
+        border-radius: 5px;
+
+        >* {
+            color: black;
+            text-decoration: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            width: 206px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+
+        :hover {
+            background-color: $set-hover-color;
+        }
+
+        :not(:last-child, span) {
+            border-bottom: 1px solid $nav-border-color;
+        }
+    }
+
 }

@@ -5,9 +5,27 @@ import router from './router'
 
 import './assets/main.scss'
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { BiSearch, FaHome, LaFacebookMessenger, CoHamburgerMenu } from "oh-vue-icons/icons";
+import {
+    BiSearch,
+    FaHome,
+    LaFacebookMessenger,
+    CoHamburgerMenu,
+    RiSettings5Line,
+    BiClockHistory,
+    LaBookmarkSolid,
+    BiMoon,
+    OiReport
+} from "oh-vue-icons/icons";
 
-addIcons(BiSearch, FaHome, LaFacebookMessenger, CoHamburgerMenu);
+addIcons(BiSearch,
+    FaHome,
+    LaFacebookMessenger,
+    CoHamburgerMenu,
+    RiSettings5Line,
+    BiClockHistory,
+    LaBookmarkSolid,
+    BiMoon,
+    OiReport);
 
 
 const app = createApp(App)
