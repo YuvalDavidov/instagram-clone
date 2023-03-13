@@ -7,6 +7,7 @@ import './assets/main.scss'
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import {
     BiSearch,
+    FaFacebookSquare,
     FaHome,
     LaFacebookMessenger,
     CoHamburgerMenu,
@@ -14,7 +15,7 @@ import {
     BiClockHistory,
     LaBookmarkSolid,
     BiMoon,
-    OiReport
+    OiReport,
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -25,6 +26,8 @@ addIcons(BiSearch,
     BiClockHistory,
     LaBookmarkSolid,
     BiMoon,
+    FaFacebookSquare,
+
     OiReport);
 
 

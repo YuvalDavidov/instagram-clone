@@ -1,0 +1,136 @@
+.welcome-page {
+
+    display: flex;
+
+    ::-webkit-input-placeholder {
+        font-size: 11px;
+        color: rgb(142, 142, 142);
+    }
+
+    input {
+        width: 268px;
+        border: 1px solid rgb(219, 219, 219);
+        margin: 0;
+        outline: none;
+        overflow: hidden;
+        padding: 9px 0 7px 8px;
+        text-overflow: ellipsis;
+        background-color: rgb(250, 250, 250)
+    }
+
+    .logo {
+        width: 175px;
+        height: 51px;
+        margin-bottom: 10px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .login-div {
+        color: rgb(38, 38, 38);
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: center;
+        max-width: 350px;
+
+        .second-div {
+            align-items: center;
+            background-color: rgb(255, 255, 255);
+            border: 1px solid rgb(219, 219, 219);
+            border-radius: 1px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            font-size: 100%;
+            margin: 0 0 10px;
+            padding: 10px 0;
+
+            span {
+                color: rgb(38, 38, 38);
+                font-size: 14px;
+                margin: 15px;
+                text-align: center;
+            }
+
+            button {
+                background-color: transparent;
+                border: none;
+                color: #0095F6
+            }
+        }
+
+        .first-div {
+            gap: 20px;
+            align-items: center;
+            background-color: rgb(255, 255, 255);
+            border: 1px solid rgb(219, 219, 219);
+            border-radius: 1px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            font-size: 100%;
+            margin: 0 0 10px;
+            padding: 10px 0;
+
+
+            .forget-password {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+
+            a {
+                color: #385185;
+                font-family: blinker;
+                font-weight: 500;
+            }
+
+            .login-btn {
+                background-color: rgb(0, 149, 246);
+                opacity: 0.7;
+                border: none;
+                border-radius: 8px;
+                padding: 7px 16px !important;
+                cursor: pointer;
+                color: white;
+                margin-top: 8px;
+
+                margin-bottom: 8px;
+                width: 268px;
+
+                &:not([disabled]):hover {
+                    background-color: rgb(24, 119, 242);
+
+                }
+            }
+
+            .or-div {
+                display: flex;
+                flex-direction: row;
+
+                .line {
+                    height: 1px;
+                    width: 107.5px;
+                    background-color: #DBDBDB;
+                    margin-top: 8px;
+                }
+            }
+
+            .OR {
+                color: #8e8e8e;
+                margin-left: 18px;
+                margin-right: 18px;
+                font-size: 0.875rem;
+                font-family: blinker;
+                font-weight: bold;
+            }
+
+
+        }
+    }
+}
