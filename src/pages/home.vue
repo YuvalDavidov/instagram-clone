@@ -1,6 +1,10 @@
 <template>
   <section v-bind:class="{ full: !user }">
-    <section v-if="user">kaka</section>
+    <section v-if="user" class="home-index">
+      <div class="top">
+        <Storys />
+      </div>
+    </section>
     <section class="welcome-page" v-if="!user">
       <div class="iphone-container">
         <img src="../assets/imgs/example-img-1.png" class="inside-img" />
@@ -52,6 +56,8 @@
 
 <script>
 import { userService } from "../services/user.service";
+
+import Storys from "@/cmps/storys.vue";
 export default {
   data() {
     return {
@@ -73,7 +79,11 @@ export default {
   methods: {
     async onLogin() {
       this.user = await userService.login(this.loginCredentials);
+      this.$router.push("");
     },
+  },
+  components: {
+    Storys,
   },
 };
 </script>
