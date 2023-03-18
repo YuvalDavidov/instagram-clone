@@ -1,5 +1,5 @@
 <template>
-  <section class="side-bar-container full">
+  <section class="side-bar-container">
     <section class="side-bar" v-bind:class="{ isSearchOpen }">
       <div class="logo">
         <RouterLink to="/">
@@ -77,21 +77,29 @@
       </section>
       <section class="account-settings">
         <a href=""><span>Switch account</span></a>
-        <a href=""><span>Log out</span></a>
+        <a @click="onLogout()"><span>Log out</span></a>
       </section>
     </article>
 
     <article class="search-bar" v-if="isSearchOpen">
       <section class="top">
         <h1>Search</h1>
-        <input type="text" placeholder="Search" v-model="this.searchTxt" />
-        <button class="clear-search-input-btn">x</button>
+        <input
+          @change="onSearch()"
+          type="text"
+          placeholder="Search"
+          v-model="this.searchTxt"
+        />
+        <button @click="onClearSearch()" class="clear-search-input-btn">
+          x
+        </button>
       </section>
     </article>
   </section>
 </template>
 
 <script>
+import { userService } from "../services/user.service";
 export default {
   data() {
     return {
@@ -108,6 +116,16 @@ export default {
     onToggleSearch() {
       this.isSearchOpen = !this.isSearchOpen;
     },
+    onClearSearch() {
+      this.searchTxt = "";
+    },
+    onSearch() {
+      console.log(this.searchTxt);
+    },
+    onLogout() {
+      userService.logout();
+    },
   },
+  computed: {},
 };
 </script>

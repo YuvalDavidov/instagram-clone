@@ -1,6 +1,6 @@
 <template>
   <section v-bind:class="{ full: !user }">
-    <section v-if="user"></section>
+    <section v-if="user">kaka</section>
     <section class="welcome-page" v-if="!user">
       <div class="iphone-container">
         <img src="../assets/imgs/example-img-1.png" class="inside-img" />
@@ -71,7 +71,9 @@ export default {
     },
   },
   methods: {
-    onLogin() {},
+    async onLogin() {
+      this.user = await userService.login(this.loginCredentials);
+    },
   },
 };
 </script>
