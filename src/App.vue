@@ -1,16 +1,15 @@
 <script setup>
 import SideBar from "./cmps/side-bar.vue";
-import {userService} from "./services/user.service"
+import { userService } from "./services/user.service";
 </script>
 
 <template>
   <section class="main-layout">
+    <SideBar />
     <header class="full"></header>
 
-    <main>
-      <RouterView />
-    </main>
+    <RouterView />
 
-    <SideBar v-if="userService.user()"/>
+    <SideBar v-if="userService.user()" />
   </section>
 </template>

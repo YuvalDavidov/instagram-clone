@@ -1,0 +1,42 @@
+.messages-container {
+    background-color: #fafafa;
+    grid-column: 2/-1;
+    height: 100vh;
+}
+
+.messages {
+    border: 1px solid $nav-border-color;
+    border-radius: 5px;
+    display: flex;
+    margin: 20px auto;
+    background-color: white;
+    height: 90vh;
+    width: 935px;
+
+
+    &-users {
+        width: 350px;
+        border-right: 1px solid $nav-border-color;
+
+        .top {
+            display: flex;
+            border-bottom: 1px solid $nav-border-color;
+
+            .user-name {
+                width: 100%;
+                text-align: center;
+                padding: 20px;
+            }
+
+            button {
+                background: none;
+                border: none;
+            }
+        }
+
+        .users {
+            height: fit-content;
+        }
+    }
+
+}
