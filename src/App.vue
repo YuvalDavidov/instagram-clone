@@ -5,8 +5,8 @@ import { userService } from "./services/user.service";
 
 <template>
   <section class="main-layout">
-    <SideBar />
-    <header class="full"></header>
+    <!-- <SideBar /> -->
+    <!-- <header class="full"></header> -->
 
     <RouterView />
 
