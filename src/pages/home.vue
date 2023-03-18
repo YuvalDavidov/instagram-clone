@@ -4,7 +4,8 @@
 
         <section v-if="user"></section>
         <section class="welcome-page" v-if="!user">
-            <div class="img-container">
+            <img src="../assets/imgs/example-img-1.png" class="inside-img">
+            <div class="iphone-container">
                 <img src="../assets/imgs/iphone-transparent.png">
             </div>
             <div class="login-div">

@@ -11,6 +11,9 @@ function getUserByUsername(username) {
 
 }
 
+
+
+
 async function login(userCred) {
     const users = await storageService.query(USER_KEY)
     const user = users.find(user => user.username === userCred.username)
