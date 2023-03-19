@@ -107,10 +107,13 @@ export default {
   },
   methods: {
     async onLogin() {
-      userService.login(this.loginCredentials);
+        this.$store.dispatch({
+        type: "login",
+        credentials: this.loginCredentials,
+      });
     },
     async onSignUp() {
-        this.userService.signup(this.newUser)
+        this.$store.dispatch({type: "signUp", user: this.newUser})
     },
     toSignUp() {
         this.isSignUp = !this.isSignUp

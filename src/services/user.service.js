@@ -1,7 +1,7 @@
 import { storageService } from './async-storage.service'
 
 export const userService = {
-    getUserById,
+    getUserByUsername,
     getLoggedinUser,
     login,
     logout,
@@ -15,10 +15,7 @@ function getLoggedinUser() {
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
-async function getUserById(userId) {
-    const users = await storageService.query(USER_KEY)
-    const user = users.find(user => user._id === userId)
-    return user
+function getUserByUsername(username) {
 
 
 }
@@ -30,25 +27,17 @@ function logout() {
 }
 
 async function login(userCred) {
-    try {
-        const users = await storageService.query(USER_KEY)
-        const user = users.find(user => user.username === userCred.username)
-        if (user) {
-            this.$store.dispatch({
-                type: "login",
-                credentials: this.loginCredentials,
-            })
-            //     socketService.login(user._id)
-            return saveLocalUser(user)
-        } else throw err
-    } catch (err) {
-
+    const users = await storageService.query(USER_KEY)
+    const user = users.find(user => user.username === userCred.username)
+    // // const user = await httpService.post('auth/login', userCred)
+    if (user) {
+        //     socketService.login(user._id)
+        return saveLocalUser(user)
     }
-
 }
 
 function saveLocalUser(user) {
-    user = { _id: user._id, fullname: user.fullname, imgUrl: user.imgUrl }
+    user = { _id: user._id, fullname: user.fullname, imgUrl: user.imgUrl, wishlist: user.wishlist }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }
@@ -56,10 +45,10 @@ function saveLocalUser(user) {
 async function signup(userCred) {
     if (!userCred.imgUrl) userCred.imgUrl = 'http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSgdMa3-zfBbsMOTEYwMDhWumoaLYOb4kbOBP9Mmwdt9AwdzYCaL0VS1zKzlKc5DnPoWUSfVA25uggiN0o'
     const user = await storageService.post(USER_KEY, userCred)
-    login(user)
     // const user = await httpService.post('auth/signup', userCred)
     // socketService.login(user._id)
-    // return saveLocalUser(user)
+    saveLocalUser(user)
+    return user
 }
 
 function getEmptyUser() {

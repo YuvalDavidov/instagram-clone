@@ -35,6 +35,15 @@ export const myStore = createStore({
             } catch (err) {
                 throw err
             }
+        },
+        async signUp({ commit }, { user }) {
+            try {
+                const newUser = await userService.signup(user)
+                if (newUser) commit({ type: 'setUser', user })
+                else throw console.error('couldnt log in');
+            } catch (error) {
+                throw error
+            }
         }
     },
     modules: {
