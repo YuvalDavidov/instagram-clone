@@ -55,28 +55,7 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import { userService } from '../services/user.service';
-export default {
-    data() {
-        return {
-            user: userService.user(),
-            loginCredentials: {username: '', password: ''},
-        }
-    },
-    async created() {
-        
-    },
-    computed: {
-        isDisabled() {
-            if (this.loginCredentials.username.length > 5 && this.loginCredentials.password.length > 5) return false
-            else return true
-            
-        }
-    }
-=======
 import { userService } from "../services/user.service";
->>>>>>> 140e3f17b482abea4490de703864a256a8d95b36
 
 import Storys from "@/cmps/storys.vue";
 export default {
