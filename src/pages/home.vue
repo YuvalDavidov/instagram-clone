@@ -6,15 +6,16 @@
       </div>
     </section>
     <section class="welcome-page" v-if="!user">
-      <div class="iphone-container">
+      <div class="iphone-container" v-if="!isSignUp">
         <img src="../assets/imgs/example-img-1.png" class="inside-img" />
         <img src="../assets/imgs/iphone-transparent.png" class="iphone" />
       </div>
       <div class="login-div">
         <div class="first-div">
           <img class="logo" src="../assets/imgs/Instagram_logo.png" />
-          <form @submit.prevent="onLogin()">
+          <form @submit.prevent="(isSignUp) ? onSignUp() : onLogin()">
             <input
+              v-if="!isSignUp"
               v-model="loginCredentials.username"
               aria-required="true"
               type="text"
@@ -22,17 +23,44 @@
               name="username"
             />
             <input
+              v-if="!isSignUp"
               v-model="loginCredentials.password"
               aria-required="true"
               type="password"
               name="password"
               placeholder="Password"
             />
+            <input
+              v-if="isSignUp"
+              v-model="newUser.fullname"
+              aria-required="true"
+              type="text"
+              placeholder="Fullname"
+              name="fullname"
+            />
+            <input
+              v-if="isSignUp"
+              v-model="newUser.username"
+              aria-required="true"
+              type="text"
+              placeholder="Username"
+              name="username"
+            />
+            <input
+              v-if="isSignUp"
+              v-model="newUser.password"
+              aria-required="true"
+              type="password"
+              name="password"
+              placeholder="Password"
+            />
+
+
             <button v-bind:disabled="isDisabled" class="login-btn">
-              Log in
+              {{(!isSignUp) ? 'Log in' : 'Sign up'}}
             </button>
           </form>
-          <div class="or-div">
+          <div v-if="!isSignUp"  class="or-div">
             <div class="line"></div>
             <span class="OR">OR</span>
             <div class="line"></div>
@@ -45,8 +73,8 @@
         </div>
         <div class="second-div">
           <span
-            >Don't have an account?
-            <button class="signup-btn">Sign up</button></span
+            >{{(!isSignUp) ? 'Don\'t have an account?' : 'Have an account?'}}
+            <button @click="toSignUp()" class="signup-btn">{{(!isSignUp) ? 'Sign up' : 'Log in'}}</button></span
           >
         </div>
       </div>
@@ -62,6 +90,8 @@ export default {
   data() {
     return {
       loginCredentials: { username: "", password: "" },
+      isSignUp : false,
+      newUser : userService.getEmptyUser()
     };
   },
   async created() {},
@@ -77,12 +107,14 @@ export default {
   },
   methods: {
     async onLogin() {
-      // this.user = await userService.login(this.loginCredentials);
-      this.$store.dispatch({
-        type: "login",
-        credentials: this.loginCredentials,
-      });
+      userService.login(this.loginCredentials);
     },
+    async onSignUp() {
+        this.userService.signup(this.newUser)
+    },
+    toSignUp() {
+        this.isSignUp = !this.isSignUp
+    }
   },
   computed: {
     user() {
