@@ -1,6 +1,12 @@
 .welcome-page {
 
+
+    box-sizing: border-box;
     display: flex;
+    flex-direction: row;
+    margin-top: 90px;
+
+
 
     ::-webkit-input-placeholder {
         font-size: 11px;
@@ -9,20 +15,26 @@
 
 
     .iphone-container {
-        img {
+        max-width: min-content;
+        max-height: 600px;
+
+        .iphone {
             width: 350px;
             height: 515px;
+
+        }
+
+        .inside-img {
+            width: 225px;
+            height: 465px;
+            position: relative;
+            left: 291px;
+            bottom: -13px;
         }
 
     }
 
-    .inside-img {
-        width: 225px;
-        height: 465px;
-        position: relative;
-        left: 291px;
-        bottom: -13px;
-    }
+
 
     input {
         width: 268px;
@@ -52,7 +64,7 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        justify-content: center;
+        padding-top: 10px;
         max-width: 350px;
 
         .second-div {

@@ -1,12 +1,12 @@
 <template>
 
-    <section>
+    <section class="full">
 
         <section v-if="user"></section>
-        <section class="welcome-page" v-if="!user">
-            <img src="../assets/imgs/example-img-1.png" class="inside-img">
+        <section class="welcome-page full" v-if="!user">
             <div class="iphone-container">
-                <img src="../assets/imgs/iphone-transparent.png">
+                <img src="../assets/imgs/example-img-1.png" class="inside-img">
+                <img src="../assets/imgs/iphone-transparent.png" class="iphone">
             </div>
             <div class="login-div">
                 <div class="first-div">
@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             user: userService.user(),
-            loginCredentials: {username: '', password: ''}
+            loginCredentials: {username: '', password: ''},
         }
     },
     async created() {
