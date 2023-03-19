@@ -9,25 +9,26 @@ export const myStore = createStore({
     strict: true,
     state() {
         return {
-            user: null
+            user: userService.getLoggedinUser()
         }
     },
     getters: {
-        user() {
-            return this.user
+        User({ user }) {
+            if (user) return true
+            else return false
         }
     },
     mutations: {
         setUser(state, { user }) {
             state.user = user
-            console.log('login');
         }
     },
     actions: {
-        async login(credentials) {
+        async login({ commit }, { credentials }) {
             try {
                 const user = await userService.login(credentials)
-                this.commit({ type: 'setUser', user })
+                if (!user) throw err
+                commit({ type: 'setUser', user })
             } catch (err) {
                 throw err
             }

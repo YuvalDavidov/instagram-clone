@@ -10,6 +10,6 @@ import { userService } from "./services/user.service";
 
     <RouterView />
 
-    <SideBar v-if="userService.user()" />
+    <SideBar v-if="this.$store.getters.User" />
   </section>
 </template>
