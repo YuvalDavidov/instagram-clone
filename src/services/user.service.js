@@ -2,17 +2,15 @@ import { storageService } from './async-storage.service'
 
 export const userService = {
     getUserByUsername,
-    user,
+    getLoggedinUser,
     login,
     logout
 }
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
 
-function user() {
-    const user = sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)
-    if (user) return true
-    return false
+function getLoggedinUser() {
+    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
 function getUserByUsername(username) {
@@ -27,7 +25,6 @@ function logout() {
 }
 
 async function login(userCred) {
-
     const users = await storageService.query(USER_KEY)
     const user = users.find(user => user.username === userCred.username)
     // // const user = await httpService.post('auth/login', userCred)

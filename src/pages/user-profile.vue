@@ -1,5 +1,7 @@
 <template>
-  <img src="" />
+  <section class="user-profile">
+    {{ username }}
+  </section>
 </template>
 
 <script>
@@ -7,11 +9,12 @@ import { userService } from "../services/user.service";
 export default {
   data() {
     return {
-      txt: "Hello",
+      username: null,
+      user: userService.getUserByUsername(username),
     };
   },
   created() {
-    const contactId = this.$route.params.username;
+    this.username = this.$route.params.username;
   },
 };
 </script>

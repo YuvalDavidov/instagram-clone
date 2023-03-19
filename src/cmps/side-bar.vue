@@ -126,6 +126,5 @@ export default {
       userService.logout();
     },
   },
-  computed: {},
 };
 </script>

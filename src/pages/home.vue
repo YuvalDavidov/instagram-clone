@@ -61,7 +61,6 @@ import Storys from "@/cmps/storys.vue";
 export default {
   data() {
     return {
-      user: userService.user(),
       loginCredentials: { username: "", password: "" },
     };
   },
@@ -78,7 +77,16 @@ export default {
   },
   methods: {
     async onLogin() {
-      this.user = await userService.login(this.loginCredentials);
+      // this.user = await userService.login(this.loginCredentials);
+      this.$store.dispatch({
+        type: "login",
+        credentials: this.loginCredentials,
+      });
+    },
+  },
+  computed: {
+    user() {
+      return this.$store.getters.User;
     },
   },
   components: {
