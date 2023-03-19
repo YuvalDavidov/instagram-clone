@@ -1,7 +1,7 @@
 import { storageService } from './async-storage.service'
 
 export const userService = {
-    getUserByUsername,
+    getUserById,
     getLoggedinUser,
     login,
     logout,
@@ -15,7 +15,10 @@ function getLoggedinUser() {
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
-function getUserByUsername(username) {
+async function getUserById(userId) {
+    const users = await storageService.query(USER_KEY)
+    const user = users.find(user => user._id === userId)
+    return user
 
 
 }
@@ -45,7 +48,7 @@ async function login(userCred) {
 }
 
 function saveLocalUser(user) {
-    user = { _id: user._id, fullname: user.fullname, imgUrl: user.imgUrl, wishlist: user.wishlist }
+    user = { _id: user._id, fullname: user.fullname, imgUrl: user.imgUrl }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }
