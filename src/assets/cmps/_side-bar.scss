@@ -70,6 +70,8 @@
             .profile-img {
                 margin: 0;
                 width: 24px;
+                aspect-ratio: 1/1;
+                object-fit: cover;
                 border-radius: 50%;
             }
         }

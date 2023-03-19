@@ -16,6 +16,9 @@ export const myStore = createStore({
         User({ user }) {
             if (user) return true
             else return false
+        },
+        GetUser({ user }) {
+            return user
         }
     },
     mutations: {

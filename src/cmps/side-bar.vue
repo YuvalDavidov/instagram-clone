@@ -36,9 +36,9 @@
         <RouterLink
           class="profile-btn"
           active-class="active"
-          to="/user-profile"
+          :to="`/profile/${user._id}`"
         >
-          <img src="../assets/imgs/dummy-user.jpg" class="profile-img" /><span
+          <img :src="`${user.imgUrl}`" class="profile-img" /><span
             v-if="!isSearchOpen"
           >
             Profile</span
@@ -124,6 +124,11 @@ export default {
     },
     onLogout() {
       userService.logout();
+    },
+  },
+  computed: {
+    user() {
+      return this.$store.getters.GetUser;
     },
   },
 };

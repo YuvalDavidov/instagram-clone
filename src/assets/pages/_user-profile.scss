@@ -1,0 +1,76 @@
+.user-profile {
+    margin: 0 auto;
+    padding: 20px;
+
+
+    .top {
+        display: flex;
+        padding-bottom: 20px;
+        border-bottom: 1px solid $nav-border-color;
+
+        .img-container {
+            min-width: 300px;
+            text-align: center;
+
+            img {
+                aspect-ratio: 1/1;
+                object-fit: cover;
+                width: 150px;
+                border-radius: 50%;
+            }
+        }
+
+        .right-container {
+            min-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            .user-details {
+                font-size: 18px;
+
+                display: flex;
+                gap: 20px;
+                align-items: center;
+
+                button {
+                    border: none;
+                    border-radius: 10px;
+                    padding: 10px;
+                }
+            }
+
+            .user-amount {
+                display: flex;
+                gap: 40px;
+
+                >div {
+
+                    span {
+                        font-weight: bold;
+                    }
+                }
+
+            }
+
+            .user-summery {
+                display: flex;
+            }
+        }
+    }
+
+    .actions {
+        width: max-content;
+        margin: 0 auto;
+
+        >* {
+            margin-left: 20px;
+        }
+
+        button {
+            border: none;
+            background: none;
+        }
+
+    }
+}

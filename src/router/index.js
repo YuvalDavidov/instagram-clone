@@ -14,7 +14,7 @@ const routerOptions = {
             component: Home,
         },
         {
-            path: '/:username',
+            path: '/profile/:_id',
             component: UserProfile
         },
         {
