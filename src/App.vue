@@ -8,7 +8,9 @@ import { userService } from "./services/user.service";
     <!-- <SideBar /> -->
     <!-- <header class="full"></header> -->
 
-    <RouterView />
+   
+      <RouterView />
+    
 
     <SideBar v-if="this.$store.getters.User" />
   </section>

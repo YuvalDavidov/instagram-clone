@@ -18,6 +18,7 @@ async function getUserById(userId) {
     const user = users.find(user => user._id === userId)
     return user
 
+
 }
 
 
