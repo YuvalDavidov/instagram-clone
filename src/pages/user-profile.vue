@@ -35,10 +35,12 @@ export default {
   data() {
     return {
       user: null,
+      posts: [],
     };
   },
   async created() {
     this.user = await userService.getUserById(this.$route.params._id);
+    // this.posts = await
   },
 };
 </script>
