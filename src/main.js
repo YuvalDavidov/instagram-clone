@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-// import { myStore } from './store/store'
+import { myStore } from './store/store'
 
 import './assets/main.scss'
 import { OhVueIcon, addIcons } from "oh-vue-icons";
@@ -16,6 +16,7 @@ import {
     LaBookmarkSolid,
     BiMoon,
     OiReport,
+    RiEditBoxLine
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -27,7 +28,7 @@ addIcons(BiSearch,
     LaBookmarkSolid,
     BiMoon,
     FaFacebookSquare,
-
+    RiEditBoxLine,
     OiReport);
 
 
@@ -35,7 +36,7 @@ const app = createApp(App)
 
 app.use(router)
 app.component('v-icon', OhVueIcon)
-// app.use(myStore)
+app.use(myStore)
 
 app.mount('#app')
 
