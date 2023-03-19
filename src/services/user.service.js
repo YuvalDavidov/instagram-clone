@@ -1,10 +1,13 @@
+import { storageService } from './async-storage.service'
+
 export const userService = {
     getUserByUsername,
     user,
     login,
     logout
 }
-const STORAGE_KEY_LOGGEDIN_USER = 'kaka'
+const USER_KEY = 'UserDB'
+const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
 
 function user() {
     const user = sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)
@@ -23,17 +26,14 @@ function logout() {
 }
 
 async function login(userCred) {
-    console.log(userCred);
-    const user = userCred.username
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
-    return user
-    // const users = await storageService.query(USER_KEY)
-    // const user = users.find(user => user.username === userCred.username)
+
+    const users = await storageService.query(USER_KEY)
+    const user = users.find(user => user.username === userCred.username)
     // // const user = await httpService.post('auth/login', userCred)
-    // if (user) {
-    //     //     socketService.login(user._id)
-    //     return saveLocalUser(user)
-    // }
+    if (user) {
+        //     socketService.login(user._id)
+        return saveLocalUser(user)
+    }
 }
 
 function saveLocalUser(user) {
@@ -41,3 +41,17 @@ function saveLocalUser(user) {
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }
+
+async function signup(userCred) {
+    if (!userCred.imgUrl) userCred.imgUrl = 'http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSgdMa3-zfBbsMOTEYwMDhWumoaLYOb4kbOBP9Mmwdt9AwdzYCaL0VS1zKzlKc5DnPoWUSfVA25uggiN0o'
+    const user = await storageService.post(USER_KEY, userCred)
+    // const user = await httpService.post('auth/signup', userCred)
+    // socketService.login(user._id)
+    // return saveLocalUser(user)
+}
+
+// ; (async () => {
+//     await signup({ fullname: 'Puki Norma', username: 'yuval1', password: '12345' })
+//     await signup({ fullname: 'Master Adminov', username: 'shaked', password: '12345' })
+//     await signup({ fullname: 'Muki G', username: 'daniel', password: '12345' })
+// })()

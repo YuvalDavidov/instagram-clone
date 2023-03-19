@@ -9,18 +9,28 @@ export const myStore = createStore({
     strict: true,
     state() {
         return {
-
+            user: null
         }
     },
     getters: {
-
+        user() {
+            return this.user
+        }
     },
     mutations: {
-
+        setUser(state, { user }) {
+            state.user = user
+            console.log('login');
+        }
     },
     actions: {
-        login(credentials) {
-
+        async login(credentials) {
+            try {
+                const user = await userService.login(credentials)
+                this.commit({ type: 'setUser', user })
+            } catch (err) {
+                throw err
+            }
         }
     },
     modules: {

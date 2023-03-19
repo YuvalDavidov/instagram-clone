@@ -79,7 +79,6 @@ export default {
   methods: {
     async onLogin() {
       this.user = await userService.login(this.loginCredentials);
-      this.$router.push("");
     },
   },
   components: {
