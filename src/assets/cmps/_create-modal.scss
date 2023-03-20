@@ -1,0 +1,67 @@
+.create-modal {
+    border-radius: 15px;
+    position: absolute;
+    top: calc(100vh - 90%);
+    left: calc(100vw - 70%);
+    z-index: 4;
+    width: 710px;
+    aspect-ratio: 1/1;
+    background-color: white;
+
+    >* {
+        height: 100%;
+        width: 100%;
+    }
+
+    .top {
+        text-align: center;
+        font-size: 17px;
+        padding: 10px;
+        border-bottom: 1px solid $nav-border-color ;
+    }
+
+
+    .uploader {
+        height: calc(710px - 41px);
+        position: relative;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        background-color: #ffffffc6;
+        text-align: center;
+
+        small {
+            position: relative;
+            top: 280px;
+            font-size: 16px;
+        }
+
+        & .file {
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+
+        }
+    }
+
+    .seconde-step {
+        .top {
+            display: flex;
+            justify-content: space-between;
+
+            span {
+                font-weight: bold;
+            }
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+        }
+    }
+}

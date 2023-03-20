@@ -104,15 +104,16 @@
 
     <article v-if="isCreateOpen" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
-      <section class="modal">
-        <h1 class="top">Create new post</h1>
-      </section>
+      <CreateModal />
     </article>
   </section>
 </template>
 
 <script>
 import { userService } from "../services/user.service";
+
+import CreateModal from "@/cmps/create-modal.vue";
+
 export default {
   data() {
     return {
@@ -147,6 +148,9 @@ export default {
     user() {
       return this.$store.getters.GetUser;
     },
+  },
+  components: {
+    CreateModal,
   },
 };
 </script>
