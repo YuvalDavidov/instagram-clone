@@ -22,11 +22,17 @@
             >Home</span
           ></RouterLink
         >
-        <button @click="onToggleSearch()" class="search-btn">
+        <button @click="onToggleSearch()" class="side-bar-btn">
           <v-icon scale="1.6" name="bi-search" /><span v-if="!isSearchOpen"
             >Search</span
           >
         </button>
+
+        <button @click="onToggleCreate()" class="side-bar-btn">
+          <v-icon scale="1.6" name="bi-plus-square" />
+          <span v-if="!isSearchOpen">create</span>
+        </button>
+
         <RouterLink active-class="active" to="/messages">
           <v-icon scale="1.6" name="la-facebook-messenger" /><span
             v-if="!isSearchOpen"
@@ -46,7 +52,7 @@
         >
       </nav>
       <button
-        @click="onToggleModal()"
+        @click="onToggleSettings()"
         class="settings-btn"
         v-bind:class="{ isSettingsModalOpen }"
       >
@@ -95,6 +101,13 @@
         </button>
       </section>
     </article>
+
+    <article v-if="isCreateOpen" class="create-post-modal">
+      <section class="container" @click="onToggleCreate()"></section>
+      <section class="modal">
+        <h1 class="top">Create new post</h1>
+      </section>
+    </article>
   </section>
 </template>
 
@@ -105,12 +118,13 @@ export default {
     return {
       isSettingsModalOpen: false,
       isSearchOpen: false,
+      isCreateOpen: false,
       searchTxt: "",
       usersBySearch: [],
     };
   },
   methods: {
-    onToggleModal() {
+    onToggleSettings() {
       this.isSettingsModalOpen = !this.isSettingsModalOpen;
     },
     onToggleSearch() {
@@ -124,6 +138,9 @@ export default {
     },
     onLogout() {
       userService.logout();
+    },
+    onToggleCreate() {
+      this.isCreateOpen = !this.isCreateOpen;
     },
   },
   computed: {

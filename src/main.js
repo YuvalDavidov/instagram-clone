@@ -16,7 +16,8 @@ import {
     LaBookmarkSolid,
     BiMoon,
     OiReport,
-    RiEditBoxLine
+    RiEditBoxLine,
+    BiPlusSquare
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -29,7 +30,8 @@ addIcons(BiSearch,
     BiMoon,
     FaFacebookSquare,
     RiEditBoxLine,
-    OiReport);
+    OiReport,
+    BiPlusSquare);
 
 
 const app = createApp(App)

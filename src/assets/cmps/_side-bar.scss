@@ -76,7 +76,7 @@
             }
         }
 
-        .search-btn {
+        .side-bar-btn {
             display: flex;
             align-items: center;
             border: none;
@@ -208,6 +208,37 @@
 
     }
 
+}
+
+.create-post-modal {
+    z-index: 3;
+    position: fixed;
+    top: 0;
+
+
+    .container {
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(197, 197, 197, 0.523);
+    }
+
+    .modal {
+        border-radius: 15px;
+        position: absolute;
+        top: calc(100vh - 90%);
+        left: calc(100vw - 70%);
+        z-index: 4;
+        width: 710px;
+        aspect-ratio: 1/1;
+        background-color: white;
+
+
+        .top {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid $nav-border-color ;
+        }
+    }
 }
 
 @keyframes search-bar-animasion {

@@ -28,7 +28,8 @@
     </section>
 
     <section class="posts">
-      <PostListProfile :posts="posts" />
+      <PostListProfile :posts="posts" v-if="posts" />
+      <div class="no-posts" v-if="!posts">you have no posts</div>
     </section>
   </section>
 </template>
