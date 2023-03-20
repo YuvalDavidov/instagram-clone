@@ -3,16 +3,7 @@ user :
     id,
     profilePicture,
     name,
-    posts : [
-        {
-            id,
-            imgs: [],
-            timestamp,
-            summery,
-            likes: [{picture, username, name}],
-            comments: [{username, comment}],
-        },
-    ],
+   
     numOfPosts,
     followers,
     following,
@@ -29,6 +20,17 @@ user :
     username,
     password, 
 }
+ posts : [
+        {
+            id,
+            userId
+            imgs: [],
+            timestamp,
+            summery,
+            likes: [{picture, username, name}],
+            comments: [{username, comment}],
+        },
+    ],
 
 cmps: 
 1. app-nav 

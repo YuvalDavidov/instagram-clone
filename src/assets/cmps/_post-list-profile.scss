@@ -1,0 +1,21 @@
+.post-list-profile {
+    margin: 10px auto;
+    width: fit-content;
+    display: grid;
+    grid-template-columns: repeat(3, 310px);
+    gap: 5px;
+
+
+    >li {
+        list-style: none;
+
+        img {
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            max-width: 310px;
+        }
+
+    }
+
+
+}

@@ -36,7 +36,18 @@ async function login(userCred) {
 }
 
 function saveLocalUser(user) {
-    user = { _id: user._id, fullname: user.fullname, imgUrl: user.imgUrl, posts: [] }
+    user = user = {
+        _id: user._id,
+        fullname: user.fullname,
+        imgUrl: user.imgUrl,
+        posts: [],
+        following: [],
+        followers: [],
+        summery: '',
+        highelights: [],
+        stories: []
+
+    }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }

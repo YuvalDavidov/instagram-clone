@@ -11,7 +11,9 @@
           <v-icon scale="1.2" name="ri-settings-5-line" />
         </div>
         <div class="user-amount">
-          <div><span>0</span> posts</div>
+          <div>
+            <span>{{ posts.length }}</span> posts
+          </div>
           <div><span>0</span> follower</div>
           <div><span>0</span> following</div>
         </div>
@@ -25,12 +27,17 @@
       <button>tagged</button>
     </section>
 
-    <section class="posts"></section>
+    <section class="posts">
+      <PostListProfile :posts="posts" />
+    </section>
   </section>
 </template>
 
 <script>
 import { userService } from "../services/user.service";
+import { postService } from "../services/post.service";
+
+import PostListProfile from "@/cmps/post-list-profile.vue";
 export default {
   data() {
     return {
@@ -40,7 +47,11 @@ export default {
   },
   async created() {
     this.user = await userService.getUserById(this.$route.params._id);
-    // this.posts = await
+    this.posts = await postService.getUserPostsById(this.$route.params._id);
+    console.log(this.posts);
+  },
+  components: {
+    PostListProfile,
   },
 };
 </script>
