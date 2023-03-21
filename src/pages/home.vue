@@ -95,16 +95,6 @@ export default {
     };
   },
   async created() {},
-  computed: {
-    isDisabled() {
-      if (
-        this.loginCredentials.username.length > 5 &&
-        this.loginCredentials.password.length > 5
-      )
-        return false;
-      else return true;
-    },
-  },
   methods: {
     async onLogin() {
         this.$store.dispatch({
@@ -122,6 +112,14 @@ export default {
   computed: {
     user() {
       return this.$store.getters.User;
+    },
+    isDisabled() {
+      if (
+        this.loginCredentials.username.length > 5 &&
+        this.loginCredentials.password.length > 5
+      )
+        return false;
+      else return true;
     },
   },
   components: {

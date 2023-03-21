@@ -6,7 +6,9 @@ export const userService = {
     login,
     logout,
     getEmptyUser,
-    signup
+    signup,
+    saveLocalUser,
+    checkIfOwnProfile
 }
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
@@ -19,10 +21,15 @@ function getUserById(userId) {
     return storageService.get(USER_KEY, userId)
 }
 
+function checkIfOwnProfile(id) {
+    let currUser = getLoggedinUser()
+    if (currUser._id === id) return true
+    else return false
+}
+
 
 function logout() {
     sessionStorage.clear()
-    user()
 }
 
 async function login(userCred) {
@@ -36,18 +43,6 @@ async function login(userCred) {
 }
 
 function saveLocalUser(user) {
-    user = user = {
-        _id: user._id,
-        fullname: user.fullname,
-        imgUrl: user.imgUrl,
-        posts: [],
-        following: [],
-        followers: [],
-        summery: '',
-        highelights: [],
-        stories: []
-
-    }
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
 }
@@ -56,14 +51,12 @@ async function signup(userCred) {
     if (!userCred.imgUrl) userCred.imgUrl = 'http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSgdMa3-zfBbsMOTEYwMDhWumoaLYOb4kbOBP9Mmwdt9AwdzYCaL0VS1zKzlKc5DnPoWUSfVA25uggiN0o'
     userCred = ({
         ...userCred,
-        posts: [],
         numOfPosts: 0,
         followers: [],
         following: [],
         summery: '',
         highelights: [],
         stories: [],
-
     })
     const user = await storageService.post(USER_KEY, userCred)
     // const user = await httpService.post('auth/signup', userCred)
