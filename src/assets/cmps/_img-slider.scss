@@ -1,11 +1,19 @@
 .mySwiper {
 
     .swiper-wrapper {
-        min-height: calc(710px - 42px);
+        max-height: calc(710px - 42px);
+        width: 710px;
+        border-bottom-left-radius: 15px;
 
-        img {
-            aspect-ratio: 1/0.8;
-            height: calc(710px - 42px);
+        .swiper-slide {
+
+            img {
+                width: 710px;
+                height: calc(710px - 42px);
+                object-fit: contain;
+                border-bottom-left-radius: 15px;
+            }
         }
+
     }
 }

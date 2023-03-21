@@ -104,7 +104,7 @@
 
     <article v-if="isCreateOpen" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
-      <CreateModal />
+      <CreateModal @onToggleCreate="onToggleCreate" />
     </article>
   </section>
 </template>
