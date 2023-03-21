@@ -16,9 +16,9 @@
 
     <section class="seconde-step" v-if="step === 'seconde'">
       <div class="top">
-        <button @click="onBack()" class="back-btn">back</button>
+        <button @click="onBack()" class="back btn">back</button>
         <span>Create new post</span>
-        <button @click="onPost()">Share</button>
+        <button @click="onPost()" class="share btn">Share</button>
       </div>
       <section class="bottom">
         <ImgSlider :imgsUrl="imgsUrl" />
@@ -49,11 +49,8 @@ import { postService } from "../services/post.service";
 export default {
   data() {
     return {
-      imgsUrl: [
-        "https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg",
-        "https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg",
-      ],
-      step: "seconde",
+      imgsUrl: [],
+      step: "first",
       user: userService.getLoggedinUser(),
       postSummery: "",
     };

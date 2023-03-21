@@ -67,6 +67,15 @@
             span {
                 font-weight: bold;
             }
+
+            .btn {
+                background: none;
+                border: none;
+
+                &.share {
+                    color: blue;
+                }
+            }
         }
 
         .bottom {
@@ -78,10 +87,8 @@
             }
         }
 
-        .back-btn {
-            background: none;
-            border: none;
-        }
+
+
 
         .post-details {
             padding: 0 16px;
