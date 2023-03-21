@@ -1,0 +1,11 @@
+.mySwiper {
+
+    .swiper-wrapper {
+        min-height: calc(710px - 42px);
+
+        img {
+            aspect-ratio: 1/0.8;
+            height: calc(710px - 42px);
+        }
+    }
+}

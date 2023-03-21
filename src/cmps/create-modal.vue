@@ -20,17 +20,23 @@
         <span>Create new post</span>
         <button>Share</button>
       </div>
+      <ImgSlider :imgsUrl="imgsUrl" />
     </section>
   </section>
 </template>
 
 <script>
 import { uploadService } from "../services/upload.service";
+
+import ImgSlider from "@/cmps/img-slider.vue";
 export default {
   data() {
     return {
-      imgsUrl: [],
-      step: "first",
+      imgsUrl: [
+        "https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg",
+        "https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg",
+      ],
+      step: "seconde",
     };
   },
   methods: {
@@ -45,6 +51,9 @@ export default {
       this.step = "first";
       this.imgsUrl = [];
     },
+  },
+  components: {
+    ImgSlider,
   },
 };
 </script>
