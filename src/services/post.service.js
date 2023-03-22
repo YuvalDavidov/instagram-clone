@@ -8,6 +8,8 @@ export const postService = {
 
 const POST_KEY = 'PostDB'
 
+
+
 async function getUserPostsById(userId) {
     const posts = await storageService.query(POST_KEY)
     const userPosts = posts.filter(post => post.userId === userId)

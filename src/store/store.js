@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import { userService } from '../services/user.service'
-// import { userStore } from './user.store.js'
+import { postStore } from './post.store.js'
 
 // import { contactStore } from './contact.store.js'
 
@@ -9,7 +9,7 @@ export const myStore = createStore({
     strict: true,
     state() {
         return {
-            user: userService.getLoggedinUser()
+            user: userService.getLoggedinUser(),
         }
     },
     getters: {
@@ -47,6 +47,7 @@ export const myStore = createStore({
         }
     },
     modules: {
+        postStore
         // userStore,
         // contactStore
     }

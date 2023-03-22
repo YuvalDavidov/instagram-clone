@@ -3,16 +3,18 @@
     width: fit-content;
     display: grid;
     grid-template-columns: repeat(3, 310px);
+    grid-template-rows: 310px;
     gap: 5px;
 
 
     >li {
         list-style: none;
+        max-height: 310px;
 
         img {
             aspect-ratio: 1/1;
-            object-fit: cover;
-            max-width: 310px;
+            object-fit: contain;
+            width: 310px;
         }
 
     }

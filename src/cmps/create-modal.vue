@@ -70,9 +70,19 @@ export default {
     onSummeryChange(ev) {
       this.postSummery = ev.target.value;
     },
-    onPost() {
-      postService.createPost(this.user._id, this.imgsUrl, this.postSummery);
-      this.$emit("onToggleCreate");
+    async onPost() {
+      try {
+        await postService.createPost(
+          this.user._id,
+          this.imgsUrl,
+          this.postSummery
+        );
+        this.$emit("onToggleCreate");
+        this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.user._id,
+        });
+      } catch (error) {}
     },
   },
   components: {
