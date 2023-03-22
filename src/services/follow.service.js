@@ -11,22 +11,28 @@ export const followService = {
 }
 
 async function unFollow(id) {
-    let user = await userService.getUserById(id)
-    let loggedInUser = await userService.getLoggedinUser(id)
-    // 
-    user = { ...user, followers: user.followers.filter(currId => currId !== loggedInUser._id) }
-    loggedInUser = { ...loggedInUser, following: loggedInUser.following.filter(currId => currId !== id) }
-    // 
-    await storageService.put(USER_KEY, user)
-    await storageService.put(USER_KEY, loggedInUser)
-    // 
-    userService.saveLocalUser(loggedInUser)
+    try {
+        let user = await userService.getUserById(id)
+        let loggedInUser = userService.getLoggedinUser(id)
+        // 
+        user = { ...user, followers: user.followers.filter(currId => currId !== loggedInUser._id) }
+        loggedInUser = { ...loggedInUser, following: loggedInUser.following.filter(currId => currId !== id) }
+        // 
+        await storageService.put(USER_KEY, user)
+        await storageService.put(USER_KEY, loggedInUser)
+        // 
+        userService.saveLocalUser(loggedInUser)
+    } catch (error) {
+        throw new Error('error - couldnt remove follow', error)
+
+    }
+
 }
 
 async function addFollow(id) {
     try {
         const user = await userService.getUserById(id)
-        const loggedInUser = await userService.getLoggedinUser(id)
+        const loggedInUser = userService.getLoggedinUser(id)
         // 
         user.followers.push(loggedInUser._id)
         loggedInUser.following.push(id)
@@ -36,14 +42,14 @@ async function addFollow(id) {
         // 
         userService.saveLocalUser(loggedInUser)
     } catch (error) {
-        console.log('error - couldnt add follow', error)
+        throw new Error('error - couldnt add follow', error)
     }
 
 }
 
 
-async function checkIfFollowing(id) {
-    const loggedInUser = await userService.getLoggedinUser(id)
+function checkIfFollowing(id) {
+    const loggedInUser = userService.getLoggedinUser(id)
     console.log(loggedInUser.following.includes(id))
     return loggedInUser.following.includes(id)
 } 

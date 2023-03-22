@@ -67,10 +67,15 @@ export default {
   },
   methods: {
     async onFollow() {
-      if (this.isFollowing) await followService.unFollow(this.$route.params._id)
-      else await followService.addFollow(this.$route.params._id)
-      this.isFollowing = !this.isFollowing
-      this.user = await userService.getUserById(this.$route.params._id);
+      try {
+        if (this.isFollowing) await followService.unFollow(this.$route.params._id)
+        else await followService.addFollow(this.$route.params._id)
+        this.isFollowing = !this.isFollowing
+        this.user = await userService.getUserById(this.$route.params._id);
+      } catch (err) {
+          console.error(err)
+      }
+      
     }
   },
   watch: {
