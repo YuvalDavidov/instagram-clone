@@ -4,8 +4,6 @@
     top: calc(100vh - 90%);
     left: calc(100vw - 70%);
     z-index: 4;
-    // width: 710px;
-    // aspect-ratio: 1/1;
     background-color: white;
 
     &.seconde {
@@ -81,14 +79,31 @@
         .bottom {
             display: flex;
 
-
             .post-details {
                 width: 340px;
             }
+
+            .mySwiper {
+                border-right: 1px solid $nav-border-color;
+
+                .swiper-wrapper {
+                    max-height: calc(710px - 42px);
+                    width: 710px;
+                    border-bottom-left-radius: 15px;
+
+                    .swiper-slide {
+
+                        img {
+                            width: 710px;
+                            height: calc(710px - 42px);
+                            object-fit: contain;
+                            border-bottom-left-radius: 15px;
+                        }
+                    }
+
+                }
+            }
         }
-
-
-
 
         .post-details {
             padding: 0 16px;

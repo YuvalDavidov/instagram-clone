@@ -1,0 +1,29 @@
+.user-post-preview {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+
+    .container {
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(120, 120, 120, 0.523);
+    }
+
+    .post {
+        width: 900px;
+        position: absolute;
+        top: calc(100vh - 90%);
+        left: calc(100vw - 90%);
+        z-index: 4;
+        background-color: rgb(255, 255, 255);
+
+        .left {
+            width: 660px;
+
+            img {
+                width: 660px;
+            }
+        }
+    }
+}
