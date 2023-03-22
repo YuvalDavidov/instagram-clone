@@ -8,7 +8,9 @@
         <div class="user-details">
           <span>{{ user.username }}</span>
           <button v-if="isOwnProfile">Edit profile</button>
-          <button @click="onFollow" v-if="!isOwnProfile">{{(isFollowing) ? 'Following' : 'Follow'}}</button>
+          <button @click="onFollow" v-if="!isOwnProfile">
+            {{ isFollowing ? "Following" : "Follow" }}
+          </button>
           <button v-if="!isOwnProfile">Message</button>
           <v-icon scale="1.2" name="ri-settings-5-line" />
         </div>
@@ -16,8 +18,12 @@
           <div>
             <span>{{ posts.length }}</span> posts
           </div>
-          <div><span>{{user.followers.length}}</span> followers</div>
-          <div><span>{{user.following.length}}</span> following</div>
+          <div>
+            <span>{{ user.followers.length }}</span> followers
+          </div>
+          <div>
+            <span>{{ user.following.length }}</span> following
+          </div>
         </div>
         <div class="user-summery">yuval</div>
       </div>
@@ -39,28 +45,34 @@
 <script>
 import { userService } from "../services/user.service";
 import { postService } from "../services/post.service";
-import {followService} from "../services/follow.service"
+import { followService } from "../services/follow.service";
 
 import PostListProfile from "@/cmps/post-list-profile.vue";
 export default {
   data() {
     return {
       user: null,
-      posts: [],
-      isFollowing: null
+      isFollowing: null,
     };
   },
   async created() {
     this.user = await userService.getUserById(this.$route.params._id);
-    this.posts = await postService.getUserPostsById(this.$route.params._id);
-    this.isFollowing = await followService.checkIfFollowing(this.$route.params._id)
-    
+    this.$store.dispatch({
+      type: "loadUserPosts",
+      userId: this.$route.params._id,
+    });
+    this.isFollowing = await followService.checkIfFollowing(
+      this.$route.params._id
+    );
   },
   computed: {
     isOwnProfile() {
-      if (userService.checkIfOwnProfile(this.$route.params._id)) return true
-      else return false
-    }
+      if (userService.checkIfOwnProfile(this.$route.params._id)) return true;
+      else return false;
+    },
+    posts() {
+      return this.$store.getters.userPosts;
+    },
   },
   components: {
     PostListProfile,
@@ -79,7 +91,7 @@ export default {
     }
   },
   watch: {
-    '$route.params': {
+    "$route.params": {
       immediate: true,
       async handler(params) {
         // Fetch data for the new route
@@ -87,7 +99,7 @@ export default {
         this.posts = await postService.getUserPostsById(params._id);
       },
     },
-  }
+  },
 };
 </script>
 
