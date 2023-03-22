@@ -1,0 +1,48 @@
+.post-preview-home {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    margin-left: 10vw;
+}
+
+
+.post-details-home {
+    background-color: rgb(255, 255, 255);
+    border: 1px;
+    border-style: solid;
+    border-color: rgb(239, 239, 239);
+    border-radius: 8px;
+    max-width: fit-content;
+
+    display: flex;
+    flex-direction: column;
+
+    .post-details-header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 10px;
+        gap: 10px;
+
+        span {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+
+        .user-img {
+            width: 32px;
+            border-radius: 50%;
+            height: 32px;
+            object-fit: contain;
+        }
+    }
+
+    .post-img {
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        min-width: 468px;
+        max-width: 468px;
+    }
+
+
+}

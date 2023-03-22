@@ -3,6 +3,7 @@
     <section v-if="user" class="home-index">
       <div class="top">
         <Storys />
+        <post-index-home/>
       </div>
     </section>
     <section class="welcome-page" v-if="!user">
@@ -86,6 +87,7 @@
 import { userService } from "../services/user.service";
 
 import Storys from "@/cmps/storys.vue";
+import PostIndexHome from '../cmps/post-index-home.vue';
 export default {
   data() {
     return {
@@ -124,6 +126,7 @@ export default {
   },
   components: {
     Storys,
+    PostIndexHome,
   },
 };
 </script>
