@@ -30,19 +30,17 @@ export const myStore = createStore({
         async login({ commit }, { credentials }) {
             try {
                 const user = await userService.login(credentials)
-                if (!user) throw err
                 commit({ type: 'setUser', user })
             } catch (err) {
-                throw err
+                console.error(err, 'couldnt login')
             }
         },
         async signUp({ commit }, { user }) {
             try {
-                const newUser = await userService.signup(user)
-                if (newUser) commit({ type: 'setUser', user })
-                else throw console.error('couldnt log in');
-            } catch (error) {
-                throw error
+                await userService.signup(user)
+                commit({ type: 'setUser', user })
+            } catch (err) {
+                console.error(err, 'couldnt signup')
             }
         }
     },

@@ -33,13 +33,18 @@ function logout() {
 }
 
 async function login(userCred) {
-    const users = await storageService.query(USER_KEY)
-    const user = users.find(user => user.username === userCred.username)
-    // // const user = await httpService.post('auth/login', userCred)
-    if (user) {
-        //     socketService.login(user._id)
-        return saveLocalUser(user)
+    try {
+        const users = await storageService.query(USER_KEY)
+        const user = users.find(user => user.username === userCred.username)
+        if (user) {
+            // // const user = await httpService.post('auth/login', userCred)
+            //     socketService.login(user._id)
+            return saveLocalUser(user)
+        } else throw new Error('couldnt find username')
+    } catch (err) {
+        throw new Error('coudnlt preform query', err)
     }
+
 }
 
 function saveLocalUser(user) {
@@ -58,11 +63,17 @@ async function signup(userCred) {
         highelights: [],
         stories: [],
     })
-    const user = await storageService.post(USER_KEY, userCred)
-    // const user = await httpService.post('auth/signup', userCred)
-    // socketService.login(user._id)
-    saveLocalUser(user)
-    return user
+
+    try {
+        const user = await storageService.post(USER_KEY, userCred)
+        // const user = await httpService.post('auth/signup', userCred)
+        // socketService.login(user._id)
+        saveLocalUser(user)
+        return user
+    } catch (err) {
+        throw new Error(err, 'coudnt post new user')
+    }
+
 }
 
 function getEmptyUser() {
