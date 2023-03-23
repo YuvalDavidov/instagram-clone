@@ -2,16 +2,39 @@
     margin-top: 10px;
     margin-bottom: 12px;
     margin-left: 10vw;
-}
-
-
-.post-details-home {
-    background-color: rgb(255, 255, 255);
     border: 1px;
     border-style: solid;
     border-color: rgb(239, 239, 239);
     border-radius: 8px;
     max-width: fit-content;
+
+}
+
+.post-actions {}
+
+.action-icon {
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding: 0px;
+
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+.actions-nav {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.post-details-home {
+    background-color: rgb(255, 255, 255);
+
 
     display: flex;
     flex-direction: column;

@@ -17,11 +17,17 @@ import {
     BiMoon,
     OiReport,
     RiEditBoxLine,
-    BiPlusSquare
+    BiPlusSquare,
+    FaRegularHeart,
+    FaHeart,
+    FaRegularComment
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
     FaHome,
+    FaRegularHeart,
+    FaHeart,
+    FaRegularComment,
     LaFacebookMessenger,
     CoHamburgerMenu,
     RiSettings5Line,
