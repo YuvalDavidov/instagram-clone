@@ -1,9 +1,13 @@
 <template>
   <section class="post-list-profile">
     <li v-for="(post, index) in posts" :key="post._id" class="post-grid">
-      <img :src="post.imgsUrl[0]" @click="onClickedPost(index)" />
+      <img
+        :src="post.imgsUrl[0]"
+        @click="onClickedPost(index)"
+        class="post-img"
+      />
       <section v-if="isClickedPost && postIndex === index">
-        <UserPostPreview :post="post" @onClosePost="onClosePost" />
+        <UserPostPreview :post="post" :user="user" @onClosePost="onClosePost" />
       </section>
     </li>
   </section>
@@ -21,6 +25,10 @@ export default {
   props: {
     posts: {
       type: Array,
+      required: true,
+    },
+    user: {
+      type: Object,
       required: true,
     },
   },

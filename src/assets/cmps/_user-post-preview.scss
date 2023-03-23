@@ -11,18 +11,134 @@
     }
 
     .post {
-        width: 900px;
+        border-radius: 5px;
+        display: flex;
         position: absolute;
         top: calc(100vh - 90%);
-        left: calc(100vw - 90%);
+        left: calc(100vw - 85%);
         z-index: 4;
         background-color: rgb(255, 255, 255);
 
-        .left {
+        .post-images {
             width: 660px;
+            border-right: 1px solid $nav-border-color;
+
+            .swiper {
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+                height: 660px;
+            }
 
             img {
+                aspect-ratio: 1/1;
+                object-fit: contain;
+                border-top-left-radius: 10px;
+                background-color: black;
                 width: 660px;
+            }
+        }
+
+        .summery-n-comments {
+            width: 500px;
+
+            .summery-top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 15px;
+                border-bottom: 1px solid $nav-border-color;
+
+                header {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    .user-img {
+                        width: 32px;
+                        aspect-ratio: 1/1;
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
+
+                }
+
+                button {
+                    background: none;
+                    border: none;
+                }
+            }
+
+            .comments {
+                height: 590px;
+                overflow-y: scroll;
+                display: grid;
+
+                &::-webkit-scrollbar {
+                    -webkit-appearance: none;
+                }
+
+                >* {
+                    min-height: 60px;
+                }
+
+            }
+
+            .add-comment {
+                background-color: white;
+                display: flex;
+                flex-direction: column;
+                border-top: 1px solid $nav-border-color;
+                position: absolute;
+                width: inherit;
+                border-bottom-right-radius: 5px;
+                bottom: 0;
+
+                >:not(:last-child) {
+                    padding: 0 10px;
+                    margin: 5px 0;
+                }
+
+                .actions-btns {
+                    display: flex;
+                    justify-content: space-between;
+
+                    button {
+                        background: none;
+                        border: none;
+                    }
+                }
+
+                .input-actions {
+                    position: relative;
+
+                    .comment-input {
+                        width: 500px;
+                        border: none;
+                        border-top: 1px solid $nav-border-color;
+                        padding: 10px;
+                        font-size: 16px;
+                        border-bottom-right-radius: 5px;
+                    }
+
+                    a {
+                        color: rgb(200, 200, 250);
+                        right: 5px;
+                        top: 10px;
+                        position: absolute;
+                        cursor: not-allowed;
+
+                        &.active,
+                        :hover {
+                            cursor: pointer;
+                            color: black;
+                        }
+
+                        &.active {
+                            color: blue
+                        }
+
+                    }
+                }
             }
         }
     }

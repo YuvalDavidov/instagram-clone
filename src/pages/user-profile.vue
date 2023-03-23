@@ -36,7 +36,7 @@
     </section>
 
     <section class="posts">
-      <PostListProfile :posts="posts" v-if="posts" />
+      <PostListProfile :posts="posts" :user="user" v-if="posts" />
       <div class="no-posts" v-if="!posts">you have no posts</div>
     </section>
   </section>
@@ -80,15 +80,15 @@ export default {
   methods: {
     async onFollow() {
       try {
-        if (this.isFollowing) await followService.unFollow(this.$route.params._id)
-        else await followService.addFollow(this.$route.params._id)
-        this.isFollowing = !this.isFollowing
+        if (this.isFollowing)
+          await followService.unFollow(this.$route.params._id);
+        else await followService.addFollow(this.$route.params._id);
+        this.isFollowing = !this.isFollowing;
         this.user = await userService.getUserById(this.$route.params._id);
       } catch (err) {
-          console.error(err)
+        console.error(err);
       }
-      
-    }
+    },
   },
   watch: {
     "$route.params": {

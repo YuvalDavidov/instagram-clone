@@ -7,11 +7,11 @@
     gap: 5px;
 
 
-    >li {
+    .post-grid {
         list-style: none;
         max-height: 310px;
 
-        img {
+        .post-img {
             aspect-ratio: 1/1;
             object-fit: contain;
             width: 310px;
