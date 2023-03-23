@@ -44,14 +44,13 @@
 import { uploadService } from "../services/upload.service";
 
 import ImgSlider from "@/cmps/img-slider.vue";
-import { userService } from "../services/user.service";
 import { postService } from "../services/post.service";
 export default {
   data() {
     return {
       imgsUrl: [],
       step: "first",
-      user: userService.getLoggedinUser(),
+      user: this.$store.getters.GetUser,
       postSummery: "",
     };
   },
@@ -73,7 +72,7 @@ export default {
     async onPost() {
       try {
         await postService.createPost(
-          this.user._id,
+          this.user,
           this.imgsUrl,
           this.postSummery
         );

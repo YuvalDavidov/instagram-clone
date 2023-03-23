@@ -3,12 +3,22 @@ import { storageService } from './async-storage.service'
 
 export const postService = {
     createPost,
-    getUserPostsById
+    getUserPostsById,
+    getPosts
 }
 
 const POST_KEY = 'PostDB'
 
 
+async function getPosts(user) {
+    let posts = await storageService.query(POST_KEY)
+
+    return posts.reduce((acc, post) => {
+        if (user.following.includes(post.userId)) acc.push(post)
+        return acc
+    }, [])
+
+}
 
 async function getUserPostsById(userId) {
     const posts = await storageService.query(POST_KEY)
@@ -16,15 +26,18 @@ async function getUserPostsById(userId) {
     return userPosts
 }
 
-async function createPost(userId, imgsUrl, summery) {
+async function createPost(user, imgsUrl, summery) {
 
     let post = {
-        userId,
+        userId: user._id,
+        username: user.username,
+        userImg: user.imgUrl,
         imgsUrl,
         summery,
         timeStamp: new Date(),
         likes: [],
-        comments: []
+        comments: [],
+
     }
     try {
         let newPost = await storageService.post(POST_KEY, post)
