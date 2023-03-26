@@ -102,7 +102,9 @@
                     display: flex;
                     justify-content: space-between;
 
+
                     button {
+
                         background: none;
                         border: none;
                     }
@@ -138,6 +140,11 @@
                         }
 
                     }
+                }
+
+                & small {
+                    color: rgb(179, 179, 179);
+                    font-size: 12px;
                 }
             }
         }

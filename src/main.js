@@ -20,7 +20,11 @@ import {
     BiPlusSquare,
     FaRegularHeart,
     FaHeart,
-    FaRegularComment
+    FaRegularComment,
+    BiHeart,
+    BiChat,
+    BiSend,
+    FcLike
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -37,7 +41,11 @@ addIcons(BiSearch,
     FaFacebookSquare,
     RiEditBoxLine,
     OiReport,
-    BiPlusSquare);
+    BiPlusSquare,
+    BiHeart,
+    BiChat,
+    BiSend,
+    FcLike);
 
 
 const app = createApp(App)

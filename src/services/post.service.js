@@ -4,11 +4,33 @@ import { storageService } from './async-storage.service'
 export const postService = {
     createPost,
     getUserPostsById,
-    getPosts
+    getPosts,
+    addLike,
+    removeLike
 }
 
 const POST_KEY = 'PostDB'
 
+async function removeLike(postId, userId) {
+    try {
+        let post = await storageService.get(POST_KEY, postId)
+        const idx = post.likes.findIndex((like) => like.userId === userId)
+        post.likes.splice(idx, 1)
+        await storageService.put(POST_KEY, post)
+    } catch (error) {
+        new Error('coudl\'nt remove like to this post', error)
+    }
+}
+
+async function addLike(postId, likedUser) {
+    try {
+        let post = await storageService.get(POST_KEY, postId)
+        post.likes.push(likedUser)
+        await storageService.put(POST_KEY, post)
+    } catch (error) {
+        new Error('coudl\'nt add like to this post', error)
+    }
+}
 
 async function getPosts(user) {
     let posts = await storageService.query(POST_KEY)
