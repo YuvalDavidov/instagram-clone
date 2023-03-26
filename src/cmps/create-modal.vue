@@ -28,6 +28,7 @@
             <span class="user-name"> {{ user.username }} </span>
           </section>
           <textarea
+            class="textarea-summery"
             name="post-summery"
             id=""
             rows="10"
@@ -71,11 +72,7 @@ export default {
     },
     async onPost() {
       try {
-        await postService.createPost(
-          this.user,
-          this.imgsUrl,
-          this.postSummery
-        );
+        await postService.createPost(this.user, this.imgsUrl, this.postSummery);
         this.$emit("onToggleCreate");
         this.$store.dispatch({
           type: "loadUserPosts",

@@ -13,7 +13,37 @@
           </header>
           <button>...</button>
         </div>
-        <div class="comments"></div>
+        <div class="comments">
+          <li class="post-summery">
+            <img :src="user.imgUrl" class="summery-img" />
+            <section class="summery-info">
+              <h5>{{ user.username }}</h5>
+              <span>{{ post.summery }}</span>
+            </section>
+          </li>
+          <li
+            v-for="comment in post.comments"
+            :key="comment.id"
+            class="post-comment"
+          >
+            <section class="comment-info-container">
+              <img :src="comment.userImgUrl" class="comment-img" />
+              <section class="comment-info">
+                <span class="comment-txt">
+                  <span>{{ comment.username }}</span> {{ comment.txt }}</span
+                >
+              </section>
+              <article class="comment-like-n-comments">
+                <span>{{ uploadedCommentTime(comment.timeStamp) }}</span>
+                <span>50 likes</span>
+                <span>Replay</span>
+              </article>
+            </section>
+            <button>
+              <v-icon name="bi-heart" />
+            </button>
+          </li>
+        </div>
         <section class="add-comment">
           <div class="actions-btns">
             <section>
@@ -21,12 +51,12 @@
                 <v-icon
                   name="bi-heart"
                   @click="addLike()"
-                  v-if="!didUserLiked"
+                  v-if="!didUserLikedPost"
                 />
                 <v-icon
                   name="fc-like"
                   @click="removeLike()"
-                  v-if="didUserLiked"
+                  v-if="didUserLikedPost"
                 />
               </button>
               <button @click="focusOnInput()">
@@ -98,7 +128,10 @@ export default {
           type: "loadUserPosts",
           userId: this.$route.params._id,
         });
-      } catch (error) {}
+        this.commentTxt = "";
+      } catch (error) {
+        new Error("coudl'nt add the comment to this post", error);
+      }
     },
     async addLike() {
       try {
@@ -131,6 +164,10 @@ export default {
     focusOnInput() {
       this.$refs.comment.focus();
     },
+    uploadedCommentTime(commentTimeStemp) {
+      return postService.getCommentTime(commentTimeStemp);
+    },
+    didUserLikedComment() {},
   },
   computed: {
     loggedInUser() {
@@ -139,8 +176,8 @@ export default {
     uploadedTime() {
       return postService.getTime(this.post.timeStamp);
     },
-    didUserLiked() {
-      return postService.didUserLiked(this.post);
+    didUserLikedPost() {
+      return postService.didUserLikedPost(this.post);
     },
     canComment() {
       if (this.commentTxt.length >= 1) return true;

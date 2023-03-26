@@ -1,5 +1,6 @@
 import { storageService } from './async-storage.service'
 import { userService } from './user.service';
+import { utilService } from './util.service';
 
 
 export const postService = {
@@ -10,7 +11,8 @@ export const postService = {
     removeLike,
     addComment,
     getTime,
-    didUserLiked
+    didUserLikedPost,
+    getCommentTime
 }
 
 const POST_KEY = 'PostDB'
@@ -31,39 +33,16 @@ const months = [
     "Dec",
 ];
 
-function didUserLiked(post) {
-    let user = userService.getLoggedinUser();
-    let didUserLiked = post.likes.find(
-        (like) => like.userId === user._id
-    );
-    if (didUserLiked) return true;
-    else return false;
-}
-
-function getTime(postTimeStamp) {
-    let now = new Date().getTime();
-    let postTime = new Date(postTimeStamp).getTime();
-    let diff = (now - postTime) / 1000;
-    diff /= 60 * 60;
-    let houserDiff = Math.abs(Math.round(diff));
-    if (houserDiff >= 24 && houserDiff <= 168)
-        return Math.round(houserDiff / 24) + " DAYS AGO";
-    else if (houserDiff >= 168) {
-        return (
-            new Date(postTimeStamp).getDate() +
-            " " +
-            months[new Date(postTimeStamp).getMonth()]
-        );
-    } else return houserDiff + " HOURS AGO";
-}
-
 async function addComment(postId, commentInfo) {
     try {
         let post = await storageService.get(POST_KEY, postId)
+        commentInfo.id = utilService.makeId()
+        commentInfo.timeStamp = new Date()
         post.comments.push(commentInfo)
         await storageService.put(POST_KEY, post)
 
     } catch (error) {
+        new Error('coudl\'nt add the comment to this post', error)
 
     }
 }
@@ -98,6 +77,47 @@ async function getPosts(user) {
     }, [])
 
 }
+
+
+function didUserLikedPost(post) {
+    let user = userService.getLoggedinUser();
+    let didUserLiked = post.likes.find(
+        (like) => like.userId === user._id
+    );
+    if (didUserLiked) return true;
+    else return false;
+}
+
+function getTime(postTimeStamp) {
+    let now = new Date().getTime();
+    let postTime = new Date(postTimeStamp).getTime();
+    let diff = (now - postTime) / 1000;
+    diff /= 60 * 60;
+    let houserDiff = Math.abs(Math.round(diff));
+    if (houserDiff >= 24 && houserDiff <= 168)
+        return Math.round(houserDiff / 24) + " DAYS AGO";
+    else if (houserDiff >= 168) {
+        return (
+            new Date(postTimeStamp).getDate() +
+            " " +
+            months[new Date(postTimeStamp).getMonth()]
+        );
+    } else return houserDiff + " HOURS AGO";
+}
+
+function getCommentTime(commentTimeStamp) {
+    let now = new Date().getTime();
+    let commentTime = new Date(commentTimeStamp).getTime();
+    let diff = (now - commentTime) / 1000;
+    diff /= 60 * 60;
+    let houserDiff = Math.abs(Math.round(diff));
+    if (houserDiff >= 24 && houserDiff <= 168)
+        return Math.round(houserDiff / 24) + " D";
+    else if (houserDiff >= 168) return Math.round(houserDiff / 24) + " w";
+    else if (houserDiff < 1) return Math.round(diff * 60) + " M"
+    else return houserDiff + " H";
+}
+
 
 async function getUserPostsById(userId) {
     const posts = await storageService.query(POST_KEY)
