@@ -49,12 +49,7 @@
               class="comment-input"
               placeholder="comment..."
             />
-            <a
-              @click="addComment()"
-              :class="{ active: commentTxt.length >= 1 }"
-            >
-              post
-            </a>
+            <a @click="addComment()" :class="{ active: canComment }"> post </a>
           </section>
         </section>
       </section>
@@ -66,21 +61,6 @@
 import { postService } from "../services/post.service";
 import { userService } from "../services/user.service";
 import ImgSlider from "./img-slider.vue";
-
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 
 export default {
   data() {
@@ -103,16 +83,29 @@ export default {
     closePost() {
       this.$emit("onClosePost");
     },
-    addComment() {
+    async addComment() {
       if (this.commentTxt.length < 1) return;
+
+      try {
+        const commentInfo = {
+          txt: this.commentTxt,
+          userid: this.loggedInUser._id,
+          username: this.loggedInUser.username,
+          userImgUrl: this.loggedInUser.imgUrl,
+        };
+        await postService.addComment(this.post._id, commentInfo);
+        this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.$route.params._id,
+        });
+      } catch (error) {}
     },
     async addLike() {
       try {
-        let userLiked = userService.getLoggedinUser();
         let userInfo = {
-          imgUrl: userLiked.imgUrl,
-          userId: userLiked._id,
-          username: userLiked.username,
+          imgUrl: this.loggedInUser.imgUrl,
+          userId: this.loggedInUser._id,
+          username: this.loggedInUser.username,
         };
         await postService.addLike(this.post._id, userInfo);
         this.$store.dispatch({
@@ -125,7 +118,7 @@ export default {
     },
     async removeLike() {
       try {
-        const userId = userService.getLoggedinUser()._id;
+        const userId = this.loggedInUser._id;
         await postService.removeLike(this.post._id, userId);
         this.$store.dispatch({
           type: "loadUserPosts",
@@ -140,29 +133,18 @@ export default {
     },
   },
   computed: {
+    loggedInUser() {
+      return this.$store.getters.GetUser;
+    },
     uploadedTime() {
-      let now = new Date().getTime();
-      let postTime = new Date(this.post.timeStamp).getTime();
-      let diff = (now - postTime) / 1000;
-      diff /= 60 * 60;
-      let houserDiff = Math.abs(Math.round(diff));
-      if (houserDiff >= 24 && houserDiff <= 168)
-        return Math.round(houserDiff / 24) + " DAYS AGO";
-      else if (houserDiff >= 168) {
-        return (
-          new Date(this.post.timeStamp).getDate() +
-          " " +
-          months[new Date(this.post.timeStamp).getMonth()]
-        );
-      } else return houserDiff + " HOURS AGO";
+      return postService.getTime(this.post.timeStamp);
     },
     didUserLiked() {
-      let user = userService.getLoggedinUser();
-      let didUserLiked = this.post.likes.find(
-        (like) => like.userId === user._id
-      );
-      if (didUserLiked) return true;
-      else return false;
+      return postService.didUserLiked(this.post);
+    },
+    canComment() {
+      if (this.commentTxt.length >= 1) return true;
+      else false;
     },
   },
 };

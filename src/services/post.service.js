@@ -1,4 +1,5 @@
 import { storageService } from './async-storage.service'
+import { userService } from './user.service';
 
 
 export const postService = {
@@ -6,10 +7,66 @@ export const postService = {
     getUserPostsById,
     getPosts,
     addLike,
-    removeLike
+    removeLike,
+    addComment,
+    getTime,
+    didUserLiked
 }
 
 const POST_KEY = 'PostDB'
+
+
+const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+];
+
+function didUserLiked(post) {
+    let user = userService.getLoggedinUser();
+    let didUserLiked = post.likes.find(
+        (like) => like.userId === user._id
+    );
+    if (didUserLiked) return true;
+    else return false;
+}
+
+function getTime(postTimeStamp) {
+    let now = new Date().getTime();
+    let postTime = new Date(postTimeStamp).getTime();
+    let diff = (now - postTime) / 1000;
+    diff /= 60 * 60;
+    let houserDiff = Math.abs(Math.round(diff));
+    if (houserDiff >= 24 && houserDiff <= 168)
+        return Math.round(houserDiff / 24) + " DAYS AGO";
+    else if (houserDiff >= 168) {
+        return (
+            new Date(postTimeStamp).getDate() +
+            " " +
+            months[new Date(postTimeStamp).getMonth()]
+        );
+    } else return houserDiff + " HOURS AGO";
+}
+
+async function addComment(postId, commentInfo) {
+    try {
+        let post = await storageService.get(POST_KEY, postId)
+        post.comments.push(commentInfo)
+        await storageService.put(POST_KEY, post)
+
+    } catch (error) {
+
+    }
+}
 
 async function removeLike(postId, userId) {
     try {
