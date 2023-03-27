@@ -10,12 +10,38 @@
         background-color: rgba(120, 120, 120, 0.523);
     }
 
+    .post-actions-btns {
+
+        button {
+            border: none;
+            background: none;
+            border-radius: 50%;
+            padding: 10px;
+
+            &:hover {
+                background: rgb(224, 224, 224);
+            }
+        }
+
+        & .right {
+            position: absolute;
+            top: 50vh;
+            right: 40px;
+        }
+
+        & .left {
+            position: absolute;
+            top: 50vh;
+            left: 40px;
+        }
+    }
+
     .post {
         border-radius: 5px;
         display: flex;
         position: absolute;
         top: calc(100vh - 90%);
-        left: calc(100vw - 85%);
+        left: calc(100vw - 80%);
         z-index: 4;
         background-color: rgb(255, 255, 255);
 
@@ -32,7 +58,6 @@
             img {
                 aspect-ratio: 1/1;
                 object-fit: contain;
-                border-top-left-radius: 10px;
                 background-color: black;
                 width: 660px;
             }

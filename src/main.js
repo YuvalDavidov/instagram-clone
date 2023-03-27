@@ -24,7 +24,9 @@ import {
     BiHeart,
     BiChat,
     BiSend,
-    FcLike
+    FcLike,
+    MdKeyboardarrowrightRound,
+    MdKeyboardarrowleftRound
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -45,7 +47,9 @@ addIcons(BiSearch,
     BiHeart,
     BiChat,
     BiSend,
-    FcLike);
+    FcLike,
+    MdKeyboardarrowrightRound,
+    MdKeyboardarrowleftRound);
 
 
 const app = createApp(App)

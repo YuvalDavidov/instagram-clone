@@ -1,6 +1,14 @@
 <template>
   <section class="user-post-preview">
     <section class="container" @click="closePost"></section>
+    <section class="post-actions-btns">
+      <button v-if="postIndex" @click="onChangePostIndex(-1)" class="left">
+        <v-icon name="md-keyboardarrowleft-round" scale="2" />
+      </button>
+      <button v-if="!isLastPost" @click="onChangePostIndex(1)" class="right">
+        <v-icon name="md-keyboardarrowright-round" scale="2" />
+      </button>
+    </section>
     <section class="post">
       <section class="post-images">
         <ImgSlider :imgsUrl="post.imgsUrl" />
@@ -14,7 +22,7 @@
           <button>...</button>
         </div>
         <div class="comments">
-          <li class="post-summery">
+          <li class="post-summery" v-if="haveSummery">
             <img :src="user.imgUrl" class="summery-img" />
             <section class="summery-info">
               <h5>{{ user.username }}</h5>
@@ -89,7 +97,6 @@
 
 <script>
 import { postService } from "../services/post.service";
-import { userService } from "../services/user.service";
 import ImgSlider from "./img-slider.vue";
 
 export default {
@@ -108,10 +115,21 @@ export default {
       type: Object,
       required: true,
     },
+    postsLength: {
+      type: Number,
+      required: true,
+    },
+    postIndex: {
+      type: Number,
+      required: true,
+    },
   },
   methods: {
     closePost() {
       this.$emit("onClosePost");
+    },
+    onChangePostIndex(direction) {
+      this.$emit("onChangePostIndex", direction);
     },
     async addComment() {
       if (this.commentTxt.length < 1) return;
@@ -183,9 +201,14 @@ export default {
       if (this.commentTxt.length >= 1) return true;
       else false;
     },
+    haveSummery() {
+      if (this.post.summery.length >= 1) return true;
+      else false;
+    },
+    isLastPost() {
+      if (this.postIndex === this.postsLength - 1) return true;
+      else false;
+    },
   },
 };
 </script>
-
-<style>
-</style>

@@ -7,7 +7,14 @@
         class="post-img"
       />
       <section v-if="isClickedPost && postIndex === index">
-        <UserPostPreview :post="post" :user="user" @onClosePost="onClosePost" />
+        <UserPostPreview
+          :post="post"
+          :user="user"
+          :postsLength="posts.length"
+          :postIndex="index"
+          @onClosePost="onClosePost"
+          @onChangePostIndex="onChangePostIndex"
+        />
       </section>
     </li>
   </section>
@@ -40,6 +47,9 @@ export default {
     onClosePost() {
       this.isClickedPost = !this.isClickedPost;
       this.postIndex = null;
+    },
+    onChangePostIndex(direction) {
+      this.postIndex += direction;
     },
   },
   computed: {},
