@@ -57,24 +57,27 @@
             <section>
               <button>
                 <v-icon
+                  scale="1.2"
                   name="bi-heart"
                   @click="addLike()"
                   v-if="!didUserLikedPost"
                 />
                 <v-icon
-                  name="fc-like"
+                  scale="1.2"
+                  fill="red"
+                  name="bi-heart-fill"
                   @click="removeLike()"
                   v-if="didUserLikedPost"
                 />
               </button>
               <button @click="focusOnInput()">
-                <v-icon name="bi-chat" />
+                <v-icon scale="1.2" name="bi-chat" />
               </button>
               <button>
-                <v-icon name="bi-send" />
+                <v-icon scale="1.2" name="bi-send" />
               </button>
             </section>
-            <button>save</button>
+            <button><v-icon scale="1.2" name="la-bookmark-solid" /></button>
           </div>
           <span> {{ post.likes.length }} likes</span>
           <small> {{ uploadedTime }}</small>

@@ -24,7 +24,7 @@ import {
     BiHeart,
     BiChat,
     BiSend,
-    FcLike,
+    BiHeartFill,
     MdKeyboardarrowrightRound,
     MdKeyboardarrowleftRound
 } from "oh-vue-icons/icons";
@@ -47,7 +47,7 @@ addIcons(BiSearch,
     BiHeart,
     BiChat,
     BiSend,
-    FcLike,
+    BiHeartFill,
     MdKeyboardarrowrightRound,
     MdKeyboardarrowleftRound);
 
