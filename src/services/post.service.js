@@ -114,7 +114,8 @@ function getCommentTime(commentTimeStamp) {
     if (houserDiff >= 24 && houserDiff <= 168)
         return Math.round(houserDiff / 24) + " D";
     else if (houserDiff >= 168) return Math.round(houserDiff / 24) + " w";
-    else if (houserDiff < 1) return Math.round(diff * 60) + " M"
+    else if (Math.round(diff * 60) < 1) return 'NOW'
+    else if (Math.round(diff * 60) < 60) return Math.round(diff * 60) + " M"
     else return houserDiff + " H";
 }
 

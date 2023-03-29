@@ -26,7 +26,8 @@ import {
     BiSend,
     BiHeartFill,
     MdKeyboardarrowrightRound,
-    MdKeyboardarrowleftRound
+    MdKeyboardarrowleftRound,
+    BiThreeDots
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -49,7 +50,8 @@ addIcons(BiSearch,
     BiSend,
     BiHeartFill,
     MdKeyboardarrowrightRound,
-    MdKeyboardarrowleftRound);
+    MdKeyboardarrowleftRound,
+    BiThreeDots);
 
 
 const app = createApp(App)

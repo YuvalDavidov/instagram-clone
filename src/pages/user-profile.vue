@@ -96,7 +96,10 @@ export default {
       async handler(params) {
         // Fetch data for the new route
         this.user = await userService.getUserById(params._id);
-        this.posts = await postService.getUserPostsById(params._id);
+        this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.$route.params._id,
+        });
       },
     },
   },

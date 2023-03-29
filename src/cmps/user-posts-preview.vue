@@ -19,7 +19,9 @@
             <img :src="user.imgUrl" class="user-img" />
             <span>{{ user.username }}</span>
           </header>
-          <button>...</button>
+          <button>
+            <v-icon name="bi-three-dots" />
+          </button>
         </div>
         <div class="comments">
           <li class="post-summery" v-if="haveSummery">
@@ -29,28 +31,34 @@
               <span>{{ post.summery }}</span>
             </section>
           </li>
-          <li
-            v-for="comment in post.comments"
-            :key="comment.id"
-            class="post-comment"
-          >
-            <section class="comment-info-container">
-              <img :src="comment.userImgUrl" class="comment-img" />
-              <section class="comment-info">
-                <span class="comment-txt">
-                  <span>{{ comment.username }}</span> {{ comment.txt }}</span
-                >
+          <ul class="post-comment-ul" v-if="post.comments.length">
+            <li
+              class="post-comment"
+              v-for="comment in post.comments"
+              :key="comment.id"
+            >
+              <section class="comment-info-container">
+                <img :src="comment.userImgUrl" class="comment-img" />
+                <section class="comment-info">
+                  <span class="comment-txt">
+                    <span>{{ comment.username }}</span> {{ comment.txt }}</span
+                  >
+                </section>
+                <article class="comment-like-n-comments">
+                  <span>{{ uploadedCommentTime(comment.timeStamp) }}</span>
+                  <span>0 likes</span>
+                  <span>Replay</span>
+                </article>
               </section>
-              <article class="comment-like-n-comments">
-                <span>{{ uploadedCommentTime(comment.timeStamp) }}</span>
-                <span>50 likes</span>
-                <span>Replay</span>
-              </article>
-            </section>
-            <button>
-              <v-icon name="bi-heart" />
-            </button>
-          </li>
+              <button>
+                <v-icon name="bi-heart" />
+              </button>
+            </li>
+          </ul>
+          <div class="no-comments" v-if="!post.comments.length">
+            <span> no comments yet. </span>
+            <small>start the conversations.</small>
+          </div>
         </div>
         <section class="add-comment">
           <div class="actions-btns">
@@ -95,20 +103,23 @@
         </section>
       </section>
     </section>
+    <UserPostSettings v-if="isSettingesOpen" />
   </section>
 </template>
 
 <script>
 import { postService } from "../services/post.service";
 import ImgSlider from "./img-slider.vue";
+import UserPostSettings from "./user-post-settings.vue";
 
 export default {
   data() {
     return {
       commentTxt: "",
+      isSettingesOpen: false,
     };
   },
-  components: { ImgSlider },
+  components: { ImgSlider, UserPostSettings },
   props: {
     post: {
       type: Object,
