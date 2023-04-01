@@ -1,10 +1,10 @@
-import { createStore } from 'vuex'
 import { postService } from '../services/post.service'
 
 export const postStore = {
     state: {
         userPosts: [],
-        followingPosts: []
+        followingPosts: [],
+        isPostModalOpen: false
     },
     getters: {
         userPosts({ userPosts }) {
@@ -12,6 +12,9 @@ export const postStore = {
         },
         followingPosts({ followingPosts }) {
             return followingPosts
+        },
+        isPostModalOpen({ isPostModalOpen }) {
+            return isPostModalOpen
         }
     },
     mutations: {
@@ -20,6 +23,9 @@ export const postStore = {
         },
         setPosts(state, { posts }) {
             state.followingPosts = posts
+        },
+        toggleModal(state, { isOpen }) {
+            state.isPostModalOpen = isOpen
         }
     },
     actions: {
@@ -40,6 +46,9 @@ export const postStore = {
                 throw new Error('coudl\'nt get posts', err)
 
             }
+        },
+        togglePostModal({ commit }, { isOpen }) {
+            commit({ type: 'toggleModal', isOpen })
         }
     }
 

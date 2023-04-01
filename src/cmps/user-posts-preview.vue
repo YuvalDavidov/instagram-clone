@@ -71,7 +71,7 @@
                 />
               </button>
               <button @click="focusOnInput()">
-                <v-icon scale="1.2" name="bi-chat" />
+                <v-icon scale="1.2" name="bi-chat" flip="horizontal" />
               </button>
               <button>
                 <v-icon scale="1.2" name="bi-send" />
@@ -167,7 +167,7 @@ export default {
           userId: this.$route.params._id,
         });
       } catch (err) {
-        throw new Error("coudl'nt like this post", err);
+        console.error("coudl'nt like this post", err);
       }
     },
     async removeLike() {

@@ -2,25 +2,7 @@
   <section>
     <section class="post-preview-home" v-for="post in posts" :key="post.id">
       <post-preview-home :post="post" />
-      <div class="post-actions">
-        <nav class="actions-nav">
-          <button class="action-icon">
-            <v-icon scale="1.4" name="fa-regular-heart" />
-          </button>
-          <button class="action-icon">
-            <v-icon scale="1.4" name="fa-regular-comment" flip="horizontal" />
-          </button>
-        </nav>
-        <span>{{ post.likes.length }} likes</span>
-        <div>
-          <span class="username">{{ post.username }}</span>
-          <span class="summery">{{ post.summery }}</span>
-        </div>
-        <button @click="openPostModal()" v-if="post.comments.length">
-          View all {{ post.comments.length }} comments
-        </button>
-        <span>{{ timeAgo() }} </span>
-      </div>
+      
     </section>
   </section>
 </template>
@@ -41,9 +23,32 @@ export default {
     timeAgo(timestamp) {
       return postService.getTime(timestamp);
     },
+    async onLike() {
+      try {
+        let userInfo = {
+          imgUrl: this.loggedInUser.imgUrl,
+          userId: this.loggedInUser._id,
+          username: this.loggedInUser.username,
+        };
+        await postService.addLike(this.post._id, userInfo);
+        this.$store.dispatch({
+          type: "loadPosts",
+          userId: this.$route.params._id,
+        });
+      } catch (err) {
+        console.error("coudl'nt like this post", err);
+      }
+    },
+    didUserLikedPost(post) {
+      return postService.didUserLikedPost(post);
+    },
   },
+  
+  computed: {
+    loggedInUser() {
+      return this.$store.getters.GetUser;
+    },
+    
+  }
 };
 </script>
-
-<style>
-</style>

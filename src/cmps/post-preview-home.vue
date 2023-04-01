@@ -5,17 +5,101 @@
             <span>{{ post.username }}</span>
             </div>
         <img class="post-img" :src="post.imgsUrl[0]" >
+        <div class="post-actions">
+        <nav class="actions-nav">
+          <button class="action-icon">
+            <v-icon
+                  scale="1.2"
+                  name="bi-heart"
+                  @click="addLike()"
+                  v-if="!didUserLikedPost(post)"
+                />
+                <v-icon
+                  scale="1.2"
+                  fill="red"
+                  name="bi-heart-fill"
+                  @click="removeLike()"
+                  v-if="didUserLikedPost(post)"
+                />
+          </button>
+          <button class="action-icon comment" @click="openPostModal()">
+            <v-icon scale="1.2" name="bi-chat" flip="horizontal" />
+          </button>
+        </nav>
+        <span>{{ post.likes.length }} likes</span>
+        <div>
+          <span class="username">{{ post.username }}</span>
+          <span class="summery">{{ post.summery }}</span>
+        </div>
+        <button @click="openPostModal()" v-if="post.comments.length">
+          View all {{ post.comments.length }} comments
+        </button>
+        <span>{{ timeAgo(post.timeStamp) }} </span>
+      </div>
     </article>
+    
 </template>
 
 <script>
+import { postService } from '../services/post.service';
 export default {
+    
     props: {
         post: {
             type: Object,
             required: true
         }
-    }
+    },
+    methods: {
+    timeAgo(timestamp) {
+      return postService.getTime(timestamp);
+    },
+    openPostModal() {
+        this.$store.dispatch({
+            type: 'togglePostModal',
+            isOpen: true
+        })
+        console.log(this.$store.getters.isPostModalOpen)
+    },
+    async removeLike() {
+      try {
+        const userId = this.loggedInUser._id;
+        await postService.removeLike(this.post._id, userId);
+        this.$store.dispatch({
+          type: "loadPosts",
+          user: this.loggedInUser,
+        });
+      } catch (err) {
+        throw new Error("coudl'nt remove like from this post", err);
+      }
+    },
+    async addLike() {
+      try {
+        let userInfo = {
+          imgUrl: this.loggedInUser.imgUrl,
+          userId: this.loggedInUser._id,
+          username: this.loggedInUser.username,
+        };
+        await postService.addLike(this.post._id, userInfo);
+        this.$store.dispatch({
+          type: "loadPosts",
+          user: this.loggedInUser,
+        });
+      } catch (err) {
+        console.error("coudl'nt like this post", err);
+      }
+    },
+    didUserLikedPost(post) {
+      return postService.didUserLikedPost(post);
+    },
+  },
+  
+  computed: {
+    loggedInUser() {
+      return this.$store.getters.GetUser;
+    },
+    
+  }
 }
 </script>
 

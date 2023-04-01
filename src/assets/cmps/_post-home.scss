@@ -10,7 +10,13 @@
 
 }
 
-.post-actions {}
+.post-actions {
+    background-color: rgb(255, 255, 255);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
 .action-icon {
     align-items: center;
@@ -24,11 +30,16 @@
     &:hover {
         opacity: 0.5;
     }
+
+    &.comment {
+        margin-bottom: 2px;
+    }
 }
 
 .actions-nav {
     display: flex;
     flex-direction: row;
+    gap: 10px;
 }
 
 

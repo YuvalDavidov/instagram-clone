@@ -1,6 +1,7 @@
 .main-layout {
     display: grid;
     grid-template-columns: $nav-medium-width 1fr 100px;
+    background-color: rgb(250, 250, 250);
 
     >* {
         grid-column: 2/3;
