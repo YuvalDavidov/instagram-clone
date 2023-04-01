@@ -96,6 +96,7 @@
             .comments {
                 padding: 15px;
                 height: 472px;
+                position: relative;
                 overflow-y: scroll;
                 display: grid;
                 grid-template-rows: repeat(auto-fill, 50px);
@@ -191,6 +192,25 @@
 
                 }
 
+                .no-comments {
+                    position: absolute;
+                    display: grid;
+                    top: 50%;
+                    left: 32%;
+                    text-align: center;
+
+                    span {
+                        font-weight: bold;
+                        font-size: 24px;
+                    }
+
+                }
+
+            }
+
+            .post-comment-ul {
+                margin: 0;
+                padding: 0;
             }
 
             .add-comment {
