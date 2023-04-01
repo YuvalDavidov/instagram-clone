@@ -22,7 +22,7 @@
                   v-if="didUserLikedPost(post)"
                 />
           </button>
-          <button class="action-icon comment" @click="openPostModal()">
+          <button class="action-icon comment" @click="onOpenPostModal">
             <v-icon scale="1.2" name="bi-chat" flip="horizontal" />
           </button>
         </nav>
@@ -31,35 +31,32 @@
           <span class="username">{{ post.username }}</span>
           <span class="summery">{{ post.summery }}</span>
         </div>
-        <button @click="openPostModal()" v-if="post.comments.length">
+        <button @click="onOpenPostModal()" v-if="post.comments.length">
           View all {{ post.comments.length }} comments
         </button>
         <span>{{ timeAgo(post.timeStamp) }} </span>
       </div>
     </article>
-    
+   
 </template>
 
 <script>
 import { postService } from '../services/post.service';
 export default {
-    
     props: {
         post: {
             type: Object,
             required: true
-        }
+        },
+       
     },
     methods: {
     timeAgo(timestamp) {
       return postService.getTime(timestamp);
     },
-    openPostModal() {
-        this.$store.dispatch({
-            type: 'togglePostModal',
-            isOpen: true
-        })
-        console.log(this.$store.getters.isPostModalOpen)
+    onOpenPostModal() {
+      console.log('ho')
+        this.$emit('onOpenPostModal')
     },
     async removeLike() {
       try {
@@ -99,6 +96,10 @@ export default {
       return this.$store.getters.GetUser;
     },
     
+  },
+  created() {
+    console.log(this.isOwnProfile)
+    if (!this.$route.params._id) console.log(this.$route.params)
   }
 }
 </script>

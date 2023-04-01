@@ -36,7 +36,7 @@
     </section>
 
     <section class="posts">
-      <PostListProfile :posts="posts" :user="user" v-if="posts" />
+      <PostListProfile :posts="posts" :user="user" :isOwnProfile="isOwnProfile" v-if="posts" />
       <div class="no-posts" v-if="!posts">you have no posts</div>
     </section>
   </section>

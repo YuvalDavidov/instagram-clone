@@ -6,26 +6,26 @@
         @click="onClickedPost(index)"
         class="post-img"
       />
-      <section v-if="isClickedPost && postIndex === index">
-        <UserPostPreview
+    
+        <PostModal
+        v-if="this.$store.getters.isPostModalOpen && postIndex === index"
           :post="post"
-          :user="user"
+          :isAtHomePage="false"
           :postsLength="posts.length"
           :postIndex="index"
-          @onClosePost="onClosePost"
+          :isOwnProfile="isOwnProfile"
           @onChangePostIndex="onChangePostIndex"
         />
-      </section>
+     
     </li>
   </section>
 </template>
 
 <script>
-import UserPostPreview from "./user-posts-preview.vue";
+import PostModal from '../pages/post-modal.vue'
 export default {
   data() {
     return {
-      isClickedPost: false,
       postIndex: null,
     };
   },
@@ -34,19 +34,19 @@ export default {
       type: Array,
       required: true,
     },
-    user: {
-      type: Object,
-      required: true,
-    },
+   
+    isOwnProfile: {
+      type: Boolean,
+      required: true
+    }
   },
   methods: {
     onClickedPost(idx) {
-      this.isClickedPost = !this.isClickedPost;
+      this.$store.dispatch({
+            type: 'togglePostModal',
+            isOpen: true
+        })
       this.postIndex = idx;
-    },
-    onClosePost() {
-      this.isClickedPost = !this.isClickedPost;
-      this.postIndex = null;
     },
     onChangePostIndex(direction) {
       this.postIndex += direction;
@@ -54,7 +54,7 @@ export default {
   },
   computed: {},
   components: {
-    UserPostPreview,
+    PostModal
   },
 };
 </script>
