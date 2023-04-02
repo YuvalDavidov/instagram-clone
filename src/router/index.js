@@ -4,6 +4,7 @@ import Home from '../pages/home.vue'
 import UserProfile from '../pages/user-profile.vue'
 import Search from '../pages/search.vue'
 import Messages from '../pages/messages.vue'
+import Notifications from '../pages/notifications.vue'
 
 
 const routerOptions = {
@@ -24,6 +25,10 @@ const routerOptions = {
         {
             path: '/messages',
             component: Messages,
+        },
+        {
+            path: '/notifications',
+            component: Notifications,
         },
 
 

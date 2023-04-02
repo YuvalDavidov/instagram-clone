@@ -1,5 +1,5 @@
 <template>
-  <section class="user-post-preview">
+  <section class="post-modal">
     <section class="container" @click="closePost"></section>
     <section class="post-actions-btns" v-if="!isAtHomePage">
       <button v-if="postIndex" @click="onChangePostIndex(-1)" class="left">
@@ -103,7 +103,7 @@
         </section>
       </section>
     </section>
-    <UserPostSettings v-if="isSettingsOpen && isOwnProfile"/>
+    <UserPostSettings v-if="isSettingsOpen && isOwnProfile" />
   </section>
 </template>
 
@@ -125,7 +125,7 @@ export default {
       type: Object,
       required: true,
     },
-   
+
     postsLength: {
       type: Number,
       required: false,
@@ -136,22 +136,23 @@ export default {
     },
     isOwnProfile: {
       type: Boolean,
-      required: false
+      required: false,
     },
     isAtHomePage: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   created() {
-    console.log(this.post)
+    // console.log(this.post);
   },
   methods: {
     closePost() {
-      this.$store.dispatch({
-            type: 'togglePostModal',
-            isOpen: false
-        })
+      this.$emit("onCloseModale");
+      // this.$store.dispatch({
+      //       type: 'togglePostModal',
+      //       isOpen: false
+      //   })
     },
     onChangePostIndex(direction) {
       this.$emit("onChangePostIndex", direction);
@@ -169,14 +170,14 @@ export default {
         await postService.addComment(this.post._id, commentInfo);
         if (this.$route.params._id) {
           this.$store.dispatch({
-          type: "loadUserPosts",
-          userId: this.$route.params._id,
-        });
+            type: "loadUserPosts",
+            userId: this.$route.params._id,
+          });
         } else {
           this.$store.dispatch({
-          type: "loadPosts",
-          userId: this.$route.params._id,
-        });
+            type: "loadPosts",
+            userId: this.$route.params._id,
+          });
         }
         this.commentTxt = "";
       } catch (error) {
@@ -193,16 +194,15 @@ export default {
         await postService.addLike(this.post._id, userInfo);
         if (this.$route.params._id) {
           this.$store.dispatch({
-          type: "loadUserPosts",
-          userId: this.$route.params._id,
-        });
+            type: "loadUserPosts",
+            userId: this.$route.params._id,
+          });
         } else {
           this.$store.dispatch({
-          type: "loadPosts",
-          user: this.loggedInUser
-        });
+            type: "loadPosts",
+            user: this.loggedInUser,
+          });
         }
-       
       } catch (err) {
         console.error("coudl'nt like this post", err);
       }
@@ -213,14 +213,14 @@ export default {
         await postService.removeLike(this.post._id, userId);
         if (this.$route.params._id) {
           this.$store.dispatch({
-          type: "loadUserPosts",
-          userId: this.$route.params._id,
-        });
+            type: "loadUserPosts",
+            userId: this.$route.params._id,
+          });
         } else {
           this.$store.dispatch({
-          type: "loadPosts",
-          user: this.loggedInUser
-        });
+            type: "loadPosts",
+            user: this.loggedInUser,
+          });
         }
       } catch (err) {
         throw new Error("coudl'nt remove like from this post", err);
@@ -253,7 +253,7 @@ export default {
       else false;
     },
     isLastPost() {
-       if (this.postIndex === this.postsLength - 1) return true;
+      if (this.postIndex === this.postsLength - 1) return true;
       else false;
     },
   },

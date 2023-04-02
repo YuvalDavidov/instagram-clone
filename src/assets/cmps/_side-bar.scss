@@ -51,10 +51,6 @@
 
         a.active {
             font-family: blinker-bold;
-
-            v-icon {
-                background-color: red;
-            }
         }
 
         a:hover {
@@ -67,28 +63,10 @@
             align-items: center;
             min-height: 54px;
 
-            .profile-img {
-                margin: 0;
-                width: 24px;
-                aspect-ratio: 1/1;
-                object-fit: cover;
-                border-radius: 50%;
-            }
+
         }
 
         .side-bar-btn {
-            display: flex;
-            align-items: center;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-family: blinker;
-            font-size: 16px;
-
-            &:hover {
-                background: $nav-link-bgc-hover;
-                border-radius: 50px;
-            }
 
             span {
                 margin-left: 8px;
@@ -115,11 +93,74 @@
     }
 
     &.isSearchOpen {
-
         z-index: 2;
         transition: 1s;
         width: 70px;
     }
+
+    &.isTabletMode {
+        transition: 1s;
+        width: 70px;
+    }
+
+}
+
+.mobile-bar {
+    .top-bar {
+        background-color: white;
+        height: 60px;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        border-bottom: 1px solid $nav-border-color;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 15px;
+
+        .logo-img {
+            max-width: 100px;
+        }
+
+        .search-bar-n-notification-mobile {
+            display: flex;
+            align-items: center;
+
+            & .search-input {
+                &.mobile {
+                    height: 36px;
+                    width: 268px;
+                }
+
+            }
+
+            .clear-search-input-btn {
+                right: 23px;
+                top: 22px;
+            }
+        }
+    }
+
+    .bottom-bar {
+        background-color: white;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid $nav-border-color;
+
+        nav {
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+
+            .nav-btn {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
 }
 
 .settings-modal {
@@ -181,29 +222,13 @@
             padding: 12px 14px 36px 24px;
         }
 
-        input {
-            border: 0;
-            outline: none;
-            background: $input-bg-color;
-            border-radius: 5px;
+        .search-input {
             height: 40px;
-            margin: 0 16px;
-            width: 92%;
-            padding: 3px 13px;
         }
 
         .clear-search-input-btn {
-            position: absolute;
-
             right: 23px;
             top: 77px;
-            background: none;
-            border: none;
-            border-radius: 50%;
-
-            &:hover {
-                background: $clear-input-btn-bg-color;
-            }
         }
 
     }
@@ -224,6 +249,52 @@
 
 }
 
+.side-bar-btn {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: blinker;
+    font-size: 16px;
+
+    &:hover {
+        background: $nav-link-bgc-hover;
+        border-radius: 50px;
+    }
+}
+
+.clear-search-input-btn {
+    position: absolute;
+    right: 23px;
+    top: 77px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+
+    &:hover {
+        background: $clear-input-btn-bg-color;
+    }
+}
+
+.search-input {
+    border: 0;
+    outline: none;
+    background: $input-bg-color;
+    border-radius: 5px;
+    margin: 0 16px;
+    width: 92%;
+    padding: 3px 13px;
+}
+
+.profile-img {
+    margin: 0;
+    width: 24px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 @keyframes search-bar-animasion {
     from {
         width: 200px;
@@ -235,3 +306,10 @@
         left: 70px;
     }
 }
+
+// @media (max-width:1250px) {
+//     .side-bar {
+//         width: 70px;
+//         overflow: hidden;
+//     }
+// }

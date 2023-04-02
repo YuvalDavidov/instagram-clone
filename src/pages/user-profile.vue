@@ -36,7 +36,12 @@
     </section>
 
     <section class="posts">
-      <PostListProfile :posts="posts" :user="user" :isOwnProfile="isOwnProfile" v-if="posts" />
+      <PostListProfile
+        :posts="posts"
+        :user="user"
+        :isOwnProfile="isOwnProfile"
+        v-if="posts.length"
+      />
       <div class="no-posts" v-if="!posts">you have no posts</div>
     </section>
   </section>
@@ -57,10 +62,10 @@ export default {
   },
   async created() {
     this.user = await userService.getUserById(this.$route.params._id);
-    this.$store.dispatch({
-      type: "loadUserPosts",
-      userId: this.$route.params._id,
-    });
+    // this.$store.dispatch({
+    //   type: "loadUserPosts",
+    //   userId: this.$route.params._id,
+    // });
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );
