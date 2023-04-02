@@ -1,16 +1,23 @@
 <template>
   <section>
-    <section class="post-preview-home" v-for="(post, index) in posts" :key="post.id">
-      <post-preview-home :post="post" @onOpenPostModal="onOpenPostModal(index)" />
-      <PostModal
-        v-if="this.$store.getters.isPostModalOpen && postIndex === index"
+    <section
+      class="post-preview-home"
+      v-for="(post, index) in posts"
+      :key="post.id"
+    >
+      <post-preview-home
         :post="post"
-          :user="this.$store.getters.GetUser"
-          :isAtHomePage="true"
-        />
+        @onOpenPostModal="onOpenPostModal(index)"
+      />
+      <PostModal
+        v-if="isModalOpen && postIndex === index"
+        :post="post"
+        :user="this.$store.getters.GetUser"
+        :isAtHomePage="true"
+        @onCloseModale="onCloseModale"
+      />
     </section>
   </section>
-  
 </template>
 
 <script>
@@ -18,10 +25,11 @@ import { postService } from "../services/post.service";
 import postPreviewHome from "./post-preview-home.vue";
 import PostModal from "../pages/post-modal.vue";
 export default {
-  components: { postPreviewHome,  PostModal},
+  components: { postPreviewHome, PostModal },
   data() {
     return {
       postIndex: null,
+      isModalOpen: false,
     };
   },
   props: {
@@ -36,11 +44,12 @@ export default {
       return postService.getTime(timestamp);
     },
     onOpenPostModal(index) {
-      this.$store.dispatch({
-            type: 'togglePostModal',
-            isOpen: true
-        })
-        this.postIndex = index;
+      this.isModalOpen = !this.isModalOpen;
+      this.postIndex = index;
+    },
+    onCloseModale() {
+      this.isModalOpen = !this.isModalOpen;
+      this.postIndex = null;
     },
     async onLike() {
       try {
@@ -62,16 +71,13 @@ export default {
       return postService.didUserLikedPost(post);
     },
   },
-  
+
   computed: {
     loggedInUser() {
       return this.$store.getters.GetUser;
     },
 
-    index() {
-      
-    }
-    
-  }
+    index() {},
+  },
 };
 </script>
