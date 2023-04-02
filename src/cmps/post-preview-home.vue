@@ -35,6 +35,7 @@
           View all {{ post.comments.length }} comments
         </button>
         <span>{{ timeAgo(post.timeStamp) }} </span>
+        
       </div>
     </article>
    
