@@ -8,10 +8,34 @@ export const userService = {
     getEmptyUser,
     signup,
     saveLocalUser,
-    checkIfOwnProfile
+    checkIfOwnProfile,
+    query
 }
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
+
+async function query(filterBy) {
+    try {
+        const loggedinUser = getLoggedinUser()._id
+        let users = await storageService.query(USER_KEY)
+        users = users.map(user => {
+            return {
+                username: user.username,
+                userId: user._id,
+                imgUrl: user.imgUrl,
+                fullname: user.fullname
+            }
+        })
+        users = users.filter(user => user.userId !== loggedinUser)
+        users = users.filter(user => user.username.includes(filterBy))
+        // users = users.splice(0, 5)
+        return users
+    } catch (error) {
+        throw new Error('coudnlt preform search query', error)
+
+    }
+
+}
 
 function getLoggedinUser() {
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))

@@ -1,0 +1,29 @@
+.users-list {
+    li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        padding: 8px 24px;
+        gap: 10px;
+
+        .user-info {
+            display: grid;
+
+            & :first-child {
+                font-weight: bold;
+            }
+        }
+
+        .user-img {
+            width: 44px;
+            border-radius: 50%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+
+        &:hover {
+            background-color: $nav-link-bgc-hover;
+            cursor: pointer;
+        }
+    }
+}

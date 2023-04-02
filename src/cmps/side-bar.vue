@@ -152,7 +152,7 @@
       <section class="top">
         <h1>Search</h1>
         <input
-          @change="onSearch()"
+          @input="onSearch"
           class="search-input"
           type="text"
           placeholder="Search"
@@ -166,6 +166,7 @@
           x
         </button>
       </section>
+      <UsersList @onToggleSearch="onToggleSearch" />
     </article>
 
     <article v-if="isCreateOpen" class="create-post-modal">
@@ -179,6 +180,7 @@
 import { userService } from "../services/user.service";
 
 import CreateModal from "@/cmps/create-modal.vue";
+import UsersList from "@/cmps/users-list.vue";
 
 export default {
   data() {
@@ -207,9 +209,13 @@ export default {
     },
     onClearSearch() {
       this.searchTxt = "";
+      this.onSearch();
     },
     onSearch() {
-      console.log(this.searchTxt);
+      this.$store.dispatch({
+        type: "loadUsersBy",
+        filterBy: this.searchTxt,
+      });
     },
     onLogout() {
       userService.logout();
@@ -218,13 +224,6 @@ export default {
       this.isCreateOpen = !this.isCreateOpen;
     },
     windowSizeHandeler(e) {
-      // console.log(
-      //   e.currentTarget.innerWidth,
-      //   "this.isTabletMode:",
-      //   this.isTabletMode,
-      //   "this.isMobileMode:",
-      //   this.isMobileMode
-      // );
       if (
         e.currentTarget.innerWidth < 1260 &&
         e.currentTarget.innerWidth > 770
@@ -247,6 +246,7 @@ export default {
   },
   components: {
     CreateModal,
+    UsersList,
   },
 };
 </script>
