@@ -8,11 +8,17 @@ export const usersStore = {
     getters: {
         filterdByUsers({ users }) {
             return users
+        },
+        searchedUsers({ searchedUsers }) {
+            return searchedUsers
         }
     },
     mutations: {
         setUsers(state, { users }) {
             state.users = users
+        },
+        setSearchedUsers(state, { user }) {
+            state.searchedUsers.push(user)
         }
     },
     actions: {
@@ -27,6 +33,9 @@ export const usersStore = {
             } catch (error) {
                 console.log(error, 'couldnt load users');
             }
+        },
+        addSearchedUser({ commit }, { user }) {
+            commit({ type: 'setSearchedUsers', user })
         }
     },
 
