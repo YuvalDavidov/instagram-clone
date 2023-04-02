@@ -36,17 +36,23 @@
           >
         </button>
 
-        <button @click="onToggleCreate()" class="side-bar-btn">
-          <v-icon scale="1.6" name="bi-plus-square" />
-          <span v-if="!isSearchOpen && !isTabletMode">create</span>
-        </button>
-
         <RouterLink active-class="active" to="/messages">
           <v-icon scale="1.6" name="la-facebook-messenger" /><span
             v-if="!isSearchOpen && !isTabletMode"
             >Messages</span
           ></RouterLink
         >
+
+        <RouterLink to="/notifications">
+          <v-icon name="fa-regular-heart" color="black" scale="1.6" />
+          <span v-if="!isSearchOpen && !isTabletMode">Notifications</span>
+        </RouterLink>
+
+        <button @click="onToggleCreate()" class="side-bar-btn">
+          <v-icon scale="1.6" name="bi-plus-square" />
+          <span v-if="!isSearchOpen && !isTabletMode">create</span>
+        </button>
+
         <RouterLink
           class="profile-btn"
           active-class="active"
@@ -91,10 +97,29 @@
           >
             x
           </button>
-          <v-icon name="fa-regular-heart" scale="1.5" />
+          <RouterLink to="/notifications">
+            <v-icon name="fa-regular-heart" color="black" scale="1.5" />
+          </RouterLink>
         </div>
       </section>
-      <section class="bottom-bar">asdas</section>
+      <section class="bottom-bar">
+        <nav>
+          <RouterLink class="nav-btn" to="/"
+            ><v-icon color="black" scale="1.5" name="fa-home"
+          /></RouterLink>
+          <RouterLink class="nav-btn" to="/messages">
+            <v-icon color="black" scale="1.5" name="la-facebook-messenger"
+          /></RouterLink>
+
+          <button @click="onToggleCreate()" class="side-bar-btn">
+            <v-icon scale="1.5" name="bi-plus-square" />
+          </button>
+
+          <RouterLink class="nav-btn" :to="`/profile/${user._id}`">
+            <img :src="`${user.imgUrl}`" class="profile-img"
+          /></RouterLink>
+        </nav>
+      </section>
     </section>
 
     <article v-if="isSettingsModalOpen" class="settings-modal">

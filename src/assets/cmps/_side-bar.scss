@@ -51,10 +51,6 @@
 
         a.active {
             font-family: blinker-bold;
-
-            v-icon {
-                background-color: red;
-            }
         }
 
         a:hover {
@@ -67,28 +63,10 @@
             align-items: center;
             min-height: 54px;
 
-            .profile-img {
-                margin: 0;
-                width: 24px;
-                aspect-ratio: 1/1;
-                object-fit: cover;
-                border-radius: 50%;
-            }
+
         }
 
         .side-bar-btn {
-            display: flex;
-            align-items: center;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-family: blinker;
-            font-size: 16px;
-
-            &:hover {
-                background: $nav-link-bgc-hover;
-                border-radius: 50px;
-            }
 
             span {
                 margin-left: 8px;
@@ -129,6 +107,7 @@
 
 .mobile-bar {
     .top-bar {
+        background-color: white;
         height: 60px;
         position: fixed;
         top: 0;
@@ -163,10 +142,23 @@
     }
 
     .bottom-bar {
-        background-color: pink;
+        background-color: white;
         position: fixed;
         bottom: 0;
         width: 100%;
+        border-top: 1px solid $nav-border-color;
+
+        nav {
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+
+            .nav-btn {
+                display: flex;
+                align-items: center;
+            }
+        }
     }
 
 }
@@ -257,6 +249,21 @@
 
 }
 
+.side-bar-btn {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: blinker;
+    font-size: 16px;
+
+    &:hover {
+        background: $nav-link-bgc-hover;
+        border-radius: 50px;
+    }
+}
+
 .clear-search-input-btn {
     position: absolute;
     right: 23px;
@@ -278,6 +285,14 @@
     margin: 0 16px;
     width: 92%;
     padding: 3px 13px;
+}
+
+.profile-img {
+    margin: 0;
+    width: 24px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 @keyframes search-bar-animasion {
