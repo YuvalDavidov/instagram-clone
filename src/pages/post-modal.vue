@@ -1,5 +1,5 @@
 <template>
-  <section class="user-post-preview">
+  <section class="post-modal">
     <section class="container" @click="closePost"></section>
     <section class="post-actions-btns" v-if="!isAtHomePage">
       <button v-if="postIndex" @click="onChangePostIndex(-1)" class="left">
@@ -144,7 +144,7 @@ export default {
     },
   },
   created() {
-    console.log(this.post);
+    // console.log(this.post);
   },
   methods: {
     closePost() {
