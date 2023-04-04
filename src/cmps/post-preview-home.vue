@@ -28,13 +28,14 @@
         </nav>
         <span>{{ post.likes.length }} likes</span>
         <div>
-          <span class="username">{{ post.username }}</span>
+          <span class="username">{{ post.username}}</span>
+          <span class="space"></span>
           <span class="summery">{{ post.summery }}</span>
         </div>
         <button @click="onOpenPostModal()" v-if="post.comments.length">
           View all {{ post.comments.length }} comments
         </button>
-        <span>{{ timeAgo(post.timeStamp) }} </span>
+        <span class="time-span">{{ timeAgo(post.timeStamp) }} </span>
         <section class="input-actions">
             <input
               ref="comment"

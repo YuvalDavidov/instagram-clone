@@ -13,6 +13,22 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    .username {
+
+        font-weight: bold;
+    }
+
+    .space {
+        display: inline-block;
+        min-width: 5px;
+    }
+
+    .time-span {
+        letter-spacing: .2px;
+        color: #737373;
+        font-size: 12px;
+    }
 }
 
 .action-icon {
