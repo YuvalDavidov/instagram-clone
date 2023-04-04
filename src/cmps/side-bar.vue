@@ -195,6 +195,16 @@ export default {
     };
   },
   created() {
+    if (window.innerWidth < 1260 && window.innerWidth > 770) {
+      this.isTabletMode = true;
+      this.isMobileMode = false;
+    } else if (window.innerWidth < 770) {
+      this.isMobileMode = true;
+      this.isTabletMode = false;
+    } else {
+      this.isMobileMode = false;
+      this.isTabletMode = false;
+    }
     window.addEventListener("resize", this.windowSizeHandeler);
   },
   destroyed() {
