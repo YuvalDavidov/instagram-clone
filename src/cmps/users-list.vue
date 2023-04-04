@@ -1,21 +1,44 @@
 <template>
   <section class="users-list">
-    <li
-      v-for="(user, index) in filterdByUsers"
-      :key="index"
-      @click="moveTo(user)"
-    >
-      <img class="user-img" :src="user.imgUrl" alt="" />
-      <div class="user-info">
-        <span>{{ user.username }}</span>
-        <span>{{ user.fullname }}</span>
+    <li v-for="(user, index) in filterdByUsers" :key="index">
+      <div class="list-container" @click="moveTo(user)">
+        <img class="user-img" :src="user.imgUrl" alt="" />
+        <div class="user-info">
+          <span>{{ user.username }}</span>
+          <span>{{ user.fullname }}</span>
+        </div>
       </div>
     </li>
-    <!-- <li
-      v-if="filterdByUsers"
-      v-for="(user, index) in searchedUsers"
-      :key="index"
-    ></li> -->
+    <div class="resent-action" v-if="!filterdByUsers.length">
+      <h3>Resent</h3>
+      <button
+        v-if="searchedUsers.length"
+        class="clear-all-btn"
+        @click="onClearAll()"
+      >
+        Clear all
+      </button>
+    </div>
+    <div v-if="searchedUsers.length && !filterdByUsers.length">
+      <li v-for="(user, index) in searchedUsers" :key="index">
+        <div class="list-container" @click="moveTo(user)">
+          <img class="user-img" :src="user.imgUrl" alt="" />
+          <div class="user-info">
+            <span>{{ user.username }}</span>
+            <span>{{ user.fullname }}</span>
+          </div>
+        </div>
+        <button class="remove-one-btn" @click="onRemoveOneResent(user.userId)">
+          <v-icon name="bi-x" scale="1.8" />
+        </button>
+      </li>
+    </div>
+    <div
+      class="no-resent"
+      v-if="!searchedUsers.length && !filterdByUsers.length"
+    >
+      No recent searches.
+    </div>
   </section>
 </template>
 
@@ -30,13 +53,24 @@ export default {
       this.$router.push(`/profile/${user.userId}`);
       this.$emit("onToggleSearch");
     },
+    onRemoveOneResent(userId) {
+      this.$store.dispatch({
+        type: "removeOneSearchedUser",
+        userId,
+      });
+    },
+    onClearAll() {
+      this.$store.dispatch({
+        type: "removeAllSearchedUsers",
+      });
+    },
   },
   computed: {
     filterdByUsers() {
       return this.$store.getters.filterdByUsers;
     },
     searchedUsers() {
-      return this.$$store.getters.searchedUsers;
+      return this.$store.getters.searchedUsers;
     },
   },
 };

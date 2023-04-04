@@ -18,7 +18,14 @@ export const usersStore = {
             state.users = users
         },
         setSearchedUsers(state, { user }) {
+            if (state.searchedUsers.includes(user)) return
             state.searchedUsers.push(user)
+        },
+        removeAllSearchedUsers(state) {
+            state.searchedUsers = []
+        },
+        removeOneSearchedUser(state, { userId }) {
+            state.searchedUsers = state.searchedUsers.filter(user => user.userId !== userId)
         }
     },
     actions: {
@@ -36,6 +43,12 @@ export const usersStore = {
         },
         addSearchedUser({ commit }, { user }) {
             commit({ type: 'setSearchedUsers', user })
+        },
+        removeAllSearchedUsers({ commit }) {
+            commit({ type: 'removeAllSearchedUsers' })
+        },
+        removeOneSearchedUser({ commit }, { userId }) {
+            commit({ type: 'removeOneSearchedUser', userId })
         }
     },
 

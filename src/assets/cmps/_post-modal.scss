@@ -12,8 +12,6 @@
 
     .post-actions-btns {
         button {
-            border: none;
-            background: none;
             border-radius: 50%;
             padding: 10px;
 
@@ -90,10 +88,6 @@
 
                 }
 
-                button {
-                    background: none;
-                    border: none;
-                }
             }
 
             .comments {
@@ -189,8 +183,6 @@
 
                     button {
                         height: max-content;
-                        border: none;
-                        background: none;
                     }
 
                 }
@@ -198,8 +190,8 @@
                 .no-comments {
                     position: absolute;
                     display: grid;
-                    top: 50%;
-                    left: 32%;
+                    top: 40%;
+                    left: 30%;
                     text-align: center;
 
                     span {
@@ -235,11 +227,6 @@
                     display: flex;
                     justify-content: space-between;
 
-
-                    button {
-                        background: none;
-                        border: none;
-                    }
                 }
 
                 .input-actions {
@@ -303,7 +290,7 @@
 
 }
 
-@media (max-width: 740px) {
+@media (max-width: 770px) {
 
     .post-modal {
         .post {

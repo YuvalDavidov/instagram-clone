@@ -1,29 +1,60 @@
 .users-list {
     li {
+        position: relative;
         list-style: none;
-        display: flex;
-        align-items: center;
-        padding: 8px 24px;
-        gap: 10px;
 
-        .user-info {
-            display: grid;
+        .list-container {
 
-            & :first-child {
-                font-weight: bold;
+            display: flex;
+            align-items: center;
+            padding: 8px 24px;
+            gap: 10px;
+
+            .user-info {
+                display: grid;
+
+                & :first-child {
+                    font-weight: bold;
+                }
+            }
+
+            .user-img {
+                width: 44px;
+                border-radius: 50%;
+                aspect-ratio: 1/1;
+                object-fit: cover;
+            }
+
+            &:hover {
+                background-color: $nav-link-bgc-hover;
+                cursor: pointer;
             }
         }
 
-        .user-img {
-            width: 44px;
-            border-radius: 50%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
+        .remove-one-btn {
+            position: absolute;
+            right: 24px;
+            top: 15px;
         }
+    }
 
-        &:hover {
-            background-color: $nav-link-bgc-hover;
-            cursor: pointer;
+    .resent-action {
+        padding: 8px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .clear-all-btn {
+            color: #0095f6;
         }
+    }
+
+    .no-resent {
+        font-weight: bold;
+        font-size: 14px;
+        color: grey;
+        position: absolute;
+        left: 30%;
+        top: 60%;
     }
 }
