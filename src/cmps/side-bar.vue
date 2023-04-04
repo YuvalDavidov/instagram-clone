@@ -86,7 +86,8 @@
           <input
             type="text"
             v-model="this.searchTxt"
-            @change="onSearch()"
+            @input="onSearch"
+            @click="onOpenMobileSearch()"
             placeholder="Search"
             class="search-input mobile"
           />
@@ -173,6 +174,12 @@
       <section class="container" @click="onToggleCreate()"></section>
       <CreateModal @onToggleCreate="onToggleCreate" />
     </article>
+
+    <article v-if="isMobileSearchOpen" class="search-mobile">
+      <div class="container" @click="onCloseMobileSearch()"></div>
+
+      <SearchMobileBar @onCloseMobileSearch="onCloseMobileSearch" />
+    </article>
   </section>
 </template>
 
@@ -181,12 +188,14 @@ import { userService } from "../services/user.service";
 
 import CreateModal from "@/cmps/create-modal.vue";
 import UsersList from "@/cmps/users-list.vue";
+import SearchMobileBar from "@/cmps/search-mobile-bar.vue";
 
 export default {
   data() {
     return {
       isSettingsModalOpen: false,
       isSearchOpen: false,
+      isMobileSearchOpen: false,
       isCreateOpen: false,
       searchTxt: "",
       usersBySearch: [],
@@ -217,11 +226,18 @@ export default {
     onToggleSearch() {
       this.isSearchOpen = !this.isSearchOpen;
     },
+    onOpenMobileSearch() {
+      this.isMobileSearchOpen = true;
+    },
+    onCloseMobileSearch() {
+      this.isMobileSearchOpen = false;
+    },
     onClearSearch() {
       this.searchTxt = "";
       this.onSearch();
     },
     onSearch() {
+      console.log("hi");
       this.$store.dispatch({
         type: "loadUsersBy",
         filterBy: this.searchTxt,
@@ -241,6 +257,7 @@ export default {
         this.isTabletMode = true;
         this.isMobileMode = false;
       } else if (e.currentTarget.innerWidth < 770) {
+        this.isSearchOpen = false;
         this.isMobileMode = true;
         this.isTabletMode = false;
       } else {
@@ -257,6 +274,7 @@ export default {
   components: {
     CreateModal,
     UsersList,
+    SearchMobileBar,
   },
 };
 </script>

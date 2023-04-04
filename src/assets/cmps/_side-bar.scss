@@ -135,7 +135,7 @@
             }
 
             .clear-search-input-btn {
-                right: 23px;
+                right: 64px;
                 top: 22px;
             }
         }
@@ -294,6 +294,31 @@
     aspect-ratio: 1/1;
     object-fit: cover;
     border-radius: 50%;
+}
+
+.search-mobile {
+
+    .container {
+        top: 60px;
+        z-index: 2;
+        position: fixed;
+        width: 100vw;
+        height: calc(100vh - 60px);
+    }
+
+    .search-mobile-bar {
+        position: fixed;
+        z-index: 3;
+        right: 10px;
+        top: 60px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: white;
+        box-shadow: 0px 0px 20px $nav-border-color;
+        width: 375px;
+        height: 362px;
+
+    }
 }
 
 @keyframes search-bar-animasion {

@@ -58,3 +58,12 @@
         top: 60%;
     }
 }
+
+@media (max-width: 770px) {
+    .users-list {
+
+        .resent-action {
+            padding: 0;
+        }
+    }
+}
