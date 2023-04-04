@@ -2,20 +2,33 @@
     margin-top: 10px;
     margin-bottom: 12px;
     margin-left: 10vw;
-    border: 1px;
-    border-style: solid;
-    border-color: rgb(239, 239, 239);
-    border-radius: 8px;
+
     max-width: fit-content;
 
 }
 
 .post-actions {
     background-color: rgb(255, 255, 255);
-    padding: 12px;
+    margin: 12px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    .username {
+
+        font-weight: bold;
+    }
+
+    .space {
+        display: inline-block;
+        min-width: 5px;
+    }
+
+    .time-span {
+        letter-spacing: .2px;
+        color: #737373;
+        font-size: 12px;
+    }
 }
 
 .action-icon {
@@ -46,7 +59,10 @@
 .post-details-home {
     background-color: rgb(255, 255, 255);
 
-
+    border: 1px;
+    border-style: solid;
+    border-color: rgb(219, 219, 219);
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
 

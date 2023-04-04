@@ -28,14 +28,24 @@
         </nav>
         <span>{{ post.likes.length }} likes</span>
         <div>
-          <span class="username">{{ post.username }}</span>
+          <span class="username">{{ post.username}}</span>
+          <span class="space"></span>
           <span class="summery">{{ post.summery }}</span>
         </div>
         <button @click="onOpenPostModal()" v-if="post.comments.length">
           View all {{ post.comments.length }} comments
         </button>
-        <span>{{ timeAgo(post.timeStamp) }} </span>
-        
+        <span class="time-span">{{ timeAgo(post.timeStamp) }} </span>
+        <section class="input-actions">
+            <input
+              ref="comment"
+              v-model="commentTxt"
+              type="text"
+              class="comment-input"
+              placeholder="Add a comment..."
+            />
+            <a @click="addComment()" :class="{ active: canComment }"> post </a>
+          </section>
       </div>
     </article>
    
@@ -44,6 +54,11 @@
 <script>
 import { postService } from '../services/post.service';
 export default {
+  data() {
+    return {
+      commentTxt: "",
+    }
+  },
     props: {
         post: {
             type: Object,
@@ -54,6 +69,26 @@ export default {
     methods: {
     timeAgo(timestamp) {
       return postService.getTime(timestamp);
+    },
+    async addComment() {
+      if (this.commentTxt.length < 1) return;
+
+      try {
+        const commentInfo = {
+          txt: this.commentTxt,
+          userid: this.loggedInUser._id,
+          username: this.loggedInUser.username,
+          userImgUrl: this.loggedInUser.imgUrl,
+        };
+        await postService.addComment(this.post._id, commentInfo);
+          this.$store.dispatch({
+            type: "loadPosts",
+            user: this.loggedInUser,
+          });
+      } catch (error) {
+        new Error("coudl'nt add the comment to this post", error);
+      }
+      this.commentTxt = "";
     },
     onOpenPostModal() {
       console.log('ho')

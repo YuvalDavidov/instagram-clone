@@ -229,37 +229,7 @@
 
                 }
 
-                .input-actions {
-                    position: relative;
 
-                    .comment-input {
-                        width: 100%;
-                        border: none;
-                        border-top: 1px solid $nav-border-color;
-                        padding: 10px;
-                        font-size: 16px;
-                        border-bottom-right-radius: 5px;
-                    }
-
-                    a {
-                        color: rgb(200, 200, 250);
-                        right: 5px;
-                        top: 10px;
-                        position: absolute;
-                        cursor: not-allowed;
-
-                        &.active,
-                        :hover {
-                            cursor: pointer;
-                            color: black;
-                        }
-
-                        &.active {
-                            color: blue
-                        }
-
-                    }
-                }
 
                 & small {
                     color: rgb(179, 179, 179);
@@ -269,6 +239,42 @@
         }
     }
 
+}
+
+.input-actions {
+    position: relative;
+
+    .comment-input {
+        width: 100%;
+        border: none;
+        border-top: 1px solid $nav-border-color;
+        padding: 10px;
+        font-size: 16px;
+        border-bottom-right-radius: 5px;
+
+        &:focus-visible {
+            outline: none;
+        }
+    }
+
+    a {
+        color: rgb(200, 200, 250);
+        right: 5px;
+        top: 10px;
+        position: absolute;
+        cursor: not-allowed;
+
+        &.active,
+        :hover {
+            cursor: pointer;
+            color: black;
+        }
+
+        &.active {
+            color: blue
+        }
+
+    }
 }
 
 @media (max-width: 1200px) {

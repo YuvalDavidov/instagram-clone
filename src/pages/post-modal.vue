@@ -176,7 +176,7 @@ export default {
         } else {
           this.$store.dispatch({
             type: "loadPosts",
-            userId: this.$route.params._id,
+            user: this.loggedInUser,
           });
         }
         this.commentTxt = "";
