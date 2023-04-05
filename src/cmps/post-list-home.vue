@@ -2,7 +2,7 @@
   <section>
     <section
       class="post-preview-home"
-      v-for="(post, index) in posts"
+      v-for="(post, index) in sortedPosts"
       :key="post.id"
     >
       <post-preview-home
@@ -38,7 +38,6 @@ export default {
       required: true,
     },
   },
-
   methods: {
     timeAgo(timestamp) {
       return postService.getTime(timestamp);
@@ -76,8 +75,9 @@ export default {
     loggedInUser() {
       return this.$store.getters.GetUser;
     },
-
-    index() {},
+    sortedPosts() {
+      return postService.sortByTimeStampe(this.posts);
+    },
   },
 };
 </script>

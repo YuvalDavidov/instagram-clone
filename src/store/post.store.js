@@ -4,7 +4,6 @@ export const postStore = {
     state: {
         userPosts: [],
         followingPosts: [],
-        isPostModalOpen: false
     },
     getters: {
         userPosts({ userPosts }) {
@@ -13,9 +12,6 @@ export const postStore = {
         followingPosts({ followingPosts }) {
             return followingPosts
         },
-        isPostModalOpen({ isPostModalOpen }) {
-            return isPostModalOpen
-        }
     },
     mutations: {
         setUserPosts(state, { userPosts }) {
@@ -24,9 +20,6 @@ export const postStore = {
         setPosts(state, { posts }) {
             state.followingPosts = posts
         },
-        toggleModal(state, { isOpen }) {
-            state.isPostModalOpen = isOpen
-        }
     },
     actions: {
         async loadUserPosts({ commit }, { userId }) {
@@ -41,15 +34,11 @@ export const postStore = {
             try {
                 const posts = await postService.getPosts(user)
                 commit({ type: 'setPosts', posts })
-                console.log(posts)
             } catch (err) {
                 throw new Error('coudl\'nt get posts', err)
 
             }
         },
-        togglePostModal({ commit }, { isOpen }) {
-            commit({ type: 'toggleModal', isOpen })
-        }
     }
 
 }

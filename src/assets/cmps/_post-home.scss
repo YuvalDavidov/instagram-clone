@@ -1,21 +1,16 @@
 .post-preview-home {
-    margin-top: 10px;
-    margin-bottom: 12px;
-    margin-left: 10vw;
-
+    margin: 10px auto;
     max-width: fit-content;
-
 }
 
 .post-actions {
     background-color: rgb(255, 255, 255);
-    margin: 12px;
+    margin-top: 12px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 
     .username {
-
         font-weight: bold;
     }
 
@@ -28,6 +23,14 @@
         letter-spacing: .2px;
         color: #737373;
         font-size: 12px;
+    }
+
+    & .input-actions {
+
+        & .comment-input {
+            border-top: none;
+        }
+
     }
 }
 
@@ -57,14 +60,11 @@
 
 
 .post-details-home {
-    background-color: rgb(255, 255, 255);
-
-    border: 1px;
-    border-style: solid;
-    border-color: rgb(219, 219, 219);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $nav-border-color;
 
     .post-details-header {
         display: flex;
@@ -88,10 +88,20 @@
     }
 
     .post-img {
-        aspect-ratio: 1/1;
-        object-fit: cover;
         min-width: 468px;
         max-width: 468px;
+
+        &.swiper {
+            height: 100%;
+            z-index: 0;
+        }
+
+        img {
+            aspect-ratio: 1/1;
+            object-fit: contain;
+            background-color: black;
+            width: 100%;
+        }
     }
 
 

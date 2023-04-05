@@ -7,7 +7,7 @@
     display: grid;
     grid-template-rows: 92px 1fr 56px;
     height: 100vh;
-    width: $nav-medium-width;
+    width: $nav-large-width;
     border-right: solid 1px $nav-border-color;
     padding: 20px 12px 8px 12px;
     background-color: white;
@@ -100,7 +100,7 @@
 
     &.isTabletMode {
         transition: 1s;
-        width: 70px;
+        width: $nav-medium-width;
     }
 
 }
@@ -332,10 +332,3 @@
         left: 70px;
     }
 }
-
-// @media (max-width:1250px) {
-//     .side-bar {
-//         width: 70px;
-//         overflow: hidden;
-//     }
-// }

@@ -23,6 +23,7 @@
 
 <script>
 import PostModal from "../pages/post-modal.vue";
+import { postService } from "../services/post.service";
 export default {
   data() {
     return {
@@ -43,15 +44,7 @@ export default {
     },
   },
   mounted() {
-    this.profilePost = this.posts.map((post) => {
-      return {
-        ...post,
-        timeStamp: new Date(post.timeStamp).getTime(),
-      };
-    });
-    this.profilePost = this.profilePost.sort(
-      (a, b) => b.timeStamp - a.timeStamp
-    );
+    this.profilePost = postService.sortByTimeStampe(this.posts);
   },
   methods: {
     onClickedPost(idx) {

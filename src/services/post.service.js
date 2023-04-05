@@ -12,7 +12,8 @@ export const postService = {
     addComment,
     getTime,
     didUserLikedPost,
-    getCommentTime
+    getCommentTime,
+    sortByTimeStampe
 }
 
 const POST_KEY = 'PostDB'
@@ -148,8 +149,20 @@ async function createPost(user, imgsUrl, summery) {
 
 }
 
+function sortByTimeStampe(posts) {
+    posts = posts.map((post) => {
+        return {
+            ...post,
+            timeStamp: new Date(post.timeStamp).getTime(),
+        };
+    });
+    return posts.sort(
+        (a, b) => b.timeStamp - a.timeStamp
+    );
+}
+
 // ; (async () => {
-//     await createPost('nrEca', ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], 'a nice livingroom')
-//     await createPost('PcWKN', ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], 'a nice livingroom')
+//     await createPost({ _id: 'nrEca' }, ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], 'a nice livingroom')
+//     // await createPost('PcWKN', ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], 'a nice livingroom')
 //     // await createPost({iNDr6, })
 // })()
