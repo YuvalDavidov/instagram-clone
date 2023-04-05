@@ -71,9 +71,8 @@ async function addLike(postId, likedUser) {
 
 async function getPosts(user) {
     let posts = await storageService.query(POST_KEY)
-
     return posts.reduce((acc, post) => {
-        if (user.following.includes(post.userId)) acc.push(post)
+        if (user.following.includes(post.userId) || post.userId === user._id) acc.push(post)
         return acc
     }, [])
 
