@@ -13,7 +13,8 @@ export const postService = {
     getTime,
     didUserLikedPost,
     getCommentTime,
-    sortByTimeStampe
+    sortByTimeStampe,
+    removePost
 }
 
 const POST_KEY = 'PostDB'
@@ -119,7 +120,6 @@ function getCommentTime(commentTimeStamp) {
     else return houserDiff + " H";
 }
 
-
 async function getUserPostsById(userId) {
     const posts = await storageService.query(POST_KEY)
     const userPosts = posts.filter(post => post.userId === userId)
@@ -146,6 +146,14 @@ async function createPost(user, imgsUrl, summery) {
         console.log('there is a problem with posting your post', error);
     }
 
+}
+
+async function removePost(postId) {
+    try {
+        await storageService.remove(POST_KEY, postId)
+    } catch (error) {
+
+    }
 }
 
 function sortByTimeStampe(posts) {

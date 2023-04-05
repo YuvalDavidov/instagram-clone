@@ -20,6 +20,13 @@ export const postStore = {
         setPosts(state, { posts }) {
             state.followingPosts = posts
         },
+        addPost(state, { post }) {
+            state.userPosts.push(post)
+            state.followingPosts.push(post)
+        },
+        removePost(state, { postId }) {
+            state.userPosts = state.userPosts.filter(post => post._id !== postId)
+        }
     },
     actions: {
         async loadUserPosts({ commit }, { userId }) {
@@ -28,6 +35,24 @@ export const postStore = {
                 commit({ type: 'setUserPosts', userPosts })
             } catch (error) {
                 throw new Error('coudl\'nt get posts from user', error)
+            }
+        },
+        async addPost({ commit }, { post }) {
+            try {
+                commit({ type: 'addPost', post })
+            } catch (error) {
+                throw new Error('coudl\'nt add post', error)
+
+            }
+        },
+        async removePost({ commit }, { postId }) {
+            try {
+                await postService.removePost(postId)
+                commit({ type: 'removePost', postId })
+
+            } catch (error) {
+                throw new Error('coudl\'nt remove post', error)
+
             }
         },
         async loadPosts({ commit }, { user }) {

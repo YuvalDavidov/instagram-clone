@@ -49,23 +49,19 @@
 
 <script>
 import { userService } from "../services/user.service";
-import { postService } from "../services/post.service";
 import { followService } from "../services/follow.service";
 
-import PostListProfile from "@/cmps/post-list-profile.vue";
+import PostListProfile from "../cmps/post-list-profile.vue";
 export default {
   data() {
     return {
       user: null,
       isFollowing: null,
+      posts: [],
     };
   },
   async created() {
     this.user = await userService.getUserById(this.$route.params._id);
-    // this.$store.dispatch({
-    //   type: "loadUserPosts",
-    //   userId: this.$route.params._id,
-    // });
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );
@@ -75,12 +71,9 @@ export default {
       if (userService.checkIfOwnProfile(this.$route.params._id)) return true;
       else return false;
     },
-    posts() {
-      return this.$store.getters.userPosts;
-    },
-  },
-  components: {
-    PostListProfile,
+    // posts() {
+    //   return this.$store.getters.userPosts;
+    // },
   },
   methods: {
     async onFollow() {
@@ -107,6 +100,16 @@ export default {
         });
       },
     },
+    "$store.getters.userPosts": {
+      deep: true,
+      async handler(newValue) {
+        console.log("newValue", newValue);
+        this.posts = newValue;
+      },
+    },
+  },
+  components: {
+    PostListProfile,
   },
 };
 </script>

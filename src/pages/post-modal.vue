@@ -19,7 +19,7 @@
             <img :src="post.userImg" class="user-img" />
             <span>{{ post.username }}</span>
           </header>
-          <button v-if="isOwnProfile">
+          <button @click="onOpenSettings" v-if="isOwnProfile">
             <v-icon name="bi-three-dots" />
           </button>
         </div>
@@ -103,7 +103,11 @@
         </section>
       </section>
     </section>
-    <UserPostSettings v-if="isSettingsOpen && isOwnProfile" />
+    <UserPostSettings
+      :post="post"
+      @closePost="closePost"
+      v-if="isSettingsOpen && isOwnProfile"
+    />
   </section>
 </template>
 
@@ -125,7 +129,6 @@ export default {
       type: Object,
       required: true,
     },
-
     postsLength: {
       type: Number,
       required: false,
@@ -233,6 +236,9 @@ export default {
       return postService.getCommentTime(commentTimeStemp);
     },
     didUserLikedComment() {},
+    onOpenSettings() {
+      this.isSettingsOpen = true;
+    },
   },
   computed: {
     loggedInUser() {

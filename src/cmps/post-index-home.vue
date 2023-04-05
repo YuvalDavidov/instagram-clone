@@ -20,5 +20,13 @@ export default {
       return this.$store.getters.followingPosts;
     },
   },
+  watch: {
+    "$store.getters.followingPosts": {
+      deep: true,
+      async handler(newValue) {
+        console.log("newValue", newValue);
+      },
+    },
+  },
 };
 </script>

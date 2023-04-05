@@ -1,6 +1,6 @@
 <template>
   <section class="post-list-profile">
-    <li v-for="(post, index) in profilePost" :key="post._id" class="post-grid">
+    <li v-for="(post, index) in sotedPosts" :key="post._id" class="post-grid">
       <img
         :src="post.imgsUrl[0]"
         @click="onClickedPost(index)"
@@ -29,7 +29,7 @@ export default {
     return {
       postIndex: null,
       isModalOpen: false,
-      profilePost: [],
+      // profilePost: [],
     };
   },
   props: {
@@ -42,9 +42,6 @@ export default {
       type: Boolean,
       required: true,
     },
-  },
-  mounted() {
-    this.profilePost = postService.sortByTimeStampe(this.posts);
   },
   methods: {
     onClickedPost(idx) {
@@ -59,7 +56,11 @@ export default {
       this.postIndex += direction;
     },
   },
-  computed: {},
+  computed: {
+    sotedPosts() {
+      return postService.sortByTimeStampe(this.posts);
+    },
+  },
   components: {
     PostModal,
   },

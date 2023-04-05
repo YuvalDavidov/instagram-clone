@@ -1,5 +1,7 @@
 .user-post-settings {
     position: absolute;
     background-color: red;
-    top: 0;
+    top: calc(50vh);
+    left: calc(50vw);
+    z-index: 4;
 }

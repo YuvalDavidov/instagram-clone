@@ -127,7 +127,6 @@ export default {
       return postService.didUserLikedPost(post);
     },
   },
-
   computed: {
     loggedInUser() {
       return this.$store.getters.GetUser;

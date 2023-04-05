@@ -72,11 +72,15 @@ export default {
     },
     async onPost() {
       try {
-        await postService.createPost(this.user, this.imgsUrl, this.postSummery);
+        const newPost = await postService.createPost(
+          this.user,
+          this.imgsUrl,
+          this.postSummery
+        );
         this.$emit("onToggleCreate");
         this.$store.dispatch({
-          type: "loadUserPosts",
-          userId: this.user._id,
+          type: "addPost",
+          post: newPost,
         });
       } catch (error) {}
     },
