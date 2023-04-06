@@ -29,10 +29,13 @@
       </nav>
       <span>{{ post.likes.length }} likes</span>
       <div>
+      <div :style="(isFullSummeryShown) ? 'white-space: pre-wrap;' : 'white-space: nowrap;' " class="post-summery">
         <span class="username">{{ post.username }}</span>
         <span class="space"></span>
         <span class="summery">{{ post.summery }}</span>
       </div>
+      <button v-if="!isFullSummeryShown && post.summery.length > 40" class="show-summery-btn" @click="showSummery()">more</button>
+    </div>
       <button @click="onOpenPostModal()" v-if="post.comments.length">
         View all {{ post.comments.length }} comments
       </button>
@@ -59,6 +62,7 @@ export default {
   data() {
     return {
       commentTxt: "",
+      isFullSummeryShown: false
     };
   },
   props: {
@@ -70,6 +74,9 @@ export default {
   methods: {
     timeAgo(timestamp) {
       return postService.getTime(timestamp);
+    },
+    showSummery() {
+      this.isFullSummeryShown = true
     },
     async addComment() {
       if (this.commentTxt.length < 1) return;
@@ -134,7 +141,7 @@ export default {
     canComment() {
       if (this.commentTxt.length >= 1) return true;
       else false;
-    },
+    }
   },
   components: {
     ImgSlider,

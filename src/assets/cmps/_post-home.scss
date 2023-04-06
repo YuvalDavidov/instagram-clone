@@ -19,6 +19,17 @@
         min-width: 5px;
     }
 
+    .post-summery {
+        max-width: 440px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .show-summery-btn {
+        padding: 0px;
+        color: rgb(115, 115, 115);
+    }
+
     .time-span {
         letter-spacing: .2px;
         color: #737373;
