@@ -103,7 +103,6 @@ export default {
     "$store.getters.userPosts": {
       deep: true,
       async handler(newValue) {
-        console.log("newValue", newValue);
         this.posts = newValue;
       },
     },

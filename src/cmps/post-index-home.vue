@@ -23,6 +23,7 @@ export default {
     window.addEventListener('scroll', this.onWindowScroll);
     this.maxPageScroll = document.body.scrollHeight - window.innerHeight
   },
+
   computed: {
     posts() {
       return this.$store.getters.followingPosts;

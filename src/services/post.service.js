@@ -4,7 +4,7 @@ import { utilService } from './util.service';
 
 
 export const postService = {
-    createPost,
+    savePost,
     getUserPostsById,
     getPosts,
     addLike,
@@ -14,7 +14,10 @@ export const postService = {
     didUserLikedPost,
     getCommentTime,
     sortByTimeStampe,
-    removePost
+    removePost,
+    getEmptyPost,
+    toggleLikeCount,
+    toggleCommenting
 }
 
 const POST_KEY = 'PostDB'
@@ -34,6 +37,30 @@ const months = [
     "Nov",
     "Dec",
 ];
+
+async function toggleCommenting(postId) {
+    try {
+        let post = await storageService.get(POST_KEY, postId)
+        post.isCommentingAllowed = !post.isCommentingAllowed
+        await storageService.put(POST_KEY, post)
+
+    } catch (error) {
+        new Error('coudl\'nt do this action on this post', error)
+
+    }
+}
+
+async function toggleLikeCount(postId) {
+    try {
+        let post = await storageService.get(POST_KEY, postId)
+        post.isLikeCountVisible = !post.isLikeCountVisible
+        await storageService.put(POST_KEY, post)
+
+    } catch (error) {
+        new Error('coudl\'nt do this action on this post', error)
+
+    }
+}
 
 async function addComment(postId, commentInfo) {
     try {
@@ -126,22 +153,27 @@ async function getUserPostsById(userId) {
     return userPosts
 }
 
-async function createPost(user, imgsUrl, summery) {
-
-    let post = {
-        userId: user._id,
-        username: user.username,
-        userImg: user.imgUrl,
-        imgsUrl,
-        summery,
-        timeStamp: new Date(),
-        likes: [],
-        comments: [],
-
-    }
+async function savePost(user, post) {
+    let postToSave
     try {
-        let newPost = await storageService.post(POST_KEY, post)
-        return newPost
+        if (post._id) {
+            postToSave = await storageService.put(POST_KEY, post)
+        } else {
+            postToSave = {
+                userId: user._id,
+                username: user.username,
+                userImg: user.imgUrl,
+                imgsUrl: post.imgsUrl,
+                summery: post.summery,
+                timeStamp: new Date(),
+                likes: [],
+                isLikeCountVisible: true,
+                isCommentingAllowed: true,
+                comments: [],
+            }
+            postToSave = await storageService.post(POST_KEY, postToSave)
+        }
+        return postToSave
     } catch (error) {
         console.log('there is a problem with posting your post', error);
     }
@@ -166,6 +198,13 @@ function sortByTimeStampe(posts) {
     return posts.sort(
         (a, b) => b.timeStamp - a.timeStamp
     );
+}
+
+function getEmptyPost() {
+    return {
+        imgsUrl: [],
+        summery: ''
+    }
 }
 
 // ; (async () => {

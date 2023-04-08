@@ -31,6 +31,10 @@ export const postStore = {
             state.userPosts.push(post)
             state.followingPosts.push(post)
         },
+        updatePost(state, { post }) {
+            const idx = state.userPosts.findIndex(p => p._id === post._id)
+            state.userPosts.splice(idx, 1, post)
+        },
         removePost(state, { postId }) {
             state.userPosts = state.userPosts.filter(post => post._id !== postId)
         }
@@ -44,11 +48,12 @@ export const postStore = {
                 throw new Error('coudl\'nt get posts from user', error)
             }
         },
-        async addPost({ commit }, { post }) {
+        async savePost({ commit }, { post }) {
+            const actionType = (post._id) ? 'updatePost' : 'addPost'
             try {
-                commit({ type: 'addPost', post })
+                commit({ type: actionType, post })
             } catch (error) {
-                throw new Error('coudl\'nt add post', error)
+                throw new Error('coudl\'nt save post', error)
 
             }
         },

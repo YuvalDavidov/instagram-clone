@@ -19,7 +19,7 @@
             <img :src="post.userImg" class="user-img" />
             <span>{{ post.username }}</span>
           </header>
-          <button @click="onOpenSettings" v-if="isOwnProfile">
+          <button @click="onToggleSettings" v-if="isOwnProfile">
             <v-icon name="bi-three-dots" />
           </button>
         </div>
@@ -87,10 +87,12 @@
             </section>
             <button><v-icon scale="1.2" name="la-bookmark-solid" /></button>
           </div>
-          <span> {{ post.likes.length }} likes</span>
+          <span v-if="post.isLikeCountVisible">
+            {{ post.likes.length }} likes</span
+          >
           <small> {{ uploadedTime }}</small>
 
-          <section class="input-actions">
+          <section v-if="post.isCommentingAllowed" class="input-actions">
             <input
               ref="comment"
               v-model="commentTxt"
@@ -105,9 +107,17 @@
     </section>
     <UserPostSettings
       :post="post"
+      @onToggleSettings="onToggleSettings"
       @closePost="closePost"
+      @toggleLikes="toggleLikes"
+      @toggleCommenting="toggleCommenting"
       v-if="isSettingsOpen && isOwnProfile"
+      @onToggleCreate="onToggleCreate"
     />
+    <article v-if="isCreateOpen && isOwnProfile" class="create-post-modal">
+      <section class="container" @click="onToggleCreate()"></section>
+      <CreateModal @onToggleCreate="onToggleCreate" :post="post" />
+    </article>
   </section>
 </template>
 
@@ -115,15 +125,17 @@
 import { postService } from "../services/post.service";
 import ImgSlider from "../cmps/img-slider.vue";
 import UserPostSettings from "../cmps/user-post-settings.vue";
+import CreateModal from "../cmps/create-modal.vue";
 
 export default {
   data() {
     return {
       commentTxt: "",
       isSettingsOpen: false,
+      isCreateOpen: false,
     };
   },
-  components: { ImgSlider, UserPostSettings },
+  components: { ImgSlider, UserPostSettings, CreateModal },
   props: {
     post: {
       type: Object,
@@ -236,8 +248,34 @@ export default {
       return postService.getCommentTime(commentTimeStemp);
     },
     didUserLikedComment() {},
-    onOpenSettings() {
-      this.isSettingsOpen = true;
+    onToggleSettings() {
+      this.isSettingsOpen = !this.isSettingsOpen;
+    },
+    onToggleCreate() {
+      if (this.isSettingsOpen) this.isSettingsOpen = false;
+      this.isCreateOpen = !this.isCreateOpen;
+    },
+    async toggleLikes() {
+      try {
+        await postService.toggleLikeCount(this.post._id);
+        this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.$route.params._id,
+        });
+      } catch (err) {
+        console.error("coudl'nt do action on this post", err);
+      }
+    },
+    async toggleCommenting() {
+      try {
+        await postService.toggleCommenting(this.post._id);
+        this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.$route.params._id,
+        });
+      } catch (err) {
+        console.error("coudl'nt do action on this post", err);
+      }
     },
   },
   computed: {
