@@ -28,7 +28,6 @@
         border-bottom: 1px solid $nav-border-color ;
     }
 
-
     .uploader {
         height: calc(710px - 41px);
         position: relative;
@@ -85,10 +84,6 @@
         .bottom {
             display: flex;
 
-            .post-details {
-                width: 340px;
-            }
-
             .mySwiper {
                 border-right: 1px solid $nav-border-color;
 
@@ -113,6 +108,7 @@
 
         .post-details {
             padding: 0 16px;
+            width: 340px;
 
             .user {
                 padding: 30px 0 10px 0;
@@ -140,6 +136,59 @@
                 resize: none;
                 font-size: 17px;
             }
+
+        }
+    }
+}
+
+@media (max-width:1260px) {
+    .create-modal {
+        left: calc(100vw - 75%);
+
+        .first-step {
+            width: 600px;
+        }
+
+        .seconde-step {
+            .bottom {
+                .post-details {
+                    width: 240px;
+
+                    .textarea-summery {
+                        width: 220px;
+
+                    }
+                }
+
+                .mySwiper {
+                    .swiper-wrapper {
+                        max-height: calc(550px - 42px);
+                        width: calc(230px + 20vw);
+
+                        .swiper-slide {
+                            img {
+                                width: calc(230px + 20vw);
+                                height: calc(550px - 42px);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        .uploader {
+            height: calc(600px - 70px);
+        }
+    }
+}
+
+@media (max-width:770px) {
+    .create-modal {
+        left: calc(100vw - 97%);
+
+        &.seconde {
+            left: calc(100vw - 97%);
 
         }
     }
