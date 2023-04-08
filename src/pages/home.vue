@@ -3,7 +3,7 @@
     <section v-if="user" class="home-index">
       <div class="top">
         <Storys />
-        <post-index-home/>
+        <post-index-home />
       </div>
     </section>
     <section class="welcome-page" v-if="!user">
@@ -109,7 +109,7 @@ export default {
     },
     toSignUp() {
         this.isSignUp = !this.isSignUp
-    }
+    },
   },
   computed: {
     user() {
