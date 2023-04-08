@@ -17,7 +17,8 @@ export const postService = {
     removePost,
     getEmptyPost,
     toggleLikeCount,
-    toggleCommenting
+    toggleCommenting,
+    isPostOwendByUser
 }
 
 const POST_KEY = 'PostDB'
@@ -106,6 +107,11 @@ async function getPosts(user) {
 
 }
 
+function isPostOwendByUser(postUserId) {
+    const currUserId = userService.getLoggedinUser()._id
+    if (currUserId === postUserId) return true
+    else return false
+}
 
 function didUserLikedPost(post) {
     let user = userService.getLoggedinUser();

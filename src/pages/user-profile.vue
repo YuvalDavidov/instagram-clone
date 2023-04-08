@@ -68,12 +68,9 @@ export default {
   },
   computed: {
     isOwnProfile() {
-      if (userService.checkIfOwnProfile(this.$route.params._id)) return true;
+      if (userService.checkIfOwnByUser(this.$route.params._id)) return true;
       else return false;
     },
-    // posts() {
-    //   return this.$store.getters.userPosts;
-    // },
   },
   methods: {
     async onFollow() {

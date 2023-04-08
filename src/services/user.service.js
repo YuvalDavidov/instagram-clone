@@ -8,7 +8,7 @@ export const userService = {
     getEmptyUser,
     signup,
     saveLocalUser,
-    checkIfOwnProfile,
+    checkIfOwnByUser,
     query
 }
 const USER_KEY = 'UserDB'
@@ -45,7 +45,7 @@ function getUserById(userId) {
     return storageService.get(USER_KEY, userId)
 }
 
-function checkIfOwnProfile(id) {
+function checkIfOwnByUser(id) {
     let currUser = getLoggedinUser()
     if (currUser._id === id) return true
     else return false

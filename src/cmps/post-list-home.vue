@@ -77,6 +77,7 @@ export default {
     sortedPosts() {
       return postService.sortByTimeStampe(this.posts);
     },
+    isOwnProfile() {},
   },
 };
 </script>

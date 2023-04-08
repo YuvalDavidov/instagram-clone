@@ -19,7 +19,7 @@
             <img :src="post.userImg" class="user-img" />
             <span>{{ post.username }}</span>
           </header>
-          <button @click="onToggleSettings" v-if="isOwnProfile">
+          <button @click="onToggleSettings" v-if="isOwnByUser">
             <v-icon name="bi-three-dots" />
           </button>
         </div>
@@ -111,10 +111,10 @@
       @closePost="closePost"
       @toggleLikes="toggleLikes"
       @toggleCommenting="toggleCommenting"
-      v-if="isSettingsOpen && isOwnProfile"
+      v-if="isSettingsOpen"
       @onToggleCreate="onToggleCreate"
     />
-    <article v-if="isCreateOpen && isOwnProfile" class="create-post-modal">
+    <article v-if="isCreateOpen && isOwnByUser" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
       <CreateModal @onToggleCreate="onToggleCreate" :post="post" />
     </article>
@@ -299,6 +299,9 @@ export default {
     isLastPost() {
       if (this.postIndex === this.postsLength - 1) return true;
       else false;
+    },
+    isOwnByUser() {
+      return postService.isPostOwendByUser(this.post.userId);
     },
   },
 };
