@@ -6,8 +6,16 @@
         Delete
       </button>
       <button @click="onEdit">Edit</button>
-      <button>Hide like count</button>
-      <button>Turn off commenting</button>
+      <button @click="onToggleLikes">
+        {{ post.isLikeCountVisible ? "Hide like count" : "Unhide like count" }}
+      </button>
+      <button @click="onToggleComminting">
+        {{
+          post.isCommentingAllowed
+            ? " Turn off commenting"
+            : " Turn on commenting"
+        }}
+      </button>
       <button>Go to post</button>
       <button>Share to...</button>
       <button>Copy link</button>
@@ -41,6 +49,14 @@ export default {
     },
     onEdit() {
       this.$emit("onToggleCreate");
+    },
+    onToggleLikes() {
+      this.$emit("toggleLikes");
+      this.$emit("onToggleSettings");
+    },
+    onToggleComminting() {
+      this.$emit("toggleCommenting");
+      this.$emit("onToggleSettings");
     },
   },
 };

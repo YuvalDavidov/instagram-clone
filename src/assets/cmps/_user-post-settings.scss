@@ -1,6 +1,8 @@
 .user-post-settings {
 
     & .post-settings-modal {
+        animation-name: settings-animasion;
+        animation-duration: 1s;
         position: absolute;
         background-color: white;
         border-radius: 15px;
@@ -25,5 +27,24 @@
         top: 0;
         left: 0;
         z-index: 4;
+    }
+}
+
+
+@keyframes settings-animasion {
+    from {
+        width: 450px;
+        height: 400px;
+        top: 28vh;
+        left: 38vw;
+        opacity: 0;
+    }
+
+    to {
+        width: 400px;
+        height: 367px;
+        top: 30vh;
+        left: 40vw;
+        opacity: 1;
     }
 }

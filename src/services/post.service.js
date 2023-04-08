@@ -15,7 +15,9 @@ export const postService = {
     getCommentTime,
     sortByTimeStampe,
     removePost,
-    getEmptyPost
+    getEmptyPost,
+    toggleLikeCount,
+    toggleCommenting
 }
 
 const POST_KEY = 'PostDB'
@@ -35,6 +37,30 @@ const months = [
     "Nov",
     "Dec",
 ];
+
+async function toggleCommenting(postId) {
+    try {
+        let post = await storageService.get(POST_KEY, postId)
+        post.isCommentingAllowed = !post.isCommentingAllowed
+        await storageService.put(POST_KEY, post)
+
+    } catch (error) {
+        new Error('coudl\'nt do this action on this post', error)
+
+    }
+}
+
+async function toggleLikeCount(postId) {
+    try {
+        let post = await storageService.get(POST_KEY, postId)
+        post.isLikeCountVisible = !post.isLikeCountVisible
+        await storageService.put(POST_KEY, post)
+
+    } catch (error) {
+        new Error('coudl\'nt do this action on this post', error)
+
+    }
+}
 
 async function addComment(postId, commentInfo) {
     try {
@@ -141,6 +167,8 @@ async function savePost(user, post) {
                 summery: post.summery,
                 timeStamp: new Date(),
                 likes: [],
+                isLikeCountVisible: true,
+                isCommentingAllowed: true,
                 comments: [],
             }
             postToSave = await storageService.post(POST_KEY, postToSave)

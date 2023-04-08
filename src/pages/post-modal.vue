@@ -87,10 +87,12 @@
             </section>
             <button><v-icon scale="1.2" name="la-bookmark-solid" /></button>
           </div>
-          <span> {{ post.likes.length }} likes</span>
+          <span v-if="post.isLikeCountVisible">
+            {{ post.likes.length }} likes</span
+          >
           <small> {{ uploadedTime }}</small>
 
-          <section class="input-actions">
+          <section v-if="post.isCommentingAllowed" class="input-actions">
             <input
               ref="comment"
               v-model="commentTxt"
@@ -107,10 +109,12 @@
       :post="post"
       @onToggleSettings="onToggleSettings"
       @closePost="closePost"
+      @toggleLikes="toggleLikes"
+      @toggleCommenting="toggleCommenting"
       v-if="isSettingsOpen && isOwnProfile"
       @onToggleCreate="onToggleCreate"
     />
-    <article v-if="isCreateOpen" class="create-post-modal">
+    <article v-if="isCreateOpen && isOwnProfile" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
       <CreateModal @onToggleCreate="onToggleCreate" :post="post" />
     </article>
@@ -250,6 +254,28 @@ export default {
     onToggleCreate() {
       if (this.isSettingsOpen) this.isSettingsOpen = false;
       this.isCreateOpen = !this.isCreateOpen;
+    },
+    async toggleLikes() {
+      try {
+        await postService.toggleLikeCount(this.post._id);
+        this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.$route.params._id,
+        });
+      } catch (err) {
+        console.error("coudl'nt do action on this post", err);
+      }
+    },
+    async toggleCommenting() {
+      try {
+        await postService.toggleCommenting(this.post._id);
+        this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.$route.params._id,
+        });
+      } catch (err) {
+        console.error("coudl'nt do action on this post", err);
+      }
     },
   },
   computed: {
