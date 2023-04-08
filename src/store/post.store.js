@@ -4,6 +4,7 @@ export const postStore = {
     state: {
         userPosts: [],
         followingPosts: [],
+        numOfPostsToQuerry: 4
     },
     getters: {
         userPosts({ userPosts }) {
@@ -12,6 +13,9 @@ export const postStore = {
         followingPosts({ followingPosts }) {
             return followingPosts
         },
+        currNumOfPosts({ numOfPostsToQuerry }) {
+            return numOfPostsToQuerry
+        }
     },
     mutations: {
         setUserPosts(state, { userPosts }) {
@@ -19,6 +23,9 @@ export const postStore = {
         },
         setPosts(state, { posts }) {
             state.followingPosts = posts
+        },
+        setCurrNumOfPosts(state, { num }) {
+            state.numOfPostsToQuerry = num
         },
         addPost(state, { post }) {
             state.userPosts.push(post)
@@ -55,9 +62,14 @@ export const postStore = {
 
             }
         },
-        async loadPosts({ commit }, { user }) {
+        async loadPosts({ commit }, { user, numOfPostsToQuerry }) {
             try {
-                const posts = await postService.getPosts(user)
+                if (numOfPostsToQuerry) {
+                    console.log(numOfPostsToQuerry)
+                    commit({ type: 'setCurrNumOfPosts', num: numOfPostsToQuerry })
+                }
+
+                const posts = await postService.getPosts(user, this.state.postStore.numOfPostsToQuerry)
                 commit({ type: 'setPosts', posts })
             } catch (err) {
                 throw new Error('coudl\'nt get posts', err)

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <section
+    <section 
       class="post-preview-home"
       v-for="(post, index) in sortedPosts"
       :key="post.id"
