@@ -16,18 +16,23 @@
 
     <section class="seconde-step" v-if="step === 'seconde'">
       <div class="top">
-        <button @click="onBack()" class="back btn">back</button>
-        <span>Create new post</span>
-        <button @click="onPost()" class="share btn">Share</button>
+        <button @click="onBack()" class="back btn">
+          {{ postToEdit._id ? "Cancel" : "Back" }}
+        </button>
+        <span> {{ postToEdit._id ? "Edit post" : "Create new post" }}</span>
+        <button @click="onPost()" class="share btn">
+          {{ postToEdit._id ? "Update" : "Share" }}
+        </button>
       </div>
       <section class="bottom">
-        <ImgSlider :imgsUrl="imgsUrl" />
+        <ImgSlider :imgsUrl="postToEdit.imgsUrl" />
         <div class="post-details">
           <section class="user">
             <span><img :src="user.imgUrl" /></span>
             <span class="user-name"> {{ user.username }} </span>
           </section>
           <textarea
+            v-model="postToEdit.summery"
             class="textarea-summery"
             name="post-summery"
             id=""
@@ -49,40 +54,56 @@ import { postService } from "../services/post.service";
 export default {
   data() {
     return {
-      imgsUrl: [],
+      postToEdit: null,
       step: "first",
       user: this.$store.getters.GetUser,
-      postSummery: "",
     };
+  },
+  props: {
+    post: {
+      type: Object,
+      required: false,
+    },
+  },
+  created() {
+    if (this.post) {
+      this.step = "seconde";
+      this.postToEdit = this.post;
+      this.postToEdit.imgsUrl = Array.prototype.slice.call(this.post.imgsUrl);
+    } else this.postToEdit = postService.getEmptyPost();
   },
   methods: {
     onUploadImg(ev) {
       console.log(ev);
       uploadService.uploadMany(ev).then((imgsUrl) => {
-        this.imgsUrl = imgsUrl.map((img) => img.url);
+        this.postToEdit.imgsUrl = imgsUrl.map((img) => img.url);
       });
       this.step = "seconde";
     },
     onBack() {
-      this.step = "first";
-      this.imgsUrl = [];
+      if (this.postToEdit._id) this.$emit("onToggleCreate");
+      else {
+        this.step = "first";
+        this.postToEdit.imgsUrl = [];
+      }
     },
     onSummeryChange(ev) {
-      this.postSummery = ev.target.value;
+      this.postToEdit.summery = ev.target.value;
     },
     async onPost() {
       try {
-        const newPost = await postService.createPost(
+        const postToSave = await postService.savePost(
           this.user,
-          this.imgsUrl,
-          this.postSummery
+          this.postToEdit
         );
         this.$emit("onToggleCreate");
         this.$store.dispatch({
-          type: "addPost",
-          post: newPost,
+          type: "savePost",
+          post: postToSave,
         });
-      } catch (error) {}
+      } catch (error) {
+        new Error("coudl'nt create this post", error);
+      }
     },
   },
   components: {

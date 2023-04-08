@@ -19,7 +19,7 @@
             <img :src="post.userImg" class="user-img" />
             <span>{{ post.username }}</span>
           </header>
-          <button @click="onOpenSettings" v-if="isOwnProfile">
+          <button @click="onToggleSettings" v-if="isOwnProfile">
             <v-icon name="bi-three-dots" />
           </button>
         </div>
@@ -105,9 +105,15 @@
     </section>
     <UserPostSettings
       :post="post"
+      @onToggleSettings="onToggleSettings"
       @closePost="closePost"
       v-if="isSettingsOpen && isOwnProfile"
+      @onToggleCreate="onToggleCreate"
     />
+    <article v-if="isCreateOpen" class="create-post-modal">
+      <section class="container" @click="onToggleCreate()"></section>
+      <CreateModal @onToggleCreate="onToggleCreate" :post="post" />
+    </article>
   </section>
 </template>
 
@@ -115,15 +121,17 @@
 import { postService } from "../services/post.service";
 import ImgSlider from "../cmps/img-slider.vue";
 import UserPostSettings from "../cmps/user-post-settings.vue";
+import CreateModal from "../cmps/create-modal.vue";
 
 export default {
   data() {
     return {
       commentTxt: "",
       isSettingsOpen: false,
+      isCreateOpen: false,
     };
   },
-  components: { ImgSlider, UserPostSettings },
+  components: { ImgSlider, UserPostSettings, CreateModal },
   props: {
     post: {
       type: Object,
@@ -236,8 +244,12 @@ export default {
       return postService.getCommentTime(commentTimeStemp);
     },
     didUserLikedComment() {},
-    onOpenSettings() {
-      this.isSettingsOpen = true;
+    onToggleSettings() {
+      this.isSettingsOpen = !this.isSettingsOpen;
+    },
+    onToggleCreate() {
+      if (this.isSettingsOpen) this.isSettingsOpen = false;
+      this.isCreateOpen = !this.isCreateOpen;
     },
   },
   computed: {

@@ -254,10 +254,11 @@ export default {
         e.currentTarget.innerWidth < 1260 &&
         e.currentTarget.innerWidth > 770
       ) {
+        if (this.isMobileSearchOpen) this.isMobileSearchOpen = false;
         this.isTabletMode = true;
         this.isMobileMode = false;
       } else if (e.currentTarget.innerWidth < 770) {
-        this.isSearchOpen = false;
+        if (this.isSearchOpen) this.isSearchOpen = false;
         this.isMobileMode = true;
         this.isTabletMode = false;
       } else {

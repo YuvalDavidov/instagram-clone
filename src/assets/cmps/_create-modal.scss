@@ -1,9 +1,15 @@
+.create-post-modal {
+    z-index: 6;
+    position: fixed;
+    top: 0;
+}
+
 .create-modal {
     border-radius: 15px;
     position: absolute;
     top: calc(100vh - 90%);
     left: calc(100vw - 70%);
-    z-index: 4;
+    z-index: 10;
     background-color: white;
 
     &.seconde {
