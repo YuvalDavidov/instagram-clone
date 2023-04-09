@@ -1,7 +1,15 @@
 <template>
   <section class="stories">
     <li v-for="(story, index) in stories" :key="index" class="story-list">
-      <Story :story="story" />
+      <Story
+        :story="story"
+        :isStoryOpen="isStoryOpen"
+        :storyIndex="index"
+        :selectedStoryIndex="selectedStoryIndex"
+        @onToggleStory="onToggleStory"
+        @onNextStory="onNextStory"
+        @onPrevStory="onPrevStory"
+      />
     </li>
   </section>
 </template>
@@ -14,12 +22,27 @@ export default {
   data() {
     return {
       stories: [],
+      isStoryOpen: false,
+      selectedStoryIndex: 0,
     };
   },
   created() {
     this.$store.dispatch({
       type: "loadStories",
     });
+  },
+  methods: {
+    onToggleStory(index) {
+      // console.log(index, this.selectedStoryIndex);
+      this.isStoryOpen = !this.isStoryOpen;
+      this.selectedStoryIndex = index;
+    },
+    onNextStory() {
+      this.selectedStoryIndex++;
+    },
+    onPrevStory() {
+      this.selectedStoryIndex--;
+    },
   },
   watch: {
     "$store.getters.getStories": {

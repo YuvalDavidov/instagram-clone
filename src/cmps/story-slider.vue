@@ -7,6 +7,10 @@
         </div>
       </li>
     </div>
+    <div class="story-user-info">
+      <img :src="story.userImgUrl" class="user-img" />
+      <p>{{ story.userId }}</p>
+    </div>
     <section class="story-slider-actions">
       <button @click="onPrevStory"></button>
       <button @click="onNextStory"></button>
@@ -33,10 +37,13 @@ export default {
       type: Object,
       required: true,
     },
+    storyIndex: {
+      type: Number,
+      required: true,
+    },
   },
   created() {
-    console.log(this.story.stories.length);
-    this.startInterval();
+    // this.startInterval();
   },
   methods: {
     startInterval() {
@@ -49,12 +56,18 @@ export default {
     onNextStory() {
       clearInterval(this.interval);
       this.storyNum++;
+      if (this.storyNum === this.story.stories.length) {
+        this.$emit("onNextStory");
+        return;
+      }
       this.startInterval();
     },
     onPrevStory() {
       clearInterval(this.interval);
       this.storyNum--;
-      if (this.storyNum === -1) this.storyNum = 0;
+      if (this.storyNum === -1 && !this.storyIndex) this.storyNum = 0;
+      else if (this.storyNum === -1 && this.storyIndex)
+        this.$emit("onPrevStory");
       this.startInterval();
     },
   },
