@@ -170,7 +170,7 @@ async function savePost(user, post) {
                 username: user.username,
                 userImg: user.imgUrl,
                 imgsUrl: post.imgsUrl,
-                summery: post.summery,
+                summery: post.summery || '',
                 timeStamp: new Date(),
                 likes: [],
                 isLikeCountVisible: true,
@@ -214,7 +214,14 @@ function getEmptyPost() {
 }
 
 // ; (async () => {
-//     await createPost({ _id: 'nrEca' }, ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], 'a nice livingroom')
-//     // await createPost('PcWKN', ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], 'a nice livingroom')
-//     // await createPost({iNDr6, })
+//     await savePost({ _id: '01axk', username: 'yuval', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
+//     await savePost({ _id: '01axk', username: 'yuval', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
+//     await savePost({ _id: '01axk', username: 'yuval', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg'], summery: 'a nice livingroom' })
+//     await savePost({ _id: 'lQ8yn', username: 'shaked', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
+//     await savePost({ _id: 'lQ8yn', username: 'shaked', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
+//     await savePost({ _id: 'lQ8yn', username: 'shaked', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
+//     await savePost({ _id: 'n0SQy', username: 'daniel', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
+//     await savePost({ _id: 'n0SQy', username: 'daniel', userImg: ' https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
+//     await savePost({ _id: 'n0SQy', username: 'daniel', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
+
 // })()

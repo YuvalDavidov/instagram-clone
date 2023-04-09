@@ -2,7 +2,7 @@
   <section v-bind:class="{ full: !user }">
     <section v-if="user" class="home-index">
       <div class="top">
-        <Storys />
+        <Stories />
         <post-index-home />
       </div>
     </section>
@@ -14,7 +14,7 @@
       <div class="login-div">
         <div class="first-div">
           <img class="logo" src="../assets/imgs/Instagram_logo.png" />
-          <form @submit.prevent="(isSignUp) ? onSignUp() : onLogin()">
+          <form @submit.prevent="isSignUp ? onSignUp() : onLogin()">
             <input
               v-if="!isSignUp"
               v-model="loginCredentials.username"
@@ -56,12 +56,11 @@
               placeholder="Password"
             />
 
-
             <button v-bind:disabled="isDisabled" class="login-btn">
-              {{(!isSignUp) ? 'Log in' : 'Sign up'}}
+              {{ !isSignUp ? "Log in" : "Sign up" }}
             </button>
           </form>
-          <div v-if="!isSignUp"  class="or-div">
+          <div v-if="!isSignUp" class="or-div">
             <div class="line"></div>
             <span class="OR">OR</span>
             <div class="line"></div>
@@ -74,8 +73,10 @@
         </div>
         <div class="second-div">
           <span
-            >{{(!isSignUp) ? 'Don\'t have an account?' : 'Have an account?'}}
-            <button @click="toSignUp()" class="signup-btn">{{(!isSignUp) ? 'Sign up' : 'Log in'}}</button></span
+            >{{ !isSignUp ? "Don't have an account?" : "Have an account?" }}
+            <button @click="toSignUp()" class="signup-btn">
+              {{ !isSignUp ? "Sign up" : "Log in" }}
+            </button></span
           >
         </div>
       </div>
@@ -86,29 +87,29 @@
 <script>
 import { userService } from "../services/user.service";
 
-import Storys from "@/cmps/storys.vue";
-import PostIndexHome from '../cmps/post-index-home.vue';
+import Stories from "@/cmps/stories.vue";
+import PostIndexHome from "../cmps/post-index-home.vue";
 export default {
   data() {
     return {
       loginCredentials: { username: "", password: "" },
-      isSignUp : false,
-      newUser : userService.getEmptyUser()
+      isSignUp: false,
+      newUser: userService.getEmptyUser(),
     };
   },
   async created() {},
   methods: {
     async onLogin() {
-        this.$store.dispatch({
+      this.$store.dispatch({
         type: "login",
         credentials: this.loginCredentials,
       });
     },
     async onSignUp() {
-        this.$store.dispatch({type: "signUp", user: this.newUser})
+      this.$store.dispatch({ type: "signUp", user: this.newUser });
     },
     toSignUp() {
-        this.isSignUp = !this.isSignUp
+      this.isSignUp = !this.isSignUp;
     },
   },
   computed: {
@@ -125,7 +126,7 @@ export default {
     },
   },
   components: {
-    Storys,
+    Stories,
     PostIndexHome,
   },
 };

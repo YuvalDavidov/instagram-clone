@@ -1,0 +1,29 @@
+.stories {
+    display: flex;
+    gap: 20px;
+    max-width: 630px;
+    margin: 0 auto;
+    overflow: auto clip;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .story-list {
+        list-style: none;
+        text-align: center;
+
+    }
+
+    .story {
+        width: max-content;
+        // background-color: blue;
+
+        &-user-img {
+            max-width: 56px;
+            border-radius: 50%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+    }
+}

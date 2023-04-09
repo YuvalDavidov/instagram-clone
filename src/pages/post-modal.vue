@@ -159,7 +159,7 @@ export default {
     },
   },
   created() {
-    // console.log(this.post);
+    console.log(this.post);
   },
   methods: {
     closePost() {
@@ -258,10 +258,17 @@ export default {
     async toggleLikes() {
       try {
         await postService.toggleLikeCount(this.post._id);
-        this.$store.dispatch({
-          type: "loadUserPosts",
-          userId: this.$route.params._id,
-        });
+        if (this.isAtHomePage) {
+          this.$store.dispatch({
+            type: "loadPosts",
+            user: this.loggedInUser,
+          });
+        } else {
+          this.$store.dispatch({
+            type: "loadUserPosts",
+            userId: this.$route.params._id,
+          });
+        }
       } catch (err) {
         console.error("coudl'nt do action on this post", err);
       }
@@ -269,10 +276,17 @@ export default {
     async toggleCommenting() {
       try {
         await postService.toggleCommenting(this.post._id);
-        this.$store.dispatch({
-          type: "loadUserPosts",
-          userId: this.$route.params._id,
-        });
+        if (this.isAtHomePage) {
+          this.$store.dispatch({
+            type: "loadPosts",
+            user: this.loggedInUser,
+          });
+        } else {
+          this.$store.dispatch({
+            type: "loadUserPosts",
+            userId: this.$route.params._id,
+          });
+        }
       } catch (err) {
         console.error("coudl'nt do action on this post", err);
       }

@@ -48,8 +48,8 @@ export const postStore = {
                 throw new Error('coudl\'nt get posts from user', error)
             }
         },
-        async savePost({ commit }, { post }) {
-            const actionType = (post._id) ? 'updatePost' : 'addPost'
+        async savePost({ commit, state }, { post }) {
+            const actionType = (state.userPosts.includes(post._id)) ? 'updatePost' : 'addPost'
             try {
                 commit({ type: actionType, post })
             } catch (error) {
