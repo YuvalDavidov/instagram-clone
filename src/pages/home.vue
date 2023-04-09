@@ -2,7 +2,7 @@
   <section v-bind:class="{ full: !user }">
     <section v-if="user" class="home-index">
       <div class="top">
-        <Stories />
+        <StoriesList />
         <post-index-home />
       </div>
     </section>
@@ -87,7 +87,7 @@
 <script>
 import { userService } from "../services/user.service";
 
-import Stories from "@/cmps/stories.vue";
+import StoriesList from "@/cmps/stories-list.vue";
 import PostIndexHome from "../cmps/post-index-home.vue";
 export default {
   data() {
@@ -126,7 +126,7 @@ export default {
     },
   },
   components: {
-    Stories,
+    StoriesList,
     PostIndexHome,
   },
 };

@@ -1,0 +1,74 @@
+.story-slider {
+    position: absolute;
+    left: calc(50% - 150px);
+    top: calc(50% - 320px);
+    background-color: red;
+    width: 300px;
+    height: 500px;
+    border-radius: 10px;
+
+    .img-container {
+        width: inherit;
+        height: inherit;
+        background-size: cover;
+        border-radius: 10px;
+
+    }
+
+    &-actions {
+        height: inherit;
+        width: inherit;
+        position: absolute;
+        display: flex;
+
+        >* {
+            width: 50%;
+        }
+    }
+
+    &-num {
+        left: 5%;
+        top: 5px;
+        position: absolute;
+        height: 5px;
+        width: 90%;
+        display: flex;
+        gap: 5px;
+
+        & li {
+            list-style: none;
+            // border-radius: 5px;
+            // background-color: white;
+            flex: 1;
+        }
+
+        .line {
+            height: 5px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, .35);
+            flex: 1;
+
+            &.prev {
+                background-color: white;
+
+            }
+
+            & .on {
+                height: 5px;
+                border-radius: 5px;
+                background-color: white;
+                animation: slideRight 3s linear;
+            }
+        }
+    }
+}
+
+@keyframes slideRight {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}

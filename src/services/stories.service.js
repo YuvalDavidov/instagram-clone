@@ -22,13 +22,15 @@ async function getStoriesByFollowings() {
     }
 }
 
-async function createStory(userId, imgUrl) {
+async function createStory(imgUrl) {
     let story = _getEmptyStory()
 
-    let user = await userService.getUserById(userId)
+    // let user = await userService.getUserById(userId)
+    let user = userService.getLoggedinUser()
     // console.log(user);
     story.userInfo = {
         userId: user._id,
+        username: user.username,
         userImgUrl: user.imgUrl
     }
     story.imgUrl = imgUrl
@@ -37,7 +39,6 @@ async function createStory(userId, imgUrl) {
         await storageService.post(STORIES_KEY, story)
     } catch (error) {
         console.log('there is a problem with posting your story', error);
-
     }
 }
 
@@ -49,11 +50,11 @@ function _getEmptyStory() {
 }
 
 // ; (async () => {
-//     await createStory('01axk', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-//     await createStory('01axk', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-//     await createStory('lQ8yn', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-//     await createStory('lQ8yn', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-//     await createStory('n0SQy', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-//     await createStory('n0SQy', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
+//     await createStory( 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
+//     await createStory( 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
+//     await createStory( 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
+//     await createStory( 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
+//     await createStory( 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
+//     await createStory( 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
 
 // })()
