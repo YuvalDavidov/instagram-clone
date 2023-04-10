@@ -1,29 +1,20 @@
 <template>
   <section class="stories">
     <li v-for="(story, index) in stories" :key="index" class="story-list">
-      <Story
-        :story="story"
-        :isStoryOpen="isStoryOpen"
-        :storyIndex="index"
-        :selectedStoryIndex="selectedStoryIndex"
-        @onToggleStory="onToggleStory"
-        @onNextStory="onNextStory"
-        @onPrevStory="onPrevStory"
-      />
+      <Story :story="story" />
     </li>
   </section>
 </template>
 
 <script>
 import { storiesService } from "../services/stories.service";
+import { userService } from "../services/user.service";
 import Story from "./story.vue";
 
 export default {
   data() {
     return {
       stories: [],
-      isStoryOpen: false,
-      selectedStoryIndex: 0,
     };
   },
   created() {
@@ -48,14 +39,7 @@ export default {
     "$store.getters.getStories": {
       deep: true,
       async handler(newValue) {
-        console.log(newValue);
-        for (const key in newValue) {
-          this.stories.push({
-            userId: key,
-            userImgUrl: newValue[key][0].userInfo.userImgUrl,
-            stories: newValue[key],
-          });
-        }
+        this.stories = newValue;
       },
     },
   },

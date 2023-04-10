@@ -1,77 +1,111 @@
 .story-slider {
-    position: absolute;
-    left: calc(50% - 150px);
-    top: calc(50% - 320px);
-    width: 300px;
-    height: 500px;
-    border-radius: 10px;
+    height: 100vh;
+    grid-column: 1/-1;
 
-    .img-container {
-        width: inherit;
-        height: inherit;
-        background-size: cover;
+    .container {
+        background-color: #1a1a1a;
+    }
+
+    &-contaienr {
+        $height: calc(100vw - 60vh);
+        position: absolute;
+        left: calc(50% - 150px);
+        top: 5vw;
+        height: $height;
+        width: calc(($height / 100) *56.24);
         border-radius: 10px;
+        z-index: 4;
 
-    }
 
-    .story-user-info {
-        position: absolute;
-        top: 15px;
-        left: 15px;
+        .img-container {
+            width: inherit;
+            height: inherit;
+            background-color: black;
+            // background-size: cover;
+            object-fit: contain;
+            border-radius: 10px;
 
-        .user-img {
-            width: 20px;
-            border-radius: 50%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-        }
-    }
-
-    &-actions {
-        height: inherit;
-        width: inherit;
-        position: absolute;
-        display: flex;
-
-        >* {
-            width: 50%;
-        }
-    }
-
-    &-num {
-        left: 5%;
-        top: 5px;
-        position: absolute;
-        height: 5px;
-        width: 90%;
-        display: flex;
-        gap: 5px;
-
-        & li {
-            list-style: none;
-            // border-radius: 5px;
-            // background-color: white;
-            flex: 1;
         }
 
-        .line {
-            height: 5px;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, .35);
-            flex: 1;
+        .container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 0;
+        }
 
-            &.prev {
-                background-color: white;
+        .story-user-info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
 
+            .user-img {
+                width: 32px;
+                border-radius: 50%;
+                aspect-ratio: 1/1;
+                object-fit: cover;
+            }
+        }
+
+        & .story-slider-actions {
+            position: absolute;
+            top: 45%;
+            left: -45px;
+            width: calc(($height / 100) *56.24 + 90px);
+
+            >* {
+                background: rgba(255, 255, 255, 0.612);
+                border-radius: 50%;
+                aspect-ratio: 1/1;
             }
 
-            & .on {
+            .left-btn {
+                position: absolute;
+                left: 0;
+            }
+
+            .right-btn {
+                position: absolute;
+                right: 0;
+            }
+        }
+
+        & .story-slider-num {
+            left: 5%;
+            top: 5px;
+            position: absolute;
+            height: 5px;
+            width: 90%;
+            display: flex;
+            gap: 5px;
+
+            & li {
+                list-style: none;
+                // border-radius: 5px;
+                // background-color: white;
+                flex: 1;
+            }
+
+            .line {
                 height: 5px;
                 border-radius: 5px;
-                background-color: white;
-                animation: slideRight 3s linear;
+                background-color: rgba(255, 255, 255, .35);
+                flex: 1;
+
+                &.prev {
+                    background-color: white;
+
+                }
+
+                & .on {
+                    height: 5px;
+                    border-radius: 5px;
+                    background-color: white;
+                    animation: slideRight 3s linear;
+                }
             }
         }
+
     }
 }
 

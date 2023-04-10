@@ -5,6 +5,7 @@ import UserProfile from '../pages/user-profile.vue'
 import Search from '../pages/search.vue'
 import Messages from '../pages/messages.vue'
 import Notifications from '../pages/notifications.vue'
+import StorySlider from '../cmps/story-slider.vue'
 
 
 const routerOptions = {
@@ -29,6 +30,10 @@ const routerOptions = {
         {
             path: '/notifications',
             component: Notifications,
+        },
+        {
+            path: '/stories/:_id/:storyId',
+            component: StorySlider,
         },
 
 

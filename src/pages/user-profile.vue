@@ -2,7 +2,12 @@
   <section class="user-profile" v-if="user">
     <article class="top">
       <div class="img-container">
-        <img :src="`${user.imgUrl}`" />
+        <button
+          @click="onGoToUserStories"
+          :class="{ 'story-btn': userStories }"
+        >
+          <img :src="`${user.imgUrl}`" />
+        </button>
       </div>
       <div class="right-container">
         <div class="user-details">
@@ -65,11 +70,18 @@ export default {
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );
+    this.$store.dispatch({
+      type: "loadUserStories",
+      userId: this.$route.params._id,
+    });
   },
   computed: {
     isOwnProfile() {
       if (userService.checkIfOwnByUser(this.$route.params._id)) return true;
       else return false;
+    },
+    userStories() {
+      return this.$store.getters.getUserStories[0];
     },
   },
   methods: {
@@ -83,6 +95,12 @@ export default {
       } catch (err) {
         console.error(err);
       }
+    },
+    onGoToUserStories() {
+      if (!this.userStories) return;
+      this.$router.push(
+        `/stories/${this.$route.params._id}/${this.userStories}`
+      );
     },
   },
   watch: {

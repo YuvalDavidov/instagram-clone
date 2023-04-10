@@ -105,7 +105,8 @@ function getEmptyUser() {
 }
 
 // ; (async () => {
-//     await signup({ fullname: 'Puki Norma', username: 'yuval1', password: '12345' })
-//     await signup({ fullname: 'Master Adminov', username: 'shaked', password: '12345' })
-//     await signup({ fullname: 'Muki G', username: 'daniel', password: '12345' })
+//     // await signup({ fullname: 'Puki Norma', username: 'yuval1', password: '12345' })
+//     // await signup({ fullname: 'Master Adminov', username: 'shaked', password: '12345' })
+//     // await signup({ fullname: 'Muki G', username: 'daniel', password: '12345' })
+//     await signup({ fullname: 'Muki Gsa', username: 'noa', password: '12345' })
 // })()

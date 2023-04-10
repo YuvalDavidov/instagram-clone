@@ -1,11 +1,11 @@
 <template>
-  <section class="story">
+  <section class="story" v-if="user">
     <button class="story-btn" @click="onToggleStory">
-      <img :src="story.userImgUrl" class="story-user-img" />
+      <img :src="user.imgUrl" class="story-user-img" />
     </button>
-    <p class="story-user-name">{{ story.userId }}</p>
+    <p class="story-user-name">{{ user.username }}</p>
 
-    <section class="story-open" v-if="isStoryOpen && isStorySelected">
+    <!-- <section class="story-open" v-if="isStoryOpen && isStorySelected">
       <StorySlider
         :story="story"
         :storyIndex="storyIndex"
@@ -14,56 +14,47 @@
         @onPrevStory="onPrevStory"
       />
       <section @click="onToggleStory" class="container"></section>
-    </section>
+    </section> -->
   </section>
 </template>
 
 <script>
+import { storiesService } from "../services/stories.service";
+import { userService } from "../services/user.service";
 import StorySlider from "./story-slider.vue";
 
 export default {
   data() {
     return {
-      // isStorySelected: false,
+      user: null,
+      stories: null,
     };
   },
   props: {
     story: {
-      type: Object,
-      required: true,
-    },
-    storyIndex: {
-      type: Number,
-      required: true,
-    },
-    selectedStoryIndex: {
-      type: Number,
-      required: true,
-    },
-    isStoryOpen: {
-      type: Boolean,
+      type: String,
       required: true,
     },
   },
-  created() {
-    // console.log(this.storyIndex, this.selectedStoryIndex);
+  async created() {
+    // this.user = await userService.getUserById(this.story);
   },
   methods: {
     onToggleStory() {
-      this.$emit("onToggleStory", this.storyIndex);
+      // this.$router.push(`/stories/${this.$route.params._id}`);
     },
-    onNextStory() {
-      this.$emit("onNextStory");
-    },
-    onPrevStory() {
-      this.$emit("onPrevStory");
-    },
+    // onNextStory() {
+    //   this.$emit("onNextStory");
+    // },
+    // onPrevStory() {
+    //   this.$emit("onPrevStory");
+    // },
   },
   computed: {
-    isStorySelected() {
-      if (this.selectedStoryIndex === this.storyIndex) return true;
-      else return false;
-    },
+    // isStorySelected() {
+    //   if (this.selectedStoryIndex === this.storyIndex) return true;
+    //   else return false;
+    // },
   },
   components: {
     StorySlider,

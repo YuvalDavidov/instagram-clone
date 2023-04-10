@@ -10,7 +10,8 @@
 
         .img-container {
             min-width: 300px;
-            text-align: center;
+            display: flex;
+            justify-content: center;
 
             img {
                 aspect-ratio: 1/1;

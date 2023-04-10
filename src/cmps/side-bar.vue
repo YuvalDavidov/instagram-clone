@@ -1,5 +1,5 @@
 <template>
-  <section class="side-bar-container">
+  <section class="side-bar-container" v-if="!isInStory">
     <section
       class="side-bar"
       v-if="!this.isMobileMode"
@@ -270,6 +270,10 @@ export default {
   computed: {
     user() {
       return this.$store.getters.GetUser;
+    },
+    isInStory() {
+      if (this.$route.path.includes("/stories")) return true;
+      else false;
     },
   },
   components: {
