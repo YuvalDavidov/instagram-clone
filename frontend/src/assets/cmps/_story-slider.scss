@@ -16,6 +16,15 @@
         border-radius: 10px;
         z-index: 4;
 
+        .onInput {
+            border-radius: 10px;
+            z-index: 6;
+            position: absolute;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            background-color: rgba(229, 229, 229, 0.187);
+        }
 
         .img-container {
             width: inherit;
@@ -36,14 +45,30 @@
 
         .story-user-info {
             position: absolute;
-            top: 15px;
-            left: 15px;
+            top: 20px;
+            left: 5%;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 5;
 
             .user-img {
                 width: 32px;
                 border-radius: 50%;
                 aspect-ratio: 1/1;
                 object-fit: cover;
+            }
+
+            p {
+                color: white;
+                margin: 0;
+            }
+
+            .interval-btn {
+                position: absolute;
+                right: 0;
+                color: white;
             }
         }
 
@@ -81,8 +106,7 @@
 
             & li {
                 list-style: none;
-                // border-radius: 5px;
-                // background-color: white;
+
                 flex: 1;
             }
 
@@ -101,20 +125,38 @@
                     height: 5px;
                     border-radius: 5px;
                     background-color: white;
-                    animation: slideRight 3s linear;
+                    transition: width 0.1s linear;
                 }
             }
         }
 
-    }
-}
+        & .comment-likes {
+            position: absolute;
+            bottom: 2.5%;
+            left: 5%;
+            width: 90%;
+            display: flex;
+            min-height: 44px;
+            z-index: 7;
 
-@keyframes slideRight {
-    from {
-        width: 0%;
-    }
+            input {
+                flex-grow: 1;
+                border-radius: 50px;
+                background: none;
+                padding: 0 5%;
+                border: 1px solid #dbdbdbb0;
+            }
 
-    to {
-        width: 100%;
+            .send {
+                position: absolute;
+                right: 15%;
+                top: 30%;
+            }
+
+            >* {
+                color: #dbdbdbb0;
+            }
+        }
+
     }
 }

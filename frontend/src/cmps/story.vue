@@ -37,24 +37,13 @@ export default {
     },
   },
   async created() {
-    // this.user = await userService.getUserById(this.story);
+    this.user = await userService.getUserById(this.story);
+    this.stories = await storiesService.getStoriesIdByUserId(this.story);
   },
   methods: {
     onToggleStory() {
-      // this.$router.push(`/stories/${this.$route.params._id}`);
+      this.$router.push(`/stories/${this.story}/${this.stories[0]}`);
     },
-    // onNextStory() {
-    //   this.$emit("onNextStory");
-    // },
-    // onPrevStory() {
-    //   this.$emit("onPrevStory");
-    // },
-  },
-  computed: {
-    // isStorySelected() {
-    //   if (this.selectedStoryIndex === this.storyIndex) return true;
-    //   else return false;
-    // },
   },
   components: {
     StorySlider,

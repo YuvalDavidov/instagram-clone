@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { storiesService } from "../services/stories.service";
-import { userService } from "../services/user.service";
 import Story from "./story.vue";
 
 export default {
@@ -21,19 +19,6 @@ export default {
     this.$store.dispatch({
       type: "loadStories",
     });
-  },
-  methods: {
-    onToggleStory(index) {
-      // console.log(index, this.selectedStoryIndex);
-      this.isStoryOpen = !this.isStoryOpen;
-      this.selectedStoryIndex = index;
-    },
-    onNextStory() {
-      this.selectedStoryIndex++;
-    },
-    onPrevStory() {
-      this.selectedStoryIndex--;
-    },
   },
   watch: {
     "$store.getters.getStories": {

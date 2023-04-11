@@ -32,6 +32,10 @@ const routerOptions = {
             component: Notifications,
         },
         {
+            path: '/stories/profile/:_id/:storyId',
+            component: StorySlider,
+        },
+        {
             path: '/stories/:_id/:storyId',
             component: StorySlider,
         },

@@ -99,7 +99,7 @@ export default {
     onGoToUserStories() {
       if (!this.userStories) return;
       this.$router.push(
-        `/stories/${this.$route.params._id}/${this.userStories}`
+        `/stories/profile/${this.$route.params._id}/${this.userStories}`
       );
     },
   },
