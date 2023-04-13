@@ -88,7 +88,7 @@ export default {
       type: "loadStory",
       storyId: this.$route.params.storyId,
     });
-    this.startInterval();
+    // this.startInterval();
   },
   methods: {
     startInterval() {

@@ -1,18 +1,25 @@
+$max-height: 54vw;
+$med-height: 62vw;
+$min-height: 96vw;
+
 .story-slider {
     height: 100vh;
     grid-column: 1/-1;
+    display: flex;
+    align-items: center;
 
     .container {
         background-color: #1a1a1a;
+        position: fixed;
     }
 
     &-contaienr {
-        $height: calc(100vw - 60vh);
-        position: absolute;
-        left: calc(50% - 150px);
-        top: 5vw;
-        height: $height;
-        width: calc(($height / 100) *56.24);
+        position: relative;
+        left: calc(($max-height / 100) *50);
+        height: $max-height;
+        max-height: 837px;
+        max-width: calc((837px / 100) *56.24);
+        width: calc(($max-height / 100) *56.24);
         border-radius: 10px;
         z-index: 4;
 
@@ -27,8 +34,10 @@
         }
 
         .img-container {
-            width: inherit;
-            height: inherit;
+            max-width: calc((837px / 100) *56.24);
+            width: calc(($max-height / 100) *56.24);
+            height: $max-height;
+            max-height: 837px;
             background-color: black;
             // background-size: cover;
             object-fit: contain;
@@ -76,7 +85,8 @@
             position: absolute;
             top: 45%;
             left: -45px;
-            width: calc(($height / 100) *56.24 + 90px);
+            width: calc(($max-height / 100) *56.24 + 90px);
+            max-width: calc((837px / 100) *56.24 + 90px);
 
             >* {
                 background: rgba(255, 255, 255, 0.612);
@@ -158,5 +168,41 @@
             }
         }
 
+    }
+}
+
+@media (max-width:1350px) {
+    .story-slider {
+        &-contaienr {
+            height: $med-height;
+            width: calc(($med-height / 100) *56.24);
+
+            .img-container {
+                width: calc(($med-height / 100) *56.24);
+                height: $med-height;
+            }
+
+            & .story-slider-actions {
+                width: calc(($med-height / 100) *56.24 + 90px);
+            }
+        }
+    }
+}
+
+@media (max-width:870px) {
+    .story-slider {
+        &-contaienr {
+            height: $min-height;
+            width: calc(($min-height / 100) *56.24);
+
+            .img-container {
+                width: calc(($min-height / 100) *56.24);
+                height: $min-height;
+            }
+
+            & .story-slider-actions {
+                width: calc(($min-height / 100) *56.24 + 90px);
+            }
+        }
     }
 }
