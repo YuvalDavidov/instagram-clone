@@ -28,6 +28,9 @@ export const storyStore = {
         setStory(state, { story }) {
             state.story = story
         },
+        setUserSawStory(state, { userId }) {
+            state.story.sawUsers.push(userId)
+        }
     },
     actions: {
         async loadStories({ commit }) {
@@ -54,11 +57,17 @@ export const storyStore = {
                 commit({ type: 'setStory', story })
             } catch (error) {
                 throw new Error('coudl\'nt get story', error)
-
             }
         },
-        async userSawStory({ commit }, { storyId }) {
-
+        async userSawStory({ commit }) {
+            try {
+                if (!this.state.storyStore.story.sawUsers.includes(this.state.user._id) && this.state.storyStore.story.userInfo.userId !== this.state.user._id) {
+                    await commit({ type: 'setUserSawStory', userId: this.state.user._id })
+                    storiesService.updateStory(this.state.storyStore.story)
+                }
+            } catch (error) {
+                throw new Error('coudl\'nt update sawUsers story', error)
+            }
         }
     },
 }

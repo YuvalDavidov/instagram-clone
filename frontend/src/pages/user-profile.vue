@@ -34,7 +34,7 @@
             <span>{{ user.following.length }}</span> following
           </div>
         </div>
-        <div class="user-summery">yuval</div>
+        <div class="user-summery">{{ user.fullname }}</div>
       </div>
     </article>
     <article v-if="this.isMobileMode" class="top mobile">
@@ -50,13 +50,12 @@
         <div class="right-container">
           <div class="user-details">
             <span>{{ user.username }}</span>
-
-            <button @click="onFollow" v-if="!isOwnProfile">
-              {{ isFollowing ? "Following" : "Follow" }}
-            </button>
-            <button v-if="!isOwnProfile">Message</button>
             <v-icon scale="1.2" name="ri-settings-5-line" />
           </div>
+          <button @click="onFollow" v-if="!isOwnProfile">
+            {{ isFollowing ? "Following" : "Follow" }}
+          </button>
+          <button v-if="!isOwnProfile">Message</button>
           <button v-if="isOwnProfile">Edit profile</button>
         </div>
       </div>
@@ -86,7 +85,7 @@
         :isOwnProfile="isOwnProfile"
         v-if="posts.length"
       />
-      <div class="no-posts" v-if="!posts">you have no posts</div>
+      <div class="no-posts" v-if="!posts.length">no posts</div>
     </section>
   </section>
 </template>
@@ -109,10 +108,6 @@ export default {
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );
-    this.$store.dispatch({
-      type: "loadUserStories",
-      userId: this.$route.params._id,
-    });
   },
   methods: {
     async onFollow() {
@@ -158,6 +153,10 @@ export default {
         this.user = await userService.getUserById(params._id);
         this.$store.dispatch({
           type: "loadUserPosts",
+          userId: this.$route.params._id,
+        });
+        this.$store.dispatch({
+          type: "loadUserStories",
           userId: this.$route.params._id,
         });
       },

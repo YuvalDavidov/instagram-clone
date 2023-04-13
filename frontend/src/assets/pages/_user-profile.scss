@@ -1,9 +1,11 @@
 .user-profile {
     margin: 0 auto;
     padding: 20px;
+    width: 100%;
 
     &.mobile {
-        padding: 20px 0;
+        padding: 0;
+        margin-top: 70px;
     }
 
     .top {
@@ -37,6 +39,10 @@
                 gap: 20px;
                 align-items: center;
 
+                span {
+                    font-weight: bold;
+                }
+
                 button {
                     border: none;
                     border-radius: 10px;
@@ -55,6 +61,7 @@
             }
 
             .user-summery {
+                font-weight: bold;
                 display: flex;
             }
         }
@@ -135,5 +142,10 @@
             background: none;
         }
 
+    }
+
+    .no-posts {
+        text-align: center;
+        padding-top: 50px;
     }
 }

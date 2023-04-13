@@ -4,17 +4,6 @@
       <img :src="user.imgUrl" class="story-user-img" />
     </button>
     <p class="story-user-name">{{ user.username }}</p>
-
-    <!-- <section class="story-open" v-if="isStoryOpen && isStorySelected">
-      <StorySlider
-        :story="story"
-        :storyIndex="storyIndex"
-        @onToggleStory="onToggleStory"
-        @onNextStory="onNextStory"
-        @onPrevStory="onPrevStory"
-      />
-      <section @click="onToggleStory" class="container"></section>
-    </section> -->
   </section>
 </template>
 

@@ -1,6 +1,4 @@
 .welcome-page {
-
-
     box-sizing: border-box;
     display: flex;
     width: max-content;
@@ -10,7 +8,6 @@
         font-size: 11px;
         color: rgb(142, 142, 142);
     }
-
 
     .iphone-container {
         position: relative;
@@ -169,5 +166,11 @@
 
 
         }
+    }
+}
+
+@media (max-width:770px) {
+    .home-index {
+        margin-top: 70px;
     }
 }

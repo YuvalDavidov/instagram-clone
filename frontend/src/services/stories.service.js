@@ -8,7 +8,8 @@ export const storiesService = {
     createStory,
     getStoriesByUserId,
     getStoriesIdByUserId,
-    getStoryById
+    getStoryById,
+    updateStory
 }
 
 async function getStoriesByFollowings() {
@@ -19,12 +20,6 @@ async function getStoriesByFollowings() {
             if ((currUser.following.includes(story.userInfo.userId) || story.userInfo.userId === currUser._id) && !acc.includes(story.userInfo.userId)) acc.push(story.userInfo.userId)
             return acc
         }, [])
-        // return storeis.reduce((acc, story) => {
-        //     if ((currUser.following.includes(story.userInfo.userId) || story.userInfo.userId === currUser._id) && !acc[story.userInfo.userId]) acc[story.userInfo.userId] = []
-        //     if (!acc[story.userInfo.userId]) return acc
-        //     acc[story.userInfo.userId].push(story._id)
-        //     return acc
-        // }, {})
     } catch (error) {
         console.log('there is a problem with getting useres stories', error);
 
@@ -76,6 +71,10 @@ async function createStory(imgUrl) {
     }
 }
 
+async function updateStory(story) {
+    await storageService.put(STORIES_KEY, story)
+}
+
 function _getEmptyStory() {
     return {
         timeStampe: new Date,
@@ -86,10 +85,5 @@ function _getEmptyStory() {
 
 // ; (async () => {
 //     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-//     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
 //     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg')
-//     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-//     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg')
-//     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
-
 // })()
