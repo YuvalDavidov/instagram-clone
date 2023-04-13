@@ -10,6 +10,7 @@ export const myStore = createStore({
     state() {
         return {
             user: userService.getLoggedinUser(),
+            windowMode: 'isLabtopMode'
         }
     },
     getters: {
@@ -19,11 +20,17 @@ export const myStore = createStore({
         },
         GetUser({ user }) {
             return user
+        },
+        GetWindowMode({ windowMode }) {
+            return windowMode
         }
     },
     mutations: {
         setUser(state, { user }) {
             state.user = user
+        },
+        setWindowMode(state, { windowMode }) {
+            state.windowMode = windowMode
         }
     },
     actions: {
@@ -42,6 +49,9 @@ export const myStore = createStore({
             } catch (err) {
                 console.error(err, 'couldnt signup')
             }
+        },
+        setWindowMode({ commit }, { windowMode }) {
+            commit({ type: 'setWindowMode', windowMode })
         }
     },
     modules: {

@@ -27,7 +27,7 @@
     .main-layout {
         margin-top: 70px;
 
-        * {
+        >* {
             grid-column: 1/-1;
         }
     }

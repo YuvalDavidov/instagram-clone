@@ -2,6 +2,9 @@
     margin: 0 auto;
     padding: 20px;
 
+    &.mobile {
+        padding: 20px 0;
+    }
 
     .top {
         display: flex;
@@ -22,7 +25,7 @@
         }
 
         .right-container {
-            min-width: 650px;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -43,19 +46,78 @@
 
             .user-amount {
                 display: flex;
-                gap: 40px;
+                flex-direction: row;
+                gap: 15px;
 
-                >div {
-
-                    span {
-                        font-weight: bold;
-                    }
+                span {
+                    font-weight: bold;
                 }
-
             }
 
             .user-summery {
                 display: flex;
+            }
+        }
+
+        &.mobile {
+            display: block;
+            padding: 0 20px;
+
+            .flex {
+                display: flex;
+                gap: 15px;
+            }
+
+            .img-container {
+                min-width: 80px;
+                padding-bottom: 20px;
+
+                img {
+                    width: 77px;
+
+                }
+            }
+
+            .right-container {
+                flex-grow: 0;
+
+                .user-details {
+                    font-weight: bold;
+
+                }
+
+                button {
+                    background-color: rgb(236, 236, 236);
+                    border: none;
+                    border-radius: 10px;
+                    padding: 10px 100px;
+                }
+            }
+
+            .user-summery {
+                font-weight: bold;
+                padding-bottom: 20px;
+            }
+        }
+
+    }
+
+    & .user-amount {
+        &.mobile {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            border-bottom: 1px solid $nav-border-color;
+            padding: 12px 0;
+
+            * {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                span {
+                    font-weight: bold;
+                }
             }
         }
     }

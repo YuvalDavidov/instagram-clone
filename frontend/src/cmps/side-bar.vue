@@ -199,20 +199,24 @@ export default {
       isCreateOpen: false,
       searchTxt: "",
       usersBySearch: [],
-      isTabletMode: false,
-      isMobileMode: false,
     };
   },
   created() {
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
-      this.isTabletMode = true;
-      this.isMobileMode = false;
+      this.$store.dispatch({
+        type: "setWindowMode",
+        windowMode: "isTabletMode",
+      });
     } else if (window.innerWidth < 770) {
-      this.isMobileMode = true;
-      this.isTabletMode = false;
+      this.$store.dispatch({
+        type: "setWindowMode",
+        windowMode: "isMobileMode",
+      });
     } else {
-      this.isMobileMode = false;
-      this.isTabletMode = false;
+      this.$store.dispatch({
+        type: "setWindowMode",
+        windowMode: "isLabtopMode",
+      });
     }
     window.addEventListener("resize", this.windowSizeHandeler);
   },
@@ -252,18 +256,31 @@ export default {
     windowSizeHandeler(e) {
       if (
         e.currentTarget.innerWidth < 1260 &&
-        e.currentTarget.innerWidth > 770
+        e.currentTarget.innerWidth > 770 &&
+        this.windowMode !== "isTabletMode"
       ) {
         if (this.isMobileSearchOpen) this.isMobileSearchOpen = false;
-        this.isTabletMode = true;
-        this.isMobileMode = false;
-      } else if (e.currentTarget.innerWidth < 770) {
+        this.$store.dispatch({
+          type: "setWindowMode",
+          windowMode: "isTabletMode",
+        });
+      } else if (
+        e.currentTarget.innerWidth < 770 &&
+        this.windowMode !== "isMobileMode"
+      ) {
         if (this.isSearchOpen) this.isSearchOpen = false;
-        this.isMobileMode = true;
-        this.isTabletMode = false;
-      } else {
-        this.isMobileMode = false;
-        this.isTabletMode = false;
+        this.$store.dispatch({
+          type: "setWindowMode",
+          windowMode: "isMobileMode",
+        });
+      } else if (
+        e.currentTarget.innerWidth > 1260 &&
+        this.windowMode !== "isLabtopMode"
+      ) {
+        this.$store.dispatch({
+          type: "setWindowMode",
+          windowMode: "isLabtopMode",
+        });
       }
     },
   },
@@ -274,6 +291,17 @@ export default {
     isInStory() {
       if (this.$route.path.includes("/stories")) return true;
       else false;
+    },
+    windowMode() {
+      return this.$store.getters.GetWindowMode;
+    },
+    isMobileMode() {
+      if (this.windowMode === "isMobileMode") return true;
+      else return false;
+    },
+    isTabletMode() {
+      if (this.windowMode === "isTabletMode") return true;
+      else return false;
     },
   },
   components: {

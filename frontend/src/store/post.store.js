@@ -70,7 +70,6 @@ export const postStore = {
         async loadPosts({ commit }, { user, numOfPostsToQuerry }) {
             try {
                 if (numOfPostsToQuerry) {
-                    console.log(numOfPostsToQuerry)
                     commit({ type: 'setCurrNumOfPosts', num: numOfPostsToQuerry })
                 }
 
