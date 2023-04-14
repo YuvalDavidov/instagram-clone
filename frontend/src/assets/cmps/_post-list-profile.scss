@@ -1,20 +1,21 @@
 .post-list-profile {
     margin: 10px auto;
-    width: fit-content;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 310px);
-    grid-template-rows: 310px;
+    grid-template-columns: repeat(3, 1fr);
     gap: 5px;
 
 
     .post-grid {
         list-style: none;
         max-height: 310px;
+        max-width: 310px;
 
         .post-img {
             aspect-ratio: 1/1;
             object-fit: contain;
-            width: 310px;
+            width: 100%;
+
         }
 
     }

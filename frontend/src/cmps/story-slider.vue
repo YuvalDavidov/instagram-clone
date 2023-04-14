@@ -19,7 +19,7 @@
       <div class="story-user-info">
         <img :src="story.userInfo.userImgUrl" class="user-img" />
         <p>{{ story.userInfo.username }}</p>
-
+        <p>{{ timeAgo }}</p>
         <button
           class="interval-btn"
           v-if="isIntervalStoped"
@@ -77,21 +77,22 @@ export default {
       commentTxt: "",
     };
   },
-  created() {
+  async created() {
     if (!this.$route.path.includes("profile")) this.isAtHome = !this.isAtHome;
-    console.log(this.isAtHome);
-    this.$store.dispatch({
+    await this.$store.dispatch({
       type: "loadUserStories",
       userId: this.$route.params._id,
     });
-    this.$store.dispatch({
+    await this.$store.dispatch({
       type: "loadStory",
       storyId: this.$route.params.storyId,
     });
-    this.startInterval();
+    // this.startInterval();
   },
   methods: {
     startInterval() {
+      this.$store.dispatch({ type: "userSawStory" });
+      // console.log(this.story);
       this.isIntervalStoped = false;
       this.interval = setInterval(() => {
         this.intervalTime -= 0.1;
@@ -218,6 +219,19 @@ export default {
       if (this.commentTxt.length) return true;
       else return false;
     },
+    timeAgo() {
+      let now = new Date().getTime();
+      let storyTime = new Date(this.story.timeStampe).getTime();
+      let diff = (now - storyTime) / 1000;
+      diff /= 60 * 60;
+      let houserDiff = Math.abs(Math.round(diff));
+      if (!houserDiff) {
+        diff *= 60;
+        let minDiff = Math.abs(Math.round(diff));
+        return minDiff + "m";
+      }
+      return houserDiff + "h";
+    },
   },
   watch: {
     "$route.params": {
@@ -226,6 +240,7 @@ export default {
           type: "loadStory",
           storyId: params.storyId,
         });
+        // console.log(this.story);
       },
     },
     "$store.getters.getUserStories": {
