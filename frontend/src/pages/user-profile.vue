@@ -35,7 +35,7 @@
     </article>
 
     <section class="actions">
-      <button>psots</button>
+      <button>posts</button>
       <button>saved</button>
       <button>tagged</button>
     </section>
