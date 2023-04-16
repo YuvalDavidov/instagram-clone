@@ -14,7 +14,7 @@ sequelize
         console.log('Database connection established successfully.');
     })
     .catch((err) => {
-        console.error('Unable to connect to the database:', err);
+        console.error('db.service - Unable to connect to the database:', err);
     });
 
 async function addRecord(model, data) {
@@ -23,7 +23,7 @@ async function addRecord(model, data) {
         await model.sync()
         return result.toJSON()
     } catch (error) {
-        throw new Error('failed to add record', error)
+        throw new Error('db.service - failed to add record', error)
     }
 
 }
@@ -33,17 +33,17 @@ async function removeRecord(model, itemId) {
         await model.sync()
 
     } catch (error) {
-        throw new Error('failed to remove record', error)
+        throw new Error('db.service - failed to remove record', error)
     }
 
 }
 async function updateRecord(model, data, itemId) {
     try {
-        await model.update(data, { where: { _id: itemId } })
+        const updatedItem = await model.update(data, { where: { _id: itemId } })
         await model.sync()
-
+        return updatedItem
     } catch (error) {
-        throw new Error('failed to update record', error)
+        throw new Error('db.service - failed to update record', error)
     }
 
 }

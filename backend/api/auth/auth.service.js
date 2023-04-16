@@ -13,29 +13,34 @@ module.exports = {
 
 async function login(username, password) {
     logger.debug(`auth.service - login with username: ${username}`)
+    try {
+        const user = await userService.getByUsername(username)
+        await bcrypt.compare(password, user.password)
+        delete user.password
+        user._id = user._id.toString()
+        return user
+    } catch (error) {
+        logger.error(`auth.service - Invalid username or password`)
+        throw new Error('auth.service - Invalid username or password', err)
+    }
 
-    const user = await userService.getByUsername(username)
-    if (!user) return Promise.reject('Invalid username or password')
-    const match = await bcrypt.compare(password, user.password)
-    if (!match) return Promise.reject('Invalid username or password')
-
-    delete user.password
-    user._id = user._id.toString()
-    return user
 }
 
 
-async function signup({ username, password, fullname, imgUrl }) {
+async function signup({ username, password, fullname, args }) {
     const saltRounds = 10
-
     logger.debug(`auth.service - signup with username: ${username}, fullname: ${fullname}`)
-    if (!username || !password || !fullname) return Promise.reject('Missing required signup information')
+    if (!username || !password || !fullname) return new Error('Missing required signup information')
+    try {
+        const userExist = await userService.getByUsername(username)
+        if (userExist) return new Error('Username already taken')
+        const hash = await bcrypt.hash(password, saltRounds)
+        return await userService.add({ username, password: hash, fullname, ...args })
+    } catch (error) {
+        throw new Error(`coudlnt sign-up`, error)
+    }
 
-    const userExist = await userService.getByUsername(username)
-    if (userExist) return Promise.reject('Username already taken')
 
-    const hash = await bcrypt.hash(password, saltRounds)
-    return userService.add({ username, password: hash, fullname, imgUrl })
 }
 
 
