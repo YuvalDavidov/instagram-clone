@@ -80,7 +80,6 @@ async function signup(userCred) {
     if (!userCred.imgUrl) userCred.imgUrl = 'http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSgdMa3-zfBbsMOTEYwMDhWumoaLYOb4kbOBP9Mmwdt9AwdzYCaL0VS1zKzlKc5DnPoWUSfVA25uggiN0o'
     userCred = ({
         ...userCred,
-        numOfPosts: 0,
         followers: [],
         following: [],
         summery: '',

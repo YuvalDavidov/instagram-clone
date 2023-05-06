@@ -1,0 +1,39 @@
+.edit-actions {
+    display: flex;
+    flex-direction: column;
+
+
+    .user-details {
+        display: flex;
+        gap: 10px;
+
+        div {
+            display: flex;
+            flex-direction: column;
+
+            button {
+                padding: 0;
+                color: #0095f6;
+
+            }
+        }
+    }
+
+    .edit-form {
+        display: flex;
+        flex-direction: column;
+
+        .bio {
+            display: flex;
+
+
+        }
+    }
+}
+
+.user-img {
+    width: 32px;
+    border-radius: 50%;
+    height: 32px;
+    object-fit: contain;
+}
