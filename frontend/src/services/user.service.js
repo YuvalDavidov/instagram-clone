@@ -7,6 +7,7 @@ export const userService = {
     logout,
     getEmptyUser,
     signup,
+    updateUser,
     saveLocalUser,
     checkIfOwnByUser,
     query
@@ -35,6 +36,11 @@ async function query(filterBy) {
 
     }
 
+}
+
+function updateUser(updatedUser) {
+    storageService.put(USER_KEY, updatedUser)
+    saveLocalUser(updatedUser)
 }
 
 function getLoggedinUser() {

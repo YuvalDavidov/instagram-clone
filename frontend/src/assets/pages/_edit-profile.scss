@@ -80,6 +80,12 @@
                 font-weight: 600;
             }
 
+            .words-count {
+                padding: 0px 0px 12px 93px;
+                font-size: 13px;
+                color: #737373;
+            }
+
             & textarea,
             & input,
             & button {
@@ -93,10 +99,15 @@
 
             textarea {
                 height: 60px;
+                color: black;
+                font-size: 16px;
             }
 
             input {
-                height: 25px;
+                width: 300px;
+                height: 30px;
+                font-size: 16px;
+
             }
 
             button {
@@ -122,5 +133,59 @@
 
     }
 }
+
+.gender-modal-container {
+    display: grid;
+    grid-template-columns: 25px 1fr 25px;
+
+    >* {
+        grid-column: 2;
+    }
+
+
+    .back-screen {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+        opacity: 50%;
+        // cursor: pointer;
+        z-index: 100;
+    }
+
+    .gender-modal {
+        z-index: 101;
+        position: fixed;
+        bottom: 25vh;
+        top: 40vh;
+        width: 460px;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 210px;
+        // z-index: 101;
+        // position: fixed;
+        // bottom: 25vh;
+        // top: 40vh;
+        // width: 496px;
+        // left: 25vw;
+        // right: 25vw;
+        // height: 231px;
+        // transform: translateX(-50%);
+        border-radius: 12px;
+        display: grid;
+        grid-template-columns: 25px 1fr 25px;
+
+        >* {
+            grid-column: 2;
+        }
+
+        background-color: white;
+    }
+
+}
+
+
 
 // @media (max-height)
