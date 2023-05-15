@@ -7,6 +7,7 @@ export const userService = {
     logout,
     getEmptyUser,
     signup,
+    updateUser,
     saveLocalUser,
     checkIfOwnByUser,
     query
@@ -35,6 +36,11 @@ async function query(filterBy) {
 
     }
 
+}
+
+function updateUser(updatedUser) {
+    storageService.put(USER_KEY, updatedUser)
+    saveLocalUser(updatedUser)
 }
 
 function getLoggedinUser() {
@@ -80,7 +86,6 @@ async function signup(userCred) {
     if (!userCred.imgUrl) userCred.imgUrl = 'http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSgdMa3-zfBbsMOTEYwMDhWumoaLYOb4kbOBP9Mmwdt9AwdzYCaL0VS1zKzlKc5DnPoWUSfVA25uggiN0o'
     userCred = ({
         ...userCred,
-        numOfPosts: 0,
         followers: [],
         following: [],
         summery: '',

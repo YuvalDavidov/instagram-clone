@@ -6,6 +6,7 @@ import Search from '../pages/search.vue'
 import Messages from '../pages/messages.vue'
 import Notifications from '../pages/notifications.vue'
 import StorySlider from '../cmps/story-slider.vue'
+import EditProfile from '../pages/edit-profile.vue'
 
 
 const routerOptions = {
@@ -39,6 +40,10 @@ const routerOptions = {
             path: '/stories/:_id/:storyId',
             component: StorySlider,
         },
+        {
+            path: '/account/edit',
+            component: EditProfile
+        }
 
 
     ],
