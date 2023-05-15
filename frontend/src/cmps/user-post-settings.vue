@@ -1,6 +1,6 @@
 <template>
   <section class="user-post-settings">
-    <section class="container" @click="onClose"></section>
+    <section class="bg-container" @click="onClose"></section>
     <section class="post-settings-modal">
       <button @click="removePost" style="color: red; font-weight: bold">
         Delete

@@ -1,0 +1,55 @@
+.unfollow-modal {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    background-color: white;
+    border-radius: 15px;
+    width: 400px;
+    top: 30vh;
+    left: 40vw;
+    z-index: 4;
+    animation-name: settings-animasion-unfollow;
+    animation-duration: 1s;
+
+    :not(:last-child) {
+        border-bottom: 1px solid $nav-border-color;
+    }
+
+    >button {
+        padding: 11px 0;
+    }
+
+    .unfollow-userInfo {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+
+        img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+    }
+}
+
+
+@keyframes settings-animasion-unfollow {
+    from {
+        width: 450px;
+        height: 350px;
+        top: 25vh;
+        left: 38vw;
+        opacity: 0;
+    }
+
+    to {
+        width: 400px;
+        height: 300px;
+        top: 30vh;
+        left: 40vw;
+        opacity: 1;
+    }
+}

@@ -1,6 +1,6 @@
 <template>
   <section class="post-modal">
-    <section class="container" @click="closePost"></section>
+    <section class="bg-container" @click="closePost"></section>
     <section class="post-actions-btns" v-if="!isAtHomePage">
       <button v-if="postIndex" @click="onChangePostIndex(-1)" class="left">
         <v-icon name="md-keyboardarrowleft-round" scale="2" />
