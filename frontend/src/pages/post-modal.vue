@@ -116,7 +116,11 @@
     />
     <article v-if="isCreateOpen && isOwnByUser" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
-      <CreateModal @onToggleCreate="onToggleCreate" :post="post" />
+      <CreateModal
+        @onToggleCreate="onToggleCreate"
+        :post="post"
+        :isPost="isPost"
+      />
     </article>
   </section>
 </template>
@@ -133,6 +137,7 @@ export default {
       commentTxt: "",
       isSettingsOpen: false,
       isCreateOpen: false,
+      isPost: true,
     };
   },
   components: { ImgSlider, UserPostSettings, CreateModal },

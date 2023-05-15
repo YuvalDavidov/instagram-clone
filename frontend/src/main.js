@@ -30,7 +30,9 @@ import {
     BiThreeDots,
     BiX,
     GiPauseButton,
-    FaPlay
+    FaPlay,
+    MdKeyboardarrowdownRound,
+    MdKeyboardarrowupRound
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -57,7 +59,9 @@ addIcons(BiSearch,
     BiThreeDots,
     BiX,
     GiPauseButton,
-    FaPlay);
+    FaPlay,
+    MdKeyboardarrowdownRound,
+    MdKeyboardarrowupRound);
 
 
 const app = createApp(App)

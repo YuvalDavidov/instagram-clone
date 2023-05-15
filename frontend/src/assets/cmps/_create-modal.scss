@@ -104,6 +104,12 @@
 
                 }
             }
+
+            .story-img-create {
+                max-height: calc(710px - 42px);
+                width: 710px;
+                object-fit: contain;
+            }
         }
 
         .post-details {
@@ -173,6 +179,12 @@
                         }
 
                     }
+                }
+
+                .story-img-create {
+                    max-height: calc(550px - 42px);
+                    width: calc(230px + 20vw);
+
                 }
             }
         }

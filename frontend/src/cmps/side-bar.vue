@@ -6,6 +6,7 @@
       v-bind:class="{
         isSearchOpen: this.isSearchOpen,
         isTabletMode: this.isTabletMode,
+        isWantToCreate: this.isWantToCreate,
       }"
     >
       <div class="logo">
@@ -48,10 +49,30 @@
           <span v-if="!isSearchOpen && !isTabletMode">Notifications</span>
         </RouterLink>
 
-        <button @click="onToggleCreate()" class="side-bar-btn">
+        <button
+          v-if="!isWantToCreate"
+          @click="wantToCreate()"
+          class="side-bar-btn"
+        >
           <v-icon scale="1.6" name="bi-plus-square" />
           <span v-if="!isSearchOpen && !isTabletMode">create</span>
         </button>
+
+        <div v-if="isWantToCreate" class="side-bar-btn create">
+          <span @click="onToggleCreate()" class="create-post-btn" v-if="isPost"
+            >post</span
+          >
+          <span
+            @click="onToggleCreate()"
+            v-if="!isPost"
+            class="create-story-btn"
+            >story</span
+          >
+          <button @click="changePostingSelection">
+            <v-icon v-if="isPost" name="md-keyboardarrowdown-round" />
+            <v-icon v-if="!isPost" name="md-keyboardarrowup-round" />
+          </button>
+        </div>
 
         <RouterLink
           class="profile-btn"
@@ -112,7 +133,7 @@
             <v-icon color="black" scale="1.5" name="la-facebook-messenger"
           /></RouterLink>
 
-          <button @click="onToggleCreate()" class="side-bar-btn">
+          <button @click="wantToCreate()" class="side-bar-btn">
             <v-icon scale="1.5" name="bi-plus-square" />
           </button>
 
@@ -172,13 +193,23 @@
 
     <article v-if="isCreateOpen" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
-      <CreateModal @onToggleCreate="onToggleCreate" />
+      <CreateModal @onToggleCreate="onToggleCreate" :isPost="isPost" />
     </article>
 
     <article v-if="isMobileSearchOpen" class="search-mobile">
       <div class="container" @click="onCloseMobileSearch()"></div>
 
       <SearchMobileBar @onCloseMobileSearch="onCloseMobileSearch" />
+    </article>
+
+    <article class="want-to-create-modal" v-if="isMoblieWantToCreate">
+      <button @click="onToggleCreate()" v-if="isPost">post</button>
+      <button @click="onToggleCreate()" v-if="!isPost">story</button>
+
+      <button @click="changePostingSelection">
+        <v-icon v-if="isPost" name="md-keyboardarrowdown-round" />
+        <v-icon v-if="!isPost" name="md-keyboardarrowup-round" />
+      </button>
     </article>
   </section>
 </template>
@@ -199,9 +230,13 @@ export default {
       isCreateOpen: false,
       searchTxt: "",
       usersBySearch: [],
+      isWantToCreate: false,
+      isMoblieWantToCreate: false,
+      isPost: true,
     };
   },
   created() {
+    console.log(this.isWantToCreate);
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
       this.$store.dispatch({
         type: "setWindowMode",
@@ -241,7 +276,6 @@ export default {
       this.onSearch();
     },
     onSearch() {
-      console.log("hi");
       this.$store.dispatch({
         type: "loadUsersBy",
         filterBy: this.searchTxt,
@@ -251,6 +285,8 @@ export default {
       userService.logout();
     },
     onToggleCreate() {
+      if (this.isWantToCreate) this.isWantToCreate = false;
+      if (this.isMoblieWantToCreate) this.isMoblieWantToCreate = false;
       this.isCreateOpen = !this.isCreateOpen;
     },
     windowSizeHandeler(e) {
@@ -260,6 +296,7 @@ export default {
         this.windowMode !== "isTabletMode"
       ) {
         if (this.isMobileSearchOpen) this.isMobileSearchOpen = false;
+        if (this.isMoblieWantToCreate) this.isMoblieWantToCreate = false;
         this.$store.dispatch({
           type: "setWindowMode",
           windowMode: "isTabletMode",
@@ -282,6 +319,16 @@ export default {
           windowMode: "isLabtopMode",
         });
       }
+    },
+    wantToCreate() {
+      if (this.isMobileMode) {
+        this.isMoblieWantToCreate = !this.isMoblieWantToCreate;
+      } else {
+        this.isWantToCreate = !this.isWantToCreate;
+      }
+    },
+    changePostingSelection() {
+      this.isPost = !this.isPost;
     },
   },
   computed: {
