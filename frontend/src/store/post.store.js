@@ -2,6 +2,7 @@ import { postService } from '../services/post.service'
 
 export const postStore = {
     state: {
+        post: null,
         userPosts: [],
         followingPosts: [],
         numOfPostsToQuerry: 4
@@ -15,6 +16,9 @@ export const postStore = {
         },
         currNumOfPosts({ numOfPostsToQuerry }) {
             return numOfPostsToQuerry
+        },
+        getPost({ post }) {
+            return post
         }
     },
     mutations: {
@@ -23,6 +27,9 @@ export const postStore = {
         },
         setPosts(state, { posts }) {
             state.followingPosts = posts
+        },
+        setPost(state, { post }) {
+            state.post = post
         },
         setCurrNumOfPosts(state, { num }) {
             state.numOfPostsToQuerry = num
@@ -80,6 +87,14 @@ export const postStore = {
 
             }
         },
+        async loadPost({ commit }, { postId }) {
+            try {
+                const post = await postService.getPostById(postId)
+                commit({ type: 'setPost', post })
+            } catch (err) {
+                throw new Error('coudl\'nt get post', err)
+            }
+        }
     }
 
 }

@@ -18,7 +18,8 @@ export const postService = {
     getEmptyPost,
     toggleLikeCount,
     toggleCommenting,
-    isPostOwendByUser
+    isPostOwendByUser,
+    getPostById
 }
 
 const POST_KEY = 'PostDB'
@@ -38,6 +39,16 @@ const months = [
     "Nov",
     "Dec",
 ];
+
+async function getPostById(postId) {
+    try {
+        const post = await storageService.get(POST_KEY, postId)
+        return post
+    } catch (error) {
+        new Error('coudl\'nt get this post', error)
+
+    }
+}
 
 async function toggleCommenting(postId) {
     try {

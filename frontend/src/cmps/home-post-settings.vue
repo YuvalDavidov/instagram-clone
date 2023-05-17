@@ -1,4 +1,5 @@
 <template>
+  <!-- add loggin user settings -->
   <article v-if="!isOwnByUser" class="post-home-settings">
     <section class="bg-container" @click="onClose"></section>
     <section

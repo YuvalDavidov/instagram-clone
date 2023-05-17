@@ -16,7 +16,7 @@
             : " Turn on commenting"
         }}
       </button>
-      <button>Go to post</button>
+      <button v-if="!isAtPostPage">Go to post</button>
       <button>Share to...</button>
       <button>Copy link</button>
       <button @click="onClose">Cancel</button>
@@ -30,6 +30,10 @@ export default {
     post: {
       type: Object,
       required: true,
+    },
+    isAtPostPage: {
+      type: Boolean,
+      required: false,
     },
   },
   methods: {
