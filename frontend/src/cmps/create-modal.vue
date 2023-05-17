@@ -1,13 +1,22 @@
 <template>
   <section class="create-modal" :class="{ seconde: step === 'seconde' }">
     <section class="first-step" v-if="step === 'first'">
-      <h1 class="top">Create new post</h1>
-      <div class="uploader">
+      <h1 class="top">Create new {{ isPost ? "post" : "story" }}</h1>
+      <div v-if="isPost" class="uploader">
         <small>Drag pictures of click to upload</small>
         <input
           type="file"
           className="file"
           multiple
+          accept="true"
+          @change="onUploadImg"
+        />
+      </div>
+      <div v-if="!isPost" class="uploader">
+        <small>Drag pictures of click to upload</small>
+        <input
+          type="file"
+          className="file"
           accept="true"
           @change="onUploadImg"
         />
@@ -19,13 +28,26 @@
         <button @click="onBack()" class="back btn">
           {{ postToEdit._id ? "Cancel" : "Back" }}
         </button>
-        <span> {{ postToEdit._id ? "Edit post" : "Create new post" }}</span>
+        <span>
+          {{
+            isPost
+              ? postToEdit._id
+                ? "Edit post"
+                : "Create new post"
+              : "Create new story"
+          }}
+        </span>
         <button @click="onPost()" class="share btn">
           {{ postToEdit._id ? "Update" : "Share" }}
         </button>
       </div>
       <section class="bottom">
-        <ImgSlider :imgsUrl="postToEdit.imgsUrl" />
+        <ImgSlider v-if="isPost" :imgsUrl="postToEdit.imgsUrl" />
+        <img
+          class="story-img-create"
+          v-if="!isPost"
+          :src="postToEdit.imgsUrl"
+        />
         <div class="post-details">
           <section class="user">
             <span><img :src="user.imgUrl" /></span>
@@ -51,18 +73,24 @@ import { uploadService } from "../services/upload.service";
 
 import ImgSlider from "@/cmps/img-slider.vue";
 import { postService } from "../services/post.service";
+import { storiesService } from "../services/stories.service";
 export default {
   data() {
     return {
       postToEdit: null,
       step: "first",
       user: this.$store.getters.GetUser,
+      myCanvas: null,
     };
   },
   props: {
     post: {
       type: Object,
       required: false,
+    },
+    isPost: {
+      type: Boolean,
+      required: true,
     },
   },
   created() {
@@ -75,9 +103,17 @@ export default {
   methods: {
     onUploadImg(ev) {
       console.log(ev);
-      uploadService.uploadMany(ev).then((imgsUrl) => {
-        this.postToEdit.imgsUrl = imgsUrl.map((img) => img.url);
-      });
+
+      if (this.isPost) {
+        uploadService.uploadMany(ev).then((imgsUrl) => {
+          this.postToEdit.imgsUrl = imgsUrl.map((img) => img.url);
+        });
+      } else {
+        console.log("gi");
+        uploadService.uploadImg(ev).then((imgsUrl) => {
+          this.postToEdit.imgsUrl = imgsUrl.url;
+        });
+      }
       this.step = "seconde";
     },
     onBack() {
@@ -92,15 +128,21 @@ export default {
     },
     async onPost() {
       try {
-        const postToSave = await postService.savePost(
-          this.user,
-          this.postToEdit
-        );
+        if (this.isPost) {
+          const postToSave = await postService.savePost(
+            this.user,
+            this.postToEdit
+          );
+          this.$store.dispatch({
+            type: "savePost",
+            post: postToSave,
+          });
+        } else {
+          const storyToSave = await storiesService.createStory(
+            this.postToEdit.imgsUrl
+          );
+        }
         this.$emit("onToggleCreate");
-        this.$store.dispatch({
-          type: "savePost",
-          post: postToSave,
-        });
       } catch (error) {
         new Error("coudl'nt create this post", error);
       }

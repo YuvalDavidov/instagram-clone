@@ -3,8 +3,10 @@
     <div class="post-details-header">
       <img class="user-img" :src="post.userImg" />
       <span>{{ post.username }}</span>
+      <button @click="toggleSettings">
+        <v-icon name="bi-three-dots" />
+      </button>
     </div>
-    <!-- <img class="post-img" :src="post.imgsUrl[0]" /> -->
     <ImgSlider class="post-img" :imgsUrl="post.imgsUrl" />
     <div class="post-actions">
       <nav class="actions-nav">
@@ -29,13 +31,26 @@
       </nav>
       <span>{{ post.likes.length }} likes</span>
       <div>
-      <div :style="(isFullSummeryShown) ? 'white-space: pre-wrap;' : 'white-space: nowrap;' " class="post-summery">
-        <span class="username">{{ post.username }}</span>
-        <span class="space"></span>
-        <span class="summery">{{ post.summery }}</span>
+        <div
+          :style="
+            isFullSummeryShown
+              ? 'white-space: pre-wrap;'
+              : 'white-space: nowrap;'
+          "
+          class="post-summery"
+        >
+          <span class="username">{{ post.username }}</span>
+          <span class="space"></span>
+          <span class="summery">{{ post.summery }}</span>
+        </div>
+        <button
+          v-if="!isFullSummeryShown && post.summery.length > 40"
+          class="show-summery-btn"
+          @click="showSummery()"
+        >
+          more
+        </button>
       </div>
-      <button v-if="!isFullSummeryShown && post.summery.length > 40" class="show-summery-btn" @click="showSummery()">more</button>
-    </div>
       <button @click="onOpenPostModal()" v-if="post.comments.length">
         View all {{ post.comments.length }} comments
       </button>
@@ -51,18 +66,25 @@
         <a @click="addComment()" :class="{ active: canComment }"> post </a>
       </section>
     </div>
+    <HomePostSettings
+      @toggleSettings="toggleSettings"
+      v-if="isSettingsOpen"
+      :post="post"
+    />
   </article>
 </template>
 
 <script>
 import { postService } from "../services/post.service";
 import ImgSlider from "./img-slider.vue";
+import HomePostSettings from "./home-post-settings.vue";
 
 export default {
   data() {
     return {
       commentTxt: "",
-      isFullSummeryShown: false
+      isFullSummeryShown: false,
+      isSettingsOpen: false,
     };
   },
   props: {
@@ -76,7 +98,7 @@ export default {
       return postService.getTime(timestamp);
     },
     showSummery() {
-      this.isFullSummeryShown = true
+      this.isFullSummeryShown = true;
     },
     async addComment() {
       if (this.commentTxt.length < 1) return;
@@ -133,6 +155,9 @@ export default {
     didUserLikedPost(post) {
       return postService.didUserLikedPost(post);
     },
+    toggleSettings() {
+      this.isSettingsOpen = !this.isSettingsOpen;
+    },
   },
   computed: {
     loggedInUser() {
@@ -141,10 +166,11 @@ export default {
     canComment() {
       if (this.commentTxt.length >= 1) return true;
       else false;
-    }
+    },
   },
   components: {
     ImgSlider,
+    HomePostSettings,
   },
 };
 </script>

@@ -71,6 +71,22 @@
             span {
                 margin-left: 8px;
             }
+
+            &.create {
+                justify-content: space-between;
+
+                & .create-post-btn {
+                    flex-grow: 1;
+                    animation-name: post-btn-animasion;
+                    animation-duration: 1s;
+                }
+
+                & .create-story-btn {
+                    flex-grow: 1;
+                    animation-name: story-btn-animasion;
+                    animation-duration: 1s;
+                }
+            }
         }
     }
 
@@ -101,6 +117,12 @@
     &.isTabletMode {
         transition: 1s;
         width: $nav-medium-width;
+    }
+
+    &.isTabletMode.isWantToCreate {
+        transition: 1s;
+        width: 120px;
+
     }
 
 }
@@ -306,6 +328,18 @@
     }
 }
 
+.want-to-create-modal {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    border: 1px solid $nav-border-color;
+    border-radius: 10px;
+    position: fixed;
+    bottom: 50px;
+    right: calc(150px + 2vw);
+}
+
 @keyframes search-bar-animasion {
     from {
         width: 200px;
@@ -315,5 +349,29 @@
     to {
         width: 400px;
         left: 70px;
+    }
+}
+
+@keyframes story-btn-animasion {
+    from {
+        transform: rotateX(0.25turn);
+
+    }
+
+    to {
+        transform: rotateX(0turn);
+
+    }
+}
+
+@keyframes post-btn-animasion {
+    from {
+        transform: rotateX(0.75turn);
+    }
+
+    to {
+        transform: rotateX(1turn);
+
+
     }
 }

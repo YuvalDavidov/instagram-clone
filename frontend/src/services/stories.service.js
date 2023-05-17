@@ -15,7 +15,8 @@ export const storiesService = {
 async function getStoriesByFollowings() {
     const currUser = userService.getLoggedinUser()
     try {
-        const storeis = await storageService.query(STORIES_KEY)
+        let storeis = await storageService.query(STORIES_KEY)
+        storeis = _filetrOver24H(storeis)
         return storeis.reduce((acc, story) => {
             if ((currUser.following.includes(story.userInfo.userId) || story.userInfo.userId === currUser._id) && !acc.includes(story.userInfo.userId)) acc.push(story.userInfo.userId)
             return acc
@@ -31,13 +32,14 @@ async function getStoriesByUserId(userId) {
         const storeis = await storageService.query(STORIES_KEY)
         return storeis.filter(story => story.userInfo.userId === userId)
     } catch (error) {
-        console.log('there is a problem with posting your story', error);
+        console.log('there is a problem with getting your story', error);
     }
 }
 
 async function getStoriesIdByUserId(userId) {
     try {
-        const storeis = await storageService.query(STORIES_KEY)
+        let storeis = await storageService.query(STORIES_KEY)
+        storeis = _filetrOver24H(storeis)
         return storeis.filter(story => story.userInfo.userId === userId).map(story => story._id)
     } catch (error) {
         console.log('there is a problem with getting stories id', error);
@@ -83,6 +85,17 @@ function _getEmptyStory() {
     }
 }
 
+function _filetrOver24H(arr) {
+    const now = new Date().getTime()
+    arr = arr.filter(story => {
+        let storyTime = new Date(story.timeStampe).getTime();
+        let diff = (now - storyTime) / 1000;
+        diff /= 60 * 60;
+        let houserDiff = Math.abs(Math.round(diff));
+        if (houserDiff <= 24) return story
+    })
+    return arr
+}
 // ; (async () => {
 //     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg')
 //     await createStory('https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg')

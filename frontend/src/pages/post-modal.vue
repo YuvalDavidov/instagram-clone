@@ -1,6 +1,6 @@
 <template>
   <section class="post-modal">
-    <section class="container" @click="closePost"></section>
+    <section class="bg-container" @click="closePost"></section>
     <section class="post-actions-btns" v-if="!isAtHomePage">
       <button v-if="postIndex" @click="onChangePostIndex(-1)" class="left">
         <v-icon name="md-keyboardarrowleft-round" scale="2" />
@@ -116,7 +116,11 @@
     />
     <article v-if="isCreateOpen && isOwnByUser" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
-      <CreateModal @onToggleCreate="onToggleCreate" :post="post" />
+      <CreateModal
+        @onToggleCreate="onToggleCreate"
+        :post="post"
+        :isPost="isPost"
+      />
     </article>
   </section>
 </template>
@@ -133,6 +137,7 @@ export default {
       commentTxt: "",
       isSettingsOpen: false,
       isCreateOpen: false,
+      isPost: true,
     };
   },
   components: { ImgSlider, UserPostSettings, CreateModal },
