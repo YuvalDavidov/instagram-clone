@@ -10,7 +10,8 @@ export const userService = {
     updateUser,
     saveLocalUser,
     checkIfOwnByUser,
-    query
+    query,
+    changePassword
 }
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
@@ -38,8 +39,17 @@ async function query(filterBy) {
 
 }
 
-function updateUser(updatedUser) {
-    storageService.put(USER_KEY, updatedUser)
+
+
+async function changePassword(currPassword, newPassword, userId) {
+    let user = getUserById(userId)
+
+}
+
+
+
+async function updateUser(updatedUser) {
+    await storageService.put(USER_KEY, updatedUser)
     saveLocalUser(updatedUser)
 }
 
