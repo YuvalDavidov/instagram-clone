@@ -31,7 +31,7 @@
               {{ isUserFollow ? "Following" : "Follow" }}
             </button>
           </header>
-          <button @click="onToggleSettings" v-if="isOwnByUser">
+          <button @click="onToggleSettings">
             <v-icon name="bi-three-dots" />
           </button>
         </div>
@@ -117,16 +117,14 @@
         </section>
       </section>
     </section>
-    <UserPostSettings
+
+    <PostSettings
+      v-if="isSettingsOpen"
       :post="post"
       :isAtPostPage="isAtPostPage"
       @onToggleSettings="onToggleSettings"
-      @closePost="closePost"
-      @toggleLikes="toggleLikes"
-      @toggleCommenting="toggleCommenting"
-      v-if="isSettingsOpen"
-      @onToggleCreate="onToggleCreate"
     />
+
     <article v-if="isCreateOpen && isOwnByUser" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
       <CreateModal
@@ -140,10 +138,10 @@
 
 <script>
 import { postService } from "../services/post.service";
-import ImgSlider from "../cmps/img-slider.vue";
-import UserPostSettings from "../cmps/user-post-settings.vue";
-import CreateModal from "../cmps/create-modal.vue";
 import { followService } from "../services/follow.service";
+import ImgSlider from "../cmps/img-slider.vue";
+import CreateModal from "../cmps/create-modal.vue";
+import PostSettings from "../cmps/post-settings.vue";
 
 export default {
   data() {
@@ -154,7 +152,6 @@ export default {
       isPost: true,
     };
   },
-  components: { ImgSlider, UserPostSettings, CreateModal },
   props: {
     post: {
       type: Object,
@@ -382,5 +379,6 @@ export default {
       return followService.checkIfFollowing(this.post.userId);
     },
   },
+  components: { ImgSlider, CreateModal, PostSettings },
 };
 </script>

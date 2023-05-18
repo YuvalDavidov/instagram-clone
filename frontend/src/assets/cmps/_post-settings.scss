@@ -1,0 +1,126 @@
+.post-settings {
+    .bg-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        background-color: #59595994;
+    }
+
+    .post-settings-following-user {
+
+        .post-home-settings-modal {
+            position: fixed;
+            background-color: white;
+            border-radius: 15px;
+            width: 400px;
+            top: 23vh;
+            left: 40vw;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+            animation-name: settings-animasion-following-user;
+            animation-duration: 1s;
+
+            &.isAtPostPage {
+                animation-name: settings-animasion-following-user-at-page;
+                animation-duration: 1s;
+            }
+
+            >* {
+                padding: 15px 0;
+            }
+
+            :not(:last-child) {
+                border-bottom: 1px solid $nav-border-color;
+            }
+        }
+
+    }
+
+    .user-post-settings {
+
+
+
+        & .post-settings-modal {
+            animation-name: settings-animasion;
+            animation-duration: 1s;
+            position: absolute;
+            background-color: white;
+            border-radius: 15px;
+            width: 400px;
+            top: 26vh;
+            left: 40vw;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+
+            >* {
+                padding: 15px 0;
+            }
+
+            &.isAtPostPage {
+                animation-name: settings-animasion-following-user-at-page;
+                animation-duration: 1s;
+            }
+
+            :not(:last-child) {
+                border-bottom: 1px solid $nav-border-color;
+            }
+        }
+    }
+}
+
+@keyframes settings-animasion {
+    from {
+        width: 450px;
+        height: 500px;
+        top: 24vh;
+        left: 38vw;
+        opacity: 0;
+    }
+
+    to {
+        width: 400px;
+        height: 439px;
+        top: 26vh;
+        left: 40vw;
+        opacity: 1;
+    }
+}
+
+@keyframes settings-animasion-following-user-at-page {
+    from {
+        width: 450px;
+        height: 450px;
+        top: 21vh;
+        left: 38vw;
+        opacity: 0;
+    }
+
+    to {
+        width: 400px;
+        height: 400px;
+        top: 23vh;
+        left: 40vw;
+        opacity: 1;
+    }
+}
+
+@keyframes settings-animasion-following-user {
+    from {
+        width: 450px;
+        height: 500px;
+        top: 21vh;
+        left: 38vw;
+        opacity: 0;
+    }
+
+    to {
+        width: 400px;
+        height: 439px;
+        top: 23vh;
+        left: 40vw;
+        opacity: 1;
+    }
+}

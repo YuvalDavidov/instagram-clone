@@ -236,6 +236,7 @@
 
     &.isAtPostPage {
         position: static;
+        z-index: 0;
         padding-top: 34px;
 
         .post {
