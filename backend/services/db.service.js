@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-
+const { Op } = require('sequelize')
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
     host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
@@ -48,13 +48,24 @@ async function updateRecord(model, data, itemId) {
 
 }
 
-async function query(model, filterBy) {
+async function query(model, filterBy, isLessDetails) {
     // filterBy needs to be an Object
     try {
         if (!filterBy) return await model.findAll()
+        const whereCondition = {}
+        Object.keys(filterBy).forEach(key => { whereCondition[key] = { [Op.eq]: filterBy[key] } })
+        whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
+        if (isLessDetails) return await model.findAll({
+            attributes: ['username', 'id', 'imgUrl', 'fullname'],
+            where: {
+                [Op.or]: whereCondition
+            }
+        })
         else {
             return await model.findAll({
-                where: filterBy
+                where: {
+                    [Op.or]: whereCondition
+                }
             })
         }
     } catch (error) {

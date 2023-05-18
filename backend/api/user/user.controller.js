@@ -18,7 +18,7 @@ async function getUsers(req, res) {
             username: req.query?.username || '',
             fullname: req.query?.fullname || ''
         }
-        const users = await userService.query(filterBy)
+        const users = (req.query?.isLessDetails) ? await userService.query(filterBy, req.query.isLessDetails) : await userService.query(filterBy)
         res.send(users)
     } catch (err) {
         logger.error('Failed to get users', err)
@@ -47,9 +47,22 @@ async function updateUser(req, res) {
     }
 }
 
+async function updatePassword(req, res) {
+
+    try {
+        await userService.checkPassword(req.body._id, req.body.currPassword)
+        const encryptedPassword = await userService.encryptPassword(req.body.newPassword)
+        await userService.update({ _id: req.body._id, password: encryptedPassword })
+    } catch (error) {
+        logger.error('Failed to update password', err)
+        res.status(500).send({ err: 'Failed to update password' })
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    updatePassword
 }

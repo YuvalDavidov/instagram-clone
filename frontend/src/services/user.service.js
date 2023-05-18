@@ -1,5 +1,5 @@
 import { storageService } from './async-storage.service'
-
+import { httpService } from './http.service.js'
 export const userService = {
     getUserById,
     getLoggedinUser,
@@ -13,12 +13,16 @@ export const userService = {
     query,
     changePassword
 }
+
+const BASE_URL = 'user/'
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
 
 async function query(filterBy) {
     try {
-        const loggedinUser = getLoggedinUser()._id
+        const loggedinUserId = getLoggedinUser()._id
+        // const queryParams = `?username=${filterBy.username}&fullname=${filterBy.fullname}?isLessDetails=${true}`
+        // let users = await httpService.get(BASE_URL+ queryParams)
         let users = await storageService.query(USER_KEY)
         users = users.map(user => {
             return {
@@ -28,8 +32,10 @@ async function query(filterBy) {
                 fullname: user.fullname
             }
         })
-        users = users.filter(user => user.userId !== loggedinUser)
+        users = users.filter(user => user.userId !== loggedinUserId && (user.username.includes(filterBy) || user.fullname.includes(filterBy)))
+        // console.log(users)
         users = users.filter(user => user.username.includes(filterBy))
+        // console.log(users)
         // users = users.splice(0, 5)
         return users
     } catch (error) {

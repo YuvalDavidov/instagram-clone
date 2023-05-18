@@ -3,12 +3,15 @@ const bcrypt = require('bcrypt')
 const userService = require('../user/user.service')
 const logger = require('../../services/logger.service')
 const cryptr = new Cryptr(process.env.SECRET1 || 'Secret-Puk-1234')
+const saltRounds = 10
 
 module.exports = {
     signup,
     login,
     getLoginToken,
-    validateToken
+    validateToken,
+    validatePassword,
+    encrypt
 }
 
 async function login(username, password) {
@@ -28,7 +31,6 @@ async function login(username, password) {
 
 
 async function signup({ username, password, fullname, args }) {
-    const saltRounds = 10
     logger.debug(`auth.service - signup with username: ${username}, fullname: ${fullname}`)
     if (!username || !password || !fullname) return new Error('Missing required signup information')
     try {
@@ -57,6 +59,27 @@ function validateToken(loginToken) {
 
     } catch (err) {
         throw new Error('Invalid login token')
+    }
+}
+
+async function validatePassword(userId, password) {
+
+    try {
+        const user = await userService.getById(userId)
+        await bcrypt.compare(password, user.password)
+
+    } catch (error) {
+        throw new Error('Incorrect Password')
+    }
+}
+
+async function encrypt(password) {
+
+    try {
+        const hash = await bcrypt.hash(password, saltRounds)
+        return hash
+    } catch (error) {
+        throw new Error('couldn\'t encrypt password')
     }
 }
 

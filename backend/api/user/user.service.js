@@ -1,6 +1,7 @@
 
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
+const authService = require('../auth/auth.service')
 
 module.exports = {
     query,
@@ -8,12 +9,14 @@ module.exports = {
     getByUsername,
     remove,
     update,
-    add
+    add,
+    checkPassword,
+    encryptPassword
 }
 
-async function query(filterBy = { username: '' }) {
+async function query(filterBy = { username: '' }, isLessDetails = false) {
     try {
-        let model = await dbService.query(users, filterBy)
+        let model = (isLessDetails) ? await dbService.query(users, filterBy, isLessDetails) : await dbService.query(users, filterBy)
         let filterdUsers = model.map(user => {
             delete user.password
             return user
@@ -24,7 +27,6 @@ async function query(filterBy = { username: '' }) {
         throw err
     }
 }
-
 
 async function getById(userId) {
     try {
@@ -78,5 +80,22 @@ async function add(user) {
 }
 
 
+async function checkPassword(userId, password) {
+    try {
+        await authService.validatePassword(userId, password)
+    } catch (error) {
+        logger.error('user.service - password incorrect')
+        throw error
+    }
+}
+
+async function encryptPassword(password) {
+    try {
+        await authService.encrypt(password)
+    } catch (error) {
+        logger.error('user.service - couldn\'t encrypt password')
+        throw error
+    }
+}
 
 
