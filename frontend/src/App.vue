@@ -7,9 +7,8 @@ import SideBar from "./cmps/side-bar.vue";
     <!-- <SideBar /> -->
     <!-- <header class="full"></header> -->
 
-   
-      <RouterView />
-    
+    <RouterView />
+
     <SideBar v-if="this.$store.getters.User" />
   </section>
 </template>

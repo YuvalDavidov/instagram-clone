@@ -3,7 +3,7 @@
     <div class="post-details-header">
       <img class="user-img" :src="post.userImg" />
       <span>{{ post.username }}</span>
-      <button @click="toggleSettings">
+      <button @click="onToggleSettings">
         <v-icon name="bi-three-dots" />
       </button>
     </div>
@@ -66,8 +66,8 @@
         <a @click="addComment()" :class="{ active: canComment }"> post </a>
       </section>
     </div>
-    <HomePostSettings
-      @toggleSettings="toggleSettings"
+    <PostSettings
+      @onToggleSettings="onToggleSettings"
       v-if="isSettingsOpen"
       :post="post"
     />
@@ -77,7 +77,7 @@
 <script>
 import { postService } from "../services/post.service";
 import ImgSlider from "./img-slider.vue";
-import HomePostSettings from "./home-post-settings.vue";
+import PostSettings from "./post-settings.vue";
 
 export default {
   data() {
@@ -155,7 +155,7 @@ export default {
     didUserLikedPost(post) {
       return postService.didUserLikedPost(post);
     },
-    toggleSettings() {
+    onToggleSettings() {
       this.isSettingsOpen = !this.isSettingsOpen;
     },
   },
@@ -170,7 +170,7 @@ export default {
   },
   components: {
     ImgSlider,
-    HomePostSettings,
+    PostSettings,
   },
 };
 </script>

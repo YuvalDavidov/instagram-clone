@@ -34,7 +34,8 @@ import {
     GiPauseButton,
     FaPlay,
     MdKeyboardarrowdownRound,
-    MdKeyboardarrowupRound
+    MdKeyboardarrowupRound,
+    MdCheckcircleoutlineRound
 } from "oh-vue-icons/icons";
 
 addIcons(BiSearch,
@@ -63,7 +64,8 @@ addIcons(BiSearch,
     GiPauseButton,
     FaPlay,
     MdKeyboardarrowdownRound,
-    MdKeyboardarrowupRound);
+    MdKeyboardarrowupRound,
+    MdCheckcircleoutlineRound);
 
 
 const app = createApp(App)

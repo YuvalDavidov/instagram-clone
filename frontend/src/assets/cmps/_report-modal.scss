@@ -1,0 +1,119 @@
+.report-modal {
+    position: fixed;
+    background-color: white;
+    border-radius: 15px;
+    width: 400px;
+    top: 10vh;
+    left: 40vw;
+    z-index: 4;
+    animation-name: settings-animasion-report;
+    animation-duration: 1s;
+
+    >* {
+        width: 100%;
+    }
+
+    header {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 43px;
+
+        button {
+            position: absolute;
+            right: 10px;
+        }
+    }
+
+    .report-q {
+        font-weight: bold;
+        font-size: 16px;
+        padding: 0 13px;
+        margin-bottom: 16px;
+    }
+
+    .report-nav {
+        display: flex;
+        flex-direction: column;
+
+        .report-btn {
+            padding: 16px 13px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid $nav-border-color;
+        }
+    }
+
+    &.report-complete {
+        top: 28vh;
+        display: flex;
+        flex-direction: column;
+        animation-name: settings-animasion-report-complete;
+        animation-duration: 1s;
+
+        header {
+            text-align: center;
+            flex-direction: column;
+            height: 160px;
+            margin-top: 16px;
+            padding: 0 16px;
+
+            h5 {
+                margin-top: 20px;
+            }
+        }
+
+        .report-nav {
+            .report-btn:last-child {
+                border-bottom: 1px solid $nav-border-color;
+            }
+        }
+
+        .report-close-btn {
+            background-color: #0095f6;
+            color: white;
+            border-radius: 10px;
+            width: 368px;
+            height: 32px;
+            margin: 16px auto;
+        }
+    }
+}
+
+
+@keyframes settings-animasion-report {
+    from {
+        width: 450px;
+        height: 800px;
+        top: 8vh;
+        left: 38vw;
+        opacity: 0;
+    }
+
+    to {
+        width: 400px;
+        height: 780px;
+        top: 10vh;
+        left: 40vw;
+        opacity: 1;
+    }
+}
+
+@keyframes settings-animasion-report-complete {
+    from {
+        width: 450px;
+        height: 430px;
+        top: 20vh;
+        left: 38vw;
+        opacity: 0;
+    }
+
+    to {
+        width: 400px;
+        height: 415px;
+        top: 28vh;
+        left: 40vw;
+        opacity: 1;
+    }
+}

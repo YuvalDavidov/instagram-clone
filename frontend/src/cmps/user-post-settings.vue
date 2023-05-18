@@ -1,7 +1,6 @@
 <template>
   <section class="user-post-settings">
-    <section class="bg-container" @click="onClose"></section>
-    <section class="post-settings-modal">
+    <section class="post-settings-modal" v-bind:class="{ isAtPostPage }">
       <button @click="removePost" style="color: red; font-weight: bold">
         Delete
       </button>
@@ -16,7 +15,7 @@
             : " Turn on commenting"
         }}
       </button>
-      <button>Go to post</button>
+      <button @click="onMoveToPost" v-if="!isAtPostPage">Go to post</button>
       <button>Share to...</button>
       <button>Copy link</button>
       <button @click="onClose">Cancel</button>
@@ -30,6 +29,10 @@ export default {
     post: {
       type: Object,
       required: true,
+    },
+    isAtPostPage: {
+      type: Boolean,
+      required: false,
     },
   },
   methods: {
@@ -57,6 +60,9 @@ export default {
     onToggleComminting() {
       this.$emit("toggleCommenting");
       this.$emit("onToggleSettings");
+    },
+    onMoveToPost() {
+      this.$emit("onMoveToPost");
     },
   },
 };

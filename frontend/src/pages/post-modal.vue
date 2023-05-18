@@ -1,7 +1,11 @@
 <template>
-  <section class="post-modal">
-    <section class="bg-container" @click="closePost"></section>
-    <section class="post-actions-btns" v-if="!isAtHomePage">
+  <section class="post-modal" v-bind:class="{ isAtPostPage }">
+    <section
+      class="bg-container"
+      v-if="!isAtPostPage"
+      @click="closePost"
+    ></section>
+    <section class="post-actions-btns" v-if="!isAtHomePage && !isAtPostPage">
       <button v-if="postIndex" @click="onChangePostIndex(-1)" class="left">
         <v-icon name="md-keyboardarrowleft-round" scale="2" />
       </button>
@@ -18,8 +22,16 @@
           <header>
             <img :src="post.userImg" class="user-img" />
             <span>{{ post.username }}</span>
+            <button
+              @click="toggleFollowing"
+              class="follow-btn-post"
+              v-bind:class="{ isUserFollow: !this.isUserFollow }"
+              v-if="isAtPostPage && !isOwnByUser"
+            >
+              {{ isUserFollow ? "Following" : "Follow" }}
+            </button>
           </header>
-          <button @click="onToggleSettings" v-if="isOwnByUser">
+          <button @click="onToggleSettings">
             <v-icon name="bi-three-dots" />
           </button>
         </div>
@@ -105,15 +117,14 @@
         </section>
       </section>
     </section>
-    <UserPostSettings
-      :post="post"
-      @onToggleSettings="onToggleSettings"
-      @closePost="closePost"
-      @toggleLikes="toggleLikes"
-      @toggleCommenting="toggleCommenting"
+
+    <PostSettings
       v-if="isSettingsOpen"
-      @onToggleCreate="onToggleCreate"
+      :post="post"
+      :isAtPostPage="isAtPostPage"
+      @onToggleSettings="onToggleSettings"
     />
+
     <article v-if="isCreateOpen && isOwnByUser" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
       <CreateModal
@@ -127,9 +138,10 @@
 
 <script>
 import { postService } from "../services/post.service";
+import { followService } from "../services/follow.service";
 import ImgSlider from "../cmps/img-slider.vue";
-import UserPostSettings from "../cmps/user-post-settings.vue";
 import CreateModal from "../cmps/create-modal.vue";
+import PostSettings from "../cmps/post-settings.vue";
 
 export default {
   data() {
@@ -140,7 +152,6 @@ export default {
       isPost: true,
     };
   },
-  components: { ImgSlider, UserPostSettings, CreateModal },
   props: {
     post: {
       type: Object,
@@ -160,7 +171,11 @@ export default {
     },
     isAtHomePage: {
       type: Boolean,
-      required: true,
+      required: false,
+    },
+    isAtPostPage: {
+      type: Boolean,
+      required: false,
     },
   },
   created() {
@@ -188,13 +203,18 @@ export default {
           userImgUrl: this.loggedInUser.imgUrl,
         };
         await postService.addComment(this.post._id, commentInfo);
-        if (this.$route.params._id) {
-          this.$store.dispatch({
+        if (this.isAtPostPage) {
+          await this.$store.dispatch({
+            type: "loadPost",
+            postId: this.$route.params.postId,
+          });
+        } else if (this.$route.params._id) {
+          await this.$store.dispatch({
             type: "loadUserPosts",
             userId: this.$route.params._id,
           });
         } else {
-          this.$store.dispatch({
+          await this.$store.dispatch({
             type: "loadPosts",
             user: this.loggedInUser,
           });
@@ -212,7 +232,12 @@ export default {
           username: this.loggedInUser.username,
         };
         await postService.addLike(this.post._id, userInfo);
-        if (this.$route.params._id) {
+        if (this.isAtPostPage) {
+          await this.$store.dispatch({
+            type: "loadPost",
+            postId: this.$route.params.postId,
+          });
+        } else if (this.$route.params._id) {
           this.$store.dispatch({
             type: "loadUserPosts",
             userId: this.$route.params._id,
@@ -231,7 +256,12 @@ export default {
       try {
         const userId = this.loggedInUser._id;
         await postService.removeLike(this.post._id, userId);
-        if (this.$route.params._id) {
+        if (this.isAtPostPage) {
+          await this.$store.dispatch({
+            type: "loadPost",
+            postId: this.$route.params.postId,
+          });
+        } else if (this.$route.params._id) {
           this.$store.dispatch({
             type: "loadUserPosts",
             userId: this.$route.params._id,
@@ -263,7 +293,12 @@ export default {
     async toggleLikes() {
       try {
         await postService.toggleLikeCount(this.post._id);
-        if (this.isAtHomePage) {
+        if (this.isAtPostPage) {
+          await this.$store.dispatch({
+            type: "loadPost",
+            postId: this.$route.params.postId,
+          });
+        } else if (this.isAtHomePage) {
           this.$store.dispatch({
             type: "loadPosts",
             user: this.loggedInUser,
@@ -281,7 +316,12 @@ export default {
     async toggleCommenting() {
       try {
         await postService.toggleCommenting(this.post._id);
-        if (this.isAtHomePage) {
+        if (this.isAtPostPage) {
+          await this.$store.dispatch({
+            type: "loadPost",
+            postId: this.$route.params.postId,
+          });
+        } else if (this.isAtHomePage) {
           this.$store.dispatch({
             type: "loadPosts",
             user: this.loggedInUser,
@@ -292,6 +332,19 @@ export default {
             userId: this.$route.params._id,
           });
         }
+      } catch (err) {
+        console.error("coudl'nt do action on this post", err);
+      }
+    },
+    async toggleFollowing() {
+      try {
+        if (this.isUserFollow) await followService.unFollow(this.post.userId);
+        else await followService.addFollow(this.post.userId);
+
+        await this.$store.dispatch({
+          type: "loadPost",
+          postId: this.$route.params.postId,
+        });
       } catch (err) {
         console.error("coudl'nt do action on this post", err);
       }
@@ -322,6 +375,10 @@ export default {
     isOwnByUser() {
       return postService.isPostOwendByUser(this.post.userId);
     },
+    isUserFollow() {
+      return followService.checkIfFollowing(this.post.userId);
+    },
   },
+  components: { ImgSlider, CreateModal, PostSettings },
 };
 </script>
