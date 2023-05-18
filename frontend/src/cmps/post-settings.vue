@@ -29,7 +29,7 @@
         <button @click="onMoveToPost" v-if="!isAtPostPage">Go to post</button>
         <button>Share to...</button>
         <button>Copy link</button>
-        <button>About this account</button>
+        <button @click="onMoveToAboutUser">About this account</button>
         <button @click="onClose">Cancel</button>
       </section>
 
@@ -45,6 +45,8 @@
         @onClose="onClose"
         :userId="post.userId"
       />
+
+      <!-- <AboutUserModal v-if="isOnAbout" /> -->
     </article>
   </section>
 </template>
@@ -54,6 +56,7 @@ import { postService } from "../services/post.service";
 import UnfollowModal from "./unfollow-modal.vue";
 import UserPostSettings from "../cmps/user-post-settings.vue";
 import ReportModal from "./report-modal.vue";
+import AboutUserModal from "./about-user-modal.vue";
 
 export default {
   props: {
@@ -70,6 +73,7 @@ export default {
     return {
       isOnUnfollow: false,
       isOnReport: false,
+      isOnAbout: false,
     };
   },
   created() {
@@ -88,6 +92,9 @@ export default {
     onMoveToPost() {
       this.$router.push(`/post/${this.post._id}`);
     },
+    onMoveToAboutUser() {
+      this.isOnAbout = !this.isOnAbout;
+    },
   },
   computed: {
     isOwnByUser() {
@@ -98,6 +105,7 @@ export default {
     UnfollowModal,
     ReportModal,
     UserPostSettings,
+    AboutUserModal,
   },
 };
 </script>
