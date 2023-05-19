@@ -8,7 +8,7 @@ $min-height: 96vw;
     display: flex;
     align-items: center;
 
-    .container {
+    .bg-container {
         background-color: #1a1a1a;
         position: fixed;
     }
@@ -45,7 +45,7 @@ $min-height: 96vw;
 
         }
 
-        .container {
+        .bg-container {
             position: fixed;
             left: 0;
             top: 0;

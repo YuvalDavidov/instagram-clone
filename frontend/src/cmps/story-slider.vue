@@ -1,6 +1,6 @@
 <template>
   <section v-if="story" class="story-slider">
-    <section @click="onBack" class="container"></section>
+    <section @click="onBack" class="bg-container"></section>
     <section class="story-slider-contaienr">
       <section v-if="isOnInput" @click="onCloseInput" class="onInput"></section>
       <div class="story-slider-num">

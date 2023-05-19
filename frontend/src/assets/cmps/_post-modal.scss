@@ -29,7 +29,9 @@
 
     .post {
         width: calc(100vw * 0.8);
+        max-width: 1300px;
         height: calc(100vw * 0.5);
+        max-height: 816px;
         border-radius: 5px;
         display: flex;
         position: absolute;
@@ -395,7 +397,7 @@
                     position: absolute;
                     top: 52px;
                     // height: 1025px;
-                    height: calc(100vw + 33%);
+                    height: 127%;
 
                 }
             }
