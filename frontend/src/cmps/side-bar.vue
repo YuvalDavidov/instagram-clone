@@ -192,7 +192,7 @@
     </article>
 
     <article v-if="isCreateOpen" class="create-post-modal">
-      <section class="container" @click="onToggleCreate()"></section>
+      <section class="bg-container" @click="onToggleCreate()"></section>
       <CreateModal @onToggleCreate="onToggleCreate" :isPost="isPost" />
     </article>
 
@@ -285,6 +285,7 @@ export default {
      await userService.logout();
     },
     onToggleCreate() {
+      console.log("hi");
       if (this.isWantToCreate) this.isWantToCreate = false;
       if (this.isMoblieWantToCreate) this.isMoblieWantToCreate = false;
       this.isCreateOpen = !this.isCreateOpen;
