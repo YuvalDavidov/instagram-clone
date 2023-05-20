@@ -281,8 +281,8 @@ export default {
         filterBy: this.searchTxt,
       });
     },
-    onLogout() {
-      userService.logout();
+    async onLogout() {
+     await userService.logout();
     },
     onToggleCreate() {
       if (this.isWantToCreate) this.isWantToCreate = false;
