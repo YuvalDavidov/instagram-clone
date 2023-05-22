@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize')
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
@@ -17,16 +17,53 @@ sequelize
         console.error('db.service - Unable to connect to the database:', err);
     });
 
+const Users = sequelize.define('users', {
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    fullname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+});
+
+sequelize
+    .sync()
+    .then(() => {
+        console.log('Models synchronized successfully');
+    })
+    .catch((err) => {
+        console.error('Error synchronizing models:', err);
+    });
+
+
 async function addRecord(model, data) {
     try {
-        const result = await model.create(data)
-        await model.sync()
-        return result.toJSON()
+        console.log('data', data);
+        const result = await Users.create(data)
+        console.log('result', result.toJSON());
+        // await Users.sync()
+        // return result.toJSON()
     } catch (error) {
-        throw new Error('db.service - failed to add record', error)
+        console.log('error', error);
+        // throw new Error('db.service - failed to add record', error)
     }
 
 }
+
+addRecord('users', {
+    username: 'yuval1',
+    fullname: 'yuval davidov',
+    password: '123456', _id: 's',
+    followers: [], following: [],
+    highlights: [], imgurl: 'ss', stories: [], summary: '',
+})
+
 async function removeRecord(model, itemId) {
     try {
         await model.destroy({ where: { _id: itemId } })

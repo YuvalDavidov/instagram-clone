@@ -1,5 +1,9 @@
 <template>
-  <section class="side-bar-container" v-if="!isInStory">
+  <section
+    class="side-bar-container"
+    v-bind:class="{ darkMode: darkMode }"
+    v-if="!isInStory"
+  >
     <section
       class="side-bar"
       v-if="!this.isMobileMode"
@@ -14,12 +18,12 @@
           <img
             v-if="!isSearchOpen && !isTabletMode"
             class="logo-img"
-            src="../assets/imgs/instagram_logo.png"
+            :src="logoSrc"
           />
           <img
             v-if="isSearchOpen || isTabletMode"
             class="logo-line-img"
-            src="../assets/imgs/instagram_logo_line.png"
+            :src="logoTabletSrc"
           />
         </RouterLink>
       </div>
@@ -45,7 +49,11 @@
         >
 
         <RouterLink to="/notifications">
-          <v-icon name="fa-regular-heart" color="black" scale="1.6" />
+          <v-icon
+            name="fa-regular-heart"
+            :color="darkMode ? 'white' : 'black'"
+            scale="1.6"
+          />
           <span v-if="!isSearchOpen && !isTabletMode">Notifications</span>
         </RouterLink>
 
@@ -100,7 +108,7 @@
       <section class="top-bar">
         <div class="logo">
           <RouterLink to="/">
-            <img class="logo-img" src="../assets/imgs/instagram_logo.png" />
+            <img class="logo-img" :src="logoSrc" />
           </RouterLink>
         </div>
         <div class="search-bar-n-notification-mobile">
@@ -166,7 +174,7 @@
       </section>
       <section class="account-settings">
         <a href=""><span>Switch account</span></a>
-        <a @click="onLogout()"><span>Log out</span></a>
+        <a href="/" @click="onLogout()"><span>Log out</span></a>
       </section>
     </article>
 
@@ -221,6 +229,11 @@ import CreateModal from "@/cmps/create-modal.vue";
 import UsersList from "@/cmps/users-list.vue";
 import SearchMobileBar from "@/cmps/search-mobile-bar.vue";
 
+import instagramLogo from "../assets/imgs/instagram_logo.png";
+import instagramLogoWhite from "../assets/imgs/instagram_logo_white.png";
+import instagramLogoLine from "../assets/imgs/instagram_logo_line.png";
+import instagramLogoLineWhite from "../assets/imgs/instagram_logo_line_white.png";
+
 export default {
   data() {
     return {
@@ -236,7 +249,6 @@ export default {
     };
   },
   created() {
-    console.log(this.isWantToCreate);
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
       this.$store.dispatch({
         type: "setWindowMode",
@@ -285,7 +297,6 @@ export default {
       userService.logout();
     },
     onToggleCreate() {
-      console.log("hi");
       if (this.isWantToCreate) this.isWantToCreate = false;
       if (this.isMoblieWantToCreate) this.isMoblieWantToCreate = false;
       this.isCreateOpen = !this.isCreateOpen;
@@ -302,6 +313,8 @@ export default {
           type: "setWindowMode",
           windowMode: "isTabletMode",
         });
+        this.isSettingsModalOpen = false;
+        this.isMobileSearchOpen = false;
       } else if (
         e.currentTarget.innerWidth < 770 &&
         this.windowMode !== "isMobileMode"
@@ -350,6 +363,15 @@ export default {
     isTabletMode() {
       if (this.windowMode === "isTabletMode") return true;
       else return false;
+    },
+    darkMode() {
+      return this.$store.getters.GetIsDarkMode;
+    },
+    logoSrc() {
+      return this.darkMode ? instagramLogoWhite : instagramLogo;
+    },
+    logoTabletSrc() {
+      return this.darkMode ? instagramLogoLineWhite : instagramLogoLine;
     },
   },
   components: {

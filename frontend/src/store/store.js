@@ -10,7 +10,8 @@ export const myStore = createStore({
     state() {
         return {
             user: userService.getLoggedinUser(),
-            windowMode: 'isLabtopMode'
+            windowMode: 'isLabtopMode',
+            isDarkMode: false
         }
     },
     getters: {
@@ -23,11 +24,15 @@ export const myStore = createStore({
         },
         GetWindowMode({ windowMode }) {
             return windowMode
+        },
+        GetIsDarkMode({ isDarkMode }) {
+            return true
         }
     },
     mutations: {
         setUser(state, { user }) {
             state.user = user
+            state.isDarkMode = user.darkMode
         },
         setWindowMode(state, { windowMode }) {
             state.windowMode = windowMode

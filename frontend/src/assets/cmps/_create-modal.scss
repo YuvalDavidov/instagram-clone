@@ -8,13 +8,10 @@
     border-radius: 15px;
     position: absolute;
     top: calc(100vh - 90%);
-    left: calc(100vw - 70%);
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 10;
     background-color: white;
-
-    &.seconde {
-        left: calc(100vw - 85%);
-    }
 
     >* {
         height: 100%;
@@ -149,8 +146,6 @@
 
 @media (max-width:1260px) {
     .create-modal {
-        left: calc(100vw - 75%);
-
         .first-step {
             width: 600px;
         }
@@ -191,17 +186,6 @@
 
         .uploader {
             height: calc(600px - 70px);
-        }
-    }
-}
-
-@media (max-width:770px) {
-    .create-modal {
-        left: calc(100vw - 97%);
-
-        &.seconde {
-            left: calc(100vw - 97%);
-
         }
     }
 }

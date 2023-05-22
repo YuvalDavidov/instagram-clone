@@ -16,7 +16,13 @@
       <div class="right-container">
         <div class="user-details">
           <span>{{ user.username }}</span>
-          <button class="edit-profile-btn" v-if="isOwnProfile" @click="onEditProfile">Edit profile</button>
+          <button
+            class="edit-profile-btn"
+            v-if="isOwnProfile"
+            @click="onEditProfile"
+          >
+            Edit profile
+          </button>
           <button @click="onFollow" v-if="!isOwnProfile">
             {{ isFollowing ? "Following" : "Follow" }}
           </button>
@@ -56,7 +62,13 @@
             {{ isFollowing ? "Following" : "Follow" }}
           </button>
           <button v-if="!isOwnProfile">Message</button>
-          <button class="edit-profile-btn" v-if="isOwnProfile" @click="onEditProfile">Edit profile</button>
+          <button
+            class="edit-profile-btn"
+            v-if="isOwnProfile"
+            @click="onEditProfile"
+          >
+            Edit profile
+          </button>
         </div>
       </div>
       <div class="user-summery">{{ user.fullname }}</div>
@@ -104,7 +116,7 @@ export default {
     };
   },
   async created() {
-    this.user = $store.getters.GetUser
+    this.user = this.$store.getters.GetUser;
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );
@@ -122,9 +134,7 @@ export default {
       }
     },
     onEditProfile() {
-      this.$router.push(
-        `/account/edit/`
-      )
+      this.$router.push(`/account/edit/`);
     },
     onGoToUserStories() {
       if (!this.userStories) return;

@@ -12,3 +12,4 @@ import SideBar from "./cmps/side-bar.vue";
     <SideBar v-if="this.$store.getters.User" />
   </section>
 </template>
+// v-bind:class="{ darkMode: this.$store.getters.GetIsDarkMode }"

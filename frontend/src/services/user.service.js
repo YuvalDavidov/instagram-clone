@@ -99,18 +99,19 @@ function saveLocalUser(user) {
 }
 
 async function signup(userCred) {
-    if (!userCred.imgUrl) userCred.imgUrl = 'http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSgdMa3-zfBbsMOTEYwMDhWumoaLYOb4kbOBP9Mmwdt9AwdzYCaL0VS1zKzlKc5DnPoWUSfVA25uggiN0o'
-    userCred = ({
+    if (!userCred.imgUrl) userCred.imgUrl = 'http://res.cloudinary.com/dp32ucj0y/image/upload/v1684499340/flz2v8jhwu9z7irwiy06.png'
+    let newUser = ({
         ...userCred,
         followers: [],
         following: [],
         summery: '',
         highelights: [],
         stories: [],
+        darkMode: true
     })
 
     try {
-        const user = await storageService.post(USER_KEY, userCred)
+        const user = await storageService.post(USER_KEY, newUser)
         // const user = await httpService.post('auth/signup', userCred)
         // socketService.login(user._id)
         saveLocalUser(user)
