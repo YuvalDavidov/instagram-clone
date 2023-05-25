@@ -110,7 +110,7 @@ const instegramPosts = sequelize.define('instegramPosts', {
 },
     {
         timestamps: true, // Enable timestamps
-        createdAt: 'created_at'
+        createdAt: 'createdAt'
     }
 );
 
@@ -128,4 +128,3 @@ sequelize
 
 module.exports = { instegramUsers, instegramPosts }
 
-module.exports = [instegramUsers, instegramPosts]

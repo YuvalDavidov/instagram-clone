@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize');
-const instegramUsers = require('./models/models');
+const { instegramUsers, instegramPosts } = require('./models/models');
+
 
 // const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
 //     host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
@@ -61,27 +62,34 @@ async function updateRecord(model, data, itemId) {
 
 }
 
-async function query(model, filterBy, isLessDetails, limit = Infinity) {
+async function query(model, filterBy, isLessDetails = false, limit = Infinity, order = ['createdAt', 'ASC']) {
     // filterBy needs to be an Object
     try {
         if (!filterBy) return await model.findAll()
+        // constructing the conditions for the sql 
         const whereCondition = {}
-        Object.keys(filterBy).forEach(key => { whereCondition[key] = { [Op.eq]: filterBy[key] } })
-        if (model === 'users') {
+        Object.keys(filterBy).forEach(key => {
+            (Array.isArray(filterBy[key])) ? whereCondition[key] = { [Op.in]: filterBy[key] } : whereCondition[key] = { [Op.eq]: filterBy[key] }
+        })
+        if (model === instegramUsers) {
             whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
+            console.log('users - verfied')
         }
+
         if (isLessDetails) return await model.findAll({
             attributes: ['username', 'id', 'imgUrl', 'fullname'],
             where: {
-                [Op.or]: whereCondition
+                [Op.or]: [whereCondition]
             },
+            order,
             limit
         })
         else {
             return await model.findAll({
                 where: {
-                    [Op.or]: whereCondition
+                    [Op.or]: [whereCondition]
                 },
+                order,
                 limit
             })
         }
