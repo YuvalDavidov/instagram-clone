@@ -2,6 +2,15 @@ const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const { instegramPosts } = require('../../services/models/models')
 
+
+module.exports = {
+    query,
+    getPostById,
+    removePost,
+    addPost,
+    updatePost
+}
+
 async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
     try {
         let filterBy
@@ -19,5 +28,39 @@ async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
 
 }
 
-async function addPost(post,)
+async function getPostById(postId) {
+    try {
+        return await dbService.query(instegramPosts, { id: postId })
+    } catch (error) {
+        logger.error(`post.service - cannot get post with id ${postId}`, err)
+        throw new Error(`post.service - cannot get post with id ${postId}`, err)
+    }
+}
 
+async function addPost(post) {
+    try {
+        await dbService.addRecord(instegramPosts, post)
+        return post
+    } catch (error) {
+        logger.error('post.service - cannot add post', err)
+        throw new Error('post.service - cannot add post', err)
+    }
+}
+
+async function removePost(postId) {
+    try {
+        await dbService.removeRecord(instegramPosts, postId)
+    } catch (error) {
+        logger.error('post.service - cannot remove post', err)
+        throw new Error('post.service - cannot remove post', err)
+    }
+}
+
+async function updatePost(data, postId) {
+    try {
+        await dbService.updateRecord(instegramPosts, data, postId)
+    } catch (error) {
+        logger.error('post.service - cannot update post', err)
+        throw new Error('post.service - cannot update post', err)
+    }
+}
