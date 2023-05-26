@@ -48,11 +48,11 @@ async function updateUser(req, res) {
 }
 
 async function updatePassword(req, res) {
-
+    const { userId, currPassword, newPassword } = req.body
     try {
-        await userService.checkPassword(req.body._id, req.body.currPassword)
-        const encryptedPassword = await userService.encryptPassword(req.body.newPassword)
-        await userService.update({ _id: req.body._id, password: encryptedPassword })
+        await userService.checkPassword(userId, currPassword)
+        const encryptedPassword = await userService.encryptPassword(newPassword)
+        await userService.update({ id: userId, password: encryptedPassword })
     } catch (error) {
         logger.error('Failed to update password', err)
         res.status(500).send({ err: 'Failed to update password' })

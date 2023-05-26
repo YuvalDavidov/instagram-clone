@@ -11,6 +11,7 @@ export const userService = {
     saveLocalUser,
     checkIfOwnByUser,
     query,
+    updatePassword
 }
 
 const USER_URL = 'user/'
@@ -52,6 +53,12 @@ async function updateUser(updatedUser) {
     } catch (error) {
         throw new Error('coudnlt update user - user service', error)
     }
+}
+
+async function updatePassword(userId, currPassword, newPassword) {
+    // const newCredentials = {userId, currPassword, newPassword}
+    // await httpService.put(`${USER_URL}+password`, newCredentials)
+
 }
 
 function getLoggedinUser() {
