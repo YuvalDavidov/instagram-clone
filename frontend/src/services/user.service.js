@@ -11,7 +11,11 @@ export const userService = {
     saveLocalUser,
     checkIfOwnByUser,
     query,
+<<<<<<< HEAD
     changePassword
+=======
+    updatePassword
+>>>>>>> e9f208978032bd445e6e6c1526be46bfe12afb7e
 }
 
 const BASE_URL = 'user/'
@@ -57,6 +61,12 @@ async function changePassword(currPassword, newPassword, userId) {
 async function updateUser(updatedUser) {
     await storageService.put(USER_KEY, updatedUser)
     saveLocalUser(updatedUser)
+}
+
+async function updatePassword(userId, currPassword, newPassword) {
+    // const newCredentials = {userId, currPassword, newPassword}
+    // await httpService.put(`${USER_URL}+password`, newCredentials)
+
 }
 
 function getLoggedinUser() {

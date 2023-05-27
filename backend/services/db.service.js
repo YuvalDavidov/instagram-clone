@@ -1,5 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
+<<<<<<< HEAD
 const { Op } = require('sequelize')
+=======
+const { Op } = require('sequelize');
+const { instegramUsers, instegramPosts } = require('./models/models');
+
+>>>>>>> e9f208978032bd445e6e6c1526be46bfe12afb7e
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
     host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
@@ -76,20 +82,26 @@ async function removeRecord(model, itemId) {
 }
 async function updateRecord(model, data, itemId) {
     try {
-        const updatedItem = await model.update(data, { where: { _id: itemId } })
+        await model.update(data, { where: { _id: itemId } })
         await model.sync()
-        return updatedItem
+        return await model.findOne({ where: { id: itemId } })
     } catch (error) {
         throw new Error('db.service - failed to update record', error)
     }
 
 }
 
+<<<<<<< HEAD
 async function query(model, filterBy, isLessDetails) {
+=======
+async function query(model, filterBy, isLessDetails = false, limit = Infinity, order = ['createdAt', 'ASC']) {
+>>>>>>> e9f208978032bd445e6e6c1526be46bfe12afb7e
     // filterBy needs to be an Object
     try {
         if (!filterBy) return await model.findAll()
+        // constructing the conditions for the sql 
         const whereCondition = {}
+<<<<<<< HEAD
         Object.keys(filterBy).forEach(key => { whereCondition[key] = { [Op.eq]: filterBy[key] } })
         whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
         if (isLessDetails) return await model.findAll({
@@ -97,12 +109,36 @@ async function query(model, filterBy, isLessDetails) {
             where: {
                 [Op.or]: whereCondition
             }
+=======
+        Object.keys(filterBy).forEach(key => {
+            (Array.isArray(filterBy[key])) ? whereCondition[key] = { [Op.in]: filterBy[key] } : whereCondition[key] = { [Op.eq]: filterBy[key] }
+        })
+        if (model === instegramUsers) {
+            whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
+            console.log('users - verfied')
+        }
+
+        if (isLessDetails) return await model.findAll({
+            attributes: ['username', 'id', 'imgUrl', 'fullname'],
+            where: {
+                [Op.or]: [whereCondition]
+            },
+            order,
+            limit
+>>>>>>> e9f208978032bd445e6e6c1526be46bfe12afb7e
         })
         else {
             return await model.findAll({
                 where: {
+<<<<<<< HEAD
                     [Op.or]: whereCondition
                 }
+=======
+                    [Op.or]: [whereCondition]
+                },
+                order,
+                limit
+>>>>>>> e9f208978032bd445e6e6c1526be46bfe12afb7e
             })
         }
     } catch (error) {
