@@ -249,6 +249,7 @@ export default {
     };
   },
   created() {
+    console.log("hi");
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
       this.$store.dispatch({
         type: "setWindowMode",
