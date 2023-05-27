@@ -11,11 +11,7 @@ export const userService = {
     saveLocalUser,
     checkIfOwnByUser,
     query,
-<<<<<<< HEAD
-    changePassword
-=======
     updatePassword
->>>>>>> e9f208978032bd445e6e6c1526be46bfe12afb7e
 }
 
 const BASE_URL = 'user/'
