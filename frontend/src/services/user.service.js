@@ -14,8 +14,7 @@ export const userService = {
     updatePassword
 }
 
-const USER_URL = 'user/'
-const AUTH_URL = 'auth/'
+const BASE_URL = 'user/'
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
 
@@ -23,7 +22,7 @@ async function query(filterBy) {
     try {
         const loggedinUserId = getLoggedinUser()._id
         // const queryParams = `?username=${filterBy.username}&fullname=${filterBy.fullname}?isLessDetails=${true}`
-        // let users = await httpService.get(USER_URL+ queryParams)
+        // let users = await httpService.get(BASE_URL+ queryParams)
         let users = await storageService.query(USER_KEY)
         users = users.map(user => {
             return {
@@ -34,9 +33,13 @@ async function query(filterBy) {
             }
         })
         users = users.filter(user => user.userId !== loggedinUserId && (user.username.includes(filterBy) || user.fullname.includes(filterBy)))
+        // console.log(users)
+        users = users.filter(user => user.username.includes(filterBy))
+        // console.log(users)
+        // users = users.splice(0, 5)
         return users
     } catch (error) {
-        throw new Error('coudnlt preform search query - user service', error)
+        throw new Error('coudnlt preform search query', error)
 
     }
 
@@ -44,15 +47,16 @@ async function query(filterBy) {
 
 
 
-async function updateUser(updatedUser) {
-    try {
-        // await httpService.put(USER_URL, updatedUser)
-        await storageService.put(USER_KEY, updatedUser)
-        saveLocalUser(updatedUser)
+async function changePassword(currPassword, newPassword, userId) {
+    let user = getUserById(userId)
 
-    } catch (error) {
-        throw new Error('coudnlt update user - user service', error)
-    }
+}
+
+
+
+async function updateUser(updatedUser) {
+    await storageService.put(USER_KEY, updatedUser)
+    saveLocalUser(updatedUser)
 }
 
 async function updatePassword(userId, currPassword, newPassword) {
@@ -65,14 +69,8 @@ function getLoggedinUser() {
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
-async function getUserById(userId) {
-    try {
-        // return await httpService.get(USER_URL + `:${userId}`)
-        return storageService.get(USER_KEY, userId)
-
-    } catch (error) {
-        throw new Error('coudnlt get user - user service', error)
-    }
+function getUserById(userId) {
+    return storageService.get(USER_KEY, userId)
 }
 
 function checkIfOwnByUser(id) {
@@ -82,22 +80,16 @@ function checkIfOwnByUser(id) {
 }
 
 
-async function logout() {
-    try {
-        await httpService.post(AUTH_URL + 'logout')
-        sessionStorage.clear()
-    } catch (error) {
-        throw new Error('coudnlt preform logout - user service', error)
-    }
-
+function logout() {
+    sessionStorage.clear()
 }
 
 async function login(userCred) {
     try {
-        // const user = await httpService.post(`${AUTH_URL}login`, userCred)
         const users = await storageService.query(USER_KEY)
         const user = users.find(user => user.username === userCred.username)
         if (user) {
+            // // const user = await httpService.post('auth/login', userCred)
             //     socketService.login(user._id)
             return saveLocalUser(user)
         } else throw new Error('couldnt find username')
@@ -113,18 +105,19 @@ function saveLocalUser(user) {
 }
 
 async function signup(userCred) {
-    if (!userCred.imgUrl) userCred.imgUrl = 'http://t1.gstatic.com/licensed-image?q=tbn:ANd9GcSgdMa3-zfBbsMOTEYwMDhWumoaLYOb4kbOBP9Mmwdt9AwdzYCaL0VS1zKzlKc5DnPoWUSfVA25uggiN0o'
-    userCred = ({
+    if (!userCred.imgUrl) userCred.imgUrl = 'http://res.cloudinary.com/dp32ucj0y/image/upload/v1684499340/flz2v8jhwu9z7irwiy06.png'
+    let newUser = ({
         ...userCred,
         followers: [],
         following: [],
         summery: '',
         highelights: [],
         stories: [],
+        darkMode: true
     })
 
     try {
-        const user = await storageService.post(USER_KEY, userCred)
+        const user = await storageService.post(USER_KEY, newUser)
         // const user = await httpService.post('auth/signup', userCred)
         // socketService.login(user._id)
         saveLocalUser(user)

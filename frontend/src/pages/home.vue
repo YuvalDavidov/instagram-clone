@@ -106,10 +106,12 @@ export default {
       });
     },
     async onSignUp() {
+      console.log("hi");
       this.$store.dispatch({ type: "signUp", user: this.newUser });
     },
     toSignUp() {
       this.isSignUp = !this.isSignUp;
+      console.log(this.isSignUp);
     },
   },
   computed: {
@@ -119,7 +121,15 @@ export default {
     isDisabled() {
       if (
         this.loginCredentials.username.length > 5 &&
-        this.loginCredentials.password.length > 5
+        this.loginCredentials.password.length > 5 &&
+        !this.isSignUp
+      )
+        return false;
+      else if (
+        this.newUser.username.length > 5 &&
+        this.newUser.password.length > 5 &&
+        this.newUser.fullname.length > 5 &&
+        this.isSignUp
       )
         return false;
       else return true;

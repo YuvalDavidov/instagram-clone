@@ -3,44 +3,69 @@ const { Op } = require('sequelize');
 const { instegramUsers, instegramPosts } = require('./models/models');
 
 
-// const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
-//     host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
-//     dialect: 'postgres',
-//     port: 5432, // default port for PostgreSQL
-//     logging: false, // disable logging
-// });
+const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
+    host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
+    dialect: 'postgres',
+    port: 5432, // default port for PostgreSQL
+    logging: false, // disable logging
+});
 
-// sequelize
-//     .authenticate()
-//     .then(async () => {
-//         console.log('Database connection established successfully.');
-//     })
-//     .catch((err) => {
-//         console.error('db.service - Unable to connect to the database:', err);
-//     });
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Database connection established successfully.');
+    })
+    .catch((err) => {
+        console.error('db.service - Unable to connect to the database:', err);
+    });
 
+const Users = sequelize.define('users', {
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    fullname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+});
 
+sequelize
+    .sync()
+    .then(() => {
+        console.log('Models synchronized successfully');
+    })
+    .catch((err) => {
+        console.error('Error synchronizing models:', err);
+    });
 
-
-// addRecord(instegramUsers, {
-//     username: 'yuval2',
-//     password: '1234556',
-//     fullname: 'Yuval davidov ha gay',
-
-// })
 
 async function addRecord(model, data) {
     try {
-        // const model = sequelize.define(modelName, {}, { tableName: modelName })
-        const result = await model.create(data)
-        // console.log('data------>', result)
-        await model.sync()
-        return result.toJSON()
+        console.log('data', data);
+        const result = await Users.create(data)
+        console.log('result', result.toJSON());
+        // await Users.sync()
+        // return result.toJSON()
     } catch (error) {
-        throw new Error('db.service - failed to add record', error)
+        console.log('error', error);
+        // throw new Error('db.service - failed to add record', error)
     }
 
 }
+
+addRecord('users', {
+    username: 'yuval1',
+    fullname: 'yuval davidov',
+    password: '123456', _id: 's',
+    followers: [], following: [],
+    highlights: [], imgurl: 'ss', stories: [], summary: '',
+})
+
 async function removeRecord(model, itemId) {
     try {
         await model.destroy({ where: { _id: itemId } })
@@ -104,13 +129,3 @@ module.exports = {
     updateRecord,
     query
 }
-
-
-
-// addRecord(User, {
-//     _id: 'dafs',
-//     username: 'yuval1',
-//     password: '123456',
-//     fullname: 'Yuval davidov',
-
-// })

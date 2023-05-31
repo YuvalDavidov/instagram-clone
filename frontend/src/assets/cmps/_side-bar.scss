@@ -1,131 +1,271 @@
 .side-bar-container {
     position: fixed;
     z-index: 2;
-}
 
-.side-bar {
-    position: relative;
-    display: grid;
-    grid-template-rows: 92px 1fr 56px;
-    height: 100vh;
-    width: $nav-large-width;
-    border-right: solid 1px $nav-border-color;
-    padding: 20px 12px 8px 12px;
-    background-color: white;
+    &.darkMode {
 
-    >* {
-        font-size: 16px;
+        .side-bar {
+            background-color: black;
+            border-right: solid 1px #262626;
+
+            nav {
+                >* {
+                    color: white;
+                }
+
+                >*:hover {
+                    background-color: #1a1a1a;
+                }
+
+                .side-bar-btn {
+                    button {
+                        color: white;
+                    }
+                }
+            }
+
+            .settings-btn {
+                color: white;
+
+                &:hover {
+                    background-color: #1a1a1a;
+                    border-radius: 50px;
+                }
+            }
+
+
+        }
+
+        .settings-modal {
+            >* {
+                background-color: black;
+
+                >* {
+                    color: white;
+
+                }
+
+                :hover {
+                    background-color: #1a1a1a;
+                }
+            }
+        }
+
+        .search-bar {
+            background-color: black;
+            border-right: solid 1px #262626;
+            color: white;
+
+            .top {
+                border-bottom: solid 1px #262626;
+
+
+                .search-input {
+                    background: #262626;
+                    color: white;
+                }
+            }
+        }
+
+        .clear-search-input-btn {
+            &:hover {
+
+                background: #1a1a1a;
+            }
+        }
+
+        .mobile-bar {
+            .top-bar {
+                background-color: black;
+
+                .search-bar-n-notification-mobile {
+                    & .search-input {
+                        background: #262626;
+                        color: white;
+                    }
+
+                    a {
+                        >* {
+                            color: white;
+                        }
+                    }
+                }
+            }
+
+            .bottom-bar {
+                background-color: black;
+
+                nav {
+                    >* {
+                        >* {
+                            color: white;
+
+                        }
+                    }
+
+                    .side-bar-btn:hover {
+                        background-color: #262626;
+                    }
+
+                }
+            }
+        }
+
+        .search-mobile {
+            .search-mobile-bar {
+                color: white;
+                background-color: #262626;
+            }
+        }
+
+        .create-post-modal {
+            .create-modal {
+                .top {
+                    color: white;
+                }
+
+                background-color: #262626;
+
+                .uploader {
+                    background-color: inherit;
+
+                    small {
+                        color: white;
+                    }
+                }
+            }
+        }
+
+        .want-to-create-modal {
+            background-color: #262626;
+            border: 1px solid #1a1a1a;
+        }
     }
 
-    .logo {
-        padding: 25px 12px 16px 12px;
-        margin-bottom: 19px;
-    }
-
-    .logo-img {
-        max-width: 100px;
-    }
-
-    .logo-line-img {
-        max-width: 30px;
-    }
-
-    nav {
-        display: flex;
-        flex-direction: column;
+    .side-bar {
+        position: relative;
+        display: grid;
+        grid-template-rows: 92px 1fr 56px;
+        height: 100vh;
+        width: $nav-large-width;
+        border-right: solid 1px $nav-border-color;
+        padding: 20px 12px 8px 12px;
+        background-color: white;
 
         >* {
-            padding: 12px;
-            margin: 4px 0;
+            font-size: 16px;
         }
 
-        a {
+        .logo {
+            padding: 25px 12px 16px 12px;
+            margin-bottom: 19px;
+        }
+
+        .logo-img {
+            max-width: 100px;
+        }
+
+        .logo-line-img {
+            max-width: 30px;
+        }
+
+        nav {
             display: flex;
-            align-items: center;
-            text-decoration-line: none;
-            color: black;
+            flex-direction: column;
 
-            span {
-                margin-left: 8px;
-            }
-        }
-
-        a.active {
-            font-family: blinker-bold;
-        }
-
-        a:hover {
-            background-color: $nav-link-bgc-hover;
-            border-radius: 50px;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            min-height: 54px;
-
-
-        }
-
-        .side-bar-btn {
-
-            span {
-                margin-left: 8px;
+            >* {
+                padding: 12px;
+                margin: 4px 0;
             }
 
-            &.create {
-                justify-content: space-between;
+            a {
+                display: flex;
+                align-items: center;
+                text-decoration-line: none;
+                color: black;
 
-                & .create-post-btn {
-                    flex-grow: 1;
-                    animation-name: post-btn-animasion;
-                    animation-duration: 1s;
-                }
-
-                & .create-story-btn {
-                    flex-grow: 1;
-                    animation-name: story-btn-animasion;
-                    animation-duration: 1s;
+                span {
+                    margin-left: 8px;
                 }
             }
+
+            a.active {
+                font-family: blinker-bold;
+            }
+
+            a:hover {
+                background-color: $nav-link-bgc-hover;
+                border-radius: 50px;
+            }
+
+            .profile-btn {
+                display: flex;
+                align-items: center;
+                min-height: 54px;
+
+
+            }
+
+            .side-bar-btn {
+
+                span {
+                    margin-left: 8px;
+                }
+
+                &.create {
+                    justify-content: space-between;
+
+                    & .create-post-btn {
+                        flex-grow: 1;
+                        animation-name: post-btn-animasion;
+                        animation-duration: 1s;
+                    }
+
+                    & .create-story-btn {
+                        flex-grow: 1;
+                        animation-name: story-btn-animasion;
+                        animation-duration: 1s;
+                    }
+                }
+            }
         }
-    }
 
-    .settings-btn {
-        background: none;
-        border: none;
-        text-align: left;
-        font-family: blinker;
-        display: flex;
-        align-items: center;
+        .settings-btn {
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: blinker;
+            display: flex;
+            align-items: center;
 
-        &:hover {
-            background-color: $nav-link-bgc-hover;
-            border-radius: 50px;
+            &:hover {
+                background-color: $nav-link-bgc-hover;
+                border-radius: 50px;
+            }
+
+            &.isSettingsModalOpen {
+                font-family: blinker-bold;
+            }
         }
 
-        &.isSettingsModalOpen {
-            font-family: blinker-bold;
+        &.isSearchOpen {
+            z-index: 2;
+            transition: 1s;
+            width: 70px;
         }
-    }
 
-    &.isSearchOpen {
-        z-index: 2;
-        transition: 1s;
-        width: 70px;
-    }
+        &.isTabletMode {
+            transition: 1s;
+            width: $nav-medium-width;
+        }
 
-    &.isTabletMode {
-        transition: 1s;
-        width: $nav-medium-width;
-    }
+        &.isTabletMode.isWantToCreate {
+            transition: 1s;
+            width: 120px;
 
-    &.isTabletMode.isWantToCreate {
-        transition: 1s;
-        width: 120px;
+        }
 
     }
-
 }
 
 .mobile-bar {
@@ -159,7 +299,7 @@
 
             .clear-search-input-btn {
                 right: 64px;
-                top: 22px;
+                top: 18px
             }
         }
     }
@@ -213,6 +353,8 @@
 
         :hover {
             background-color: $set-hover-color;
+            color: inherit;
+            text-decoration: none;
         }
 
         :not(:last-child, span) {
@@ -244,6 +386,7 @@
 
         h1 {
             padding: 12px 14px 36px 24px;
+            font-size: 24px;
         }
 
         .search-input {

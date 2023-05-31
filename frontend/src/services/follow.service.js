@@ -50,6 +50,5 @@ async function addFollow(id) {
 
 function checkIfFollowing(id) {
     const loggedInUser = userService.getLoggedinUser(id)
-    console.log(loggedInUser.following.includes(id))
     return loggedInUser.following.includes(id)
 } 
