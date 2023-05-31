@@ -292,7 +292,7 @@ export default {
     },
     async toggleLikes() {
       try {
-        await postService.toggleLikeCount(this.post._id);
+        await postService.toggleLikeCount(this.post._id, this.post.isLikeCountVisible);
         if (this.isAtPostPage) {
           await this.$store.dispatch({
             type: "loadPost",
@@ -315,7 +315,7 @@ export default {
     },
     async toggleCommenting() {
       try {
-        await postService.toggleCommenting(this.post._id);
+        await postService.toggleCommenting(this.post._id, this.post.isCommentingAllowed);
         if (this.isAtPostPage) {
           await this.$store.dispatch({
             type: "loadPost",

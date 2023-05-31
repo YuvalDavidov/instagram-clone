@@ -1,7 +1,9 @@
 import { storageService } from './async-storage.service'
+import { httpService } from './http.service';
 import { userService } from './user.service';
 import { utilService } from './util.service';
 
+const POST_URL = 'post/'
 
 export const postService = {
     savePost,
@@ -42,6 +44,7 @@ const months = [
 
 async function getPostById(postId) {
     try {
+        // const post = await httpService.get(`${POST_URL}:${postId}`)
         const post = await storageService.get(POST_KEY, postId)
         return post
     } catch (error) {
@@ -50,8 +53,9 @@ async function getPostById(postId) {
     }
 }
 
-async function toggleCommenting(postId) {
+async function toggleCommenting(postId, isCommentingAllowed) {
     try {
+        // await httpService.post(POST_URL, { dataToUpdate: { isCommentingAllowed: !isCommentingAllowed }, postId })
         let post = await storageService.get(POST_KEY, postId)
         post.isCommentingAllowed = !post.isCommentingAllowed
         await storageService.put(POST_KEY, post)
@@ -62,8 +66,9 @@ async function toggleCommenting(postId) {
     }
 }
 
-async function toggleLikeCount(postId) {
+async function toggleLikeCount(postId, isLikeCountVisible) {
     try {
+        // await httpService.post(POST_URL, { dataToUpdate: { isLikeCountVisible: !isLikeCountVisible }, postId })
         let post = await storageService.get(POST_KEY, postId)
         post.isLikeCountVisible = !post.isLikeCountVisible
         await storageService.put(POST_KEY, post)
