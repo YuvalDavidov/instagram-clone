@@ -19,20 +19,6 @@ sequelize
         console.error('db.service - Unable to connect to the database:', err);
     });
 
-const Users = sequelize.define('users', {
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    fullname: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-});
 
 sequelize
     .sync()
@@ -47,7 +33,7 @@ sequelize
 async function addRecord(model, data) {
     try {
         console.log('data', data);
-        const result = await Users.create(data)
+        const result = await model.create(data)
         console.log('result', result.toJSON());
         // await Users.sync()
         // return result.toJSON()
@@ -57,14 +43,6 @@ async function addRecord(model, data) {
     }
 
 }
-
-addRecord('users', {
-    username: 'yuval1',
-    fullname: 'yuval davidov',
-    password: '123456', _id: 's',
-    followers: [], following: [],
-    highlights: [], imgurl: 'ss', stories: [], summary: '',
-})
 
 async function removeRecord(model, itemId) {
     try {
@@ -80,11 +58,24 @@ async function updateRecord(model, data, itemId) {
     try {
         await model.update(data, { where: { _id: itemId } })
         await model.sync()
-        return await model.findOne({ where: { id: itemId } })
+        return await model.findOne({ where: { _id: itemId } })
     } catch (error) {
         throw new Error('db.service - failed to update record', error)
     }
 
+}
+
+async function appendToColumn(model, data, columnName) {
+    try {
+        await model.update(
+            {
+                [columnName]: sequelize.fn('array_append', sequelize.col(columnName), data)
+            },
+            { where: { _id: data._id } }
+        )
+    } catch (error) {
+        throw new Error('db.service - failed to update/add to column', error)
+    }
 }
 
 async function query(model, filterBy, isLessDetails = false, limit = Infinity, order = ['createdAt', 'ASC']) {
@@ -102,7 +93,7 @@ async function query(model, filterBy, isLessDetails = false, limit = Infinity, o
         }
 
         if (isLessDetails) return await model.findAll({
-            attributes: ['username', 'id', 'imgUrl', 'fullname'],
+            attributes: ['username', '_id', 'imgUrl', 'fullname'],
             where: {
                 [Op.or]: [whereCondition]
             },
@@ -127,5 +118,6 @@ module.exports = {
     addRecord,
     removeRecord,
     updateRecord,
-    query
+    query,
+    appendToColumn
 }

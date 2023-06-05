@@ -192,7 +192,7 @@ export default {
   methods: {
     submit() {
       userService.updateUser({
-        ...this.user,
+        _id: this.user._id,
         bio: this.user.bio,
         website: this.user.website,
         gender: this.user.gender,
@@ -212,8 +212,7 @@ export default {
     },
     async onUploadImg(ev) {
       let newImg = await uploadService.uploadImg(ev);
-      this.user = { ...this.user, imgUrl: newImg.url };
-      userService.updateUser({ ...this.user, imgUrl: newImg.url });
+      userService.updateUser({ _id: this.user._id, imgUrl: newImg.url });
     },
     toggleEditSection(section) {
       this.editSection.editPass = section === "pass";

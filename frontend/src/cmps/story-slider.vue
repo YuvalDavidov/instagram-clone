@@ -221,7 +221,7 @@ export default {
     },
     timeAgo() {
       let now = new Date().getTime();
-      let storyTime = new Date(this.story.timeStampe).getTime();
+      let storyTime = new Date(this.story.timestampe).getTime();
       let diff = (now - storyTime) / 1000;
       diff /= 60 * 60;
       let houserDiff = Math.abs(Math.round(diff));

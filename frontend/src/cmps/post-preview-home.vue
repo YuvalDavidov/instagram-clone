@@ -54,7 +54,7 @@
       <button @click="onOpenPostModal()" v-if="post.comments.length">
         View all {{ post.comments.length }} comments
       </button>
-      <span class="time-span">{{ timeAgo(post.timeStamp) }} </span>
+      <span class="time-span">{{ timeAgo(post.timestamp) }} </span>
       <section class="input-actions">
         <input
           ref="comment"

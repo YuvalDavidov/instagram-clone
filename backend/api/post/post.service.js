@@ -30,7 +30,7 @@ async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
 
 async function getPostById(postId) {
     try {
-        return await dbService.query(instegramPosts, { id: postId })
+        return await dbService.query(instegramPosts, { _id: postId })
     } catch (error) {
         logger.error(`post.service - cannot get post with id ${postId}`, err)
         throw new Error(`post.service - cannot get post with id ${postId}`, err)

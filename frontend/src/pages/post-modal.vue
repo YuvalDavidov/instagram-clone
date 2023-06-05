@@ -57,7 +57,7 @@
                   >
                 </section>
                 <article class="comment-like-n-comments">
-                  <span>{{ uploadedCommentTime(comment.timeStamp) }}</span>
+                  <span>{{ uploadedCommentTime(comment.timestamp) }}</span>
                   <span>0 likes</span>
                   <span>Replay</span>
                 </article>
@@ -355,7 +355,7 @@ export default {
       return this.$store.getters.GetUser;
     },
     uploadedTime() {
-      return postService.getTime(this.post.timeStamp);
+      return postService.getTime(this.post.timestamp);
     },
     didUserLikedPost() {
       return postService.didUserLikedPost(this.post);

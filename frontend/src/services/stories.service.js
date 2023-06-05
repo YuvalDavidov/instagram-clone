@@ -79,7 +79,7 @@ async function updateStory(story) {
 
 function _getEmptyStory() {
     return {
-        timeStampe: new Date,
+        timestampe: new Date,
         likes: [],
         sawUsers: []
     }
@@ -88,7 +88,7 @@ function _getEmptyStory() {
 function _filetrOver24H(arr) {
     const now = new Date().getTime()
     arr = arr.filter(story => {
-        let storyTime = new Date(story.timeStampe).getTime();
+        let storyTime = new Date(story.timestampe).getTime();
         let diff = (now - storyTime) / 1000;
         diff /= 60 * 60;
         let houserDiff = Math.abs(Math.round(diff));

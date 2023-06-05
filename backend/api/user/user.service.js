@@ -1,6 +1,7 @@
 
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
+const { instegramUsers } = require('../../services/models/models')
 const authService = require('../auth/auth.service')
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
 
 async function query(filterBy = { username: '' }, isLessDetails = false) {
     try {
-        let model = (isLessDetails) ? await dbService.query(users, filterBy, isLessDetails) : await dbService.query(users, filterBy)
+        let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, isLessDetails) : await dbService.query(instegramUsers, filterBy)
         let filterdUsers = model.map(user => {
             delete user.password
             return user
@@ -30,7 +31,7 @@ async function query(filterBy = { username: '' }, isLessDetails = false) {
 
 async function getById(userId) {
     try {
-        let user = await dbService.query(users, { _id: userId })
+        let user = await dbService.query(instegramUsers, { _id: userId })
         delete user.password
         return user
     }
@@ -41,7 +42,7 @@ async function getById(userId) {
 }
 async function getByUsername(username) {
     try {
-        let user = await dbService.query(users, { username })
+        let user = await dbService.query(instegramUsers, { username })
         delete user.password
         return user
     } catch (err) {
@@ -52,7 +53,7 @@ async function getByUsername(username) {
 
 async function remove(userId) {
     try {
-        await dbService.removeRecord(users, userId)
+        await dbService.removeRecord(instegramUsers, userId)
     } catch (err) {
         logger.error(`user.service - cannot remove user ${userId}`, err)
         throw err
@@ -61,7 +62,7 @@ async function remove(userId) {
 
 async function update(user) {
     try {
-        let updatedUser = await dbService.updateRecord(users, user, user._id)
+        let updatedUser = await dbService.updateRecord(instegramUsers, user, user._id)
         return updatedUser
     } catch (err) {
         logger.error(`user.service - cannot update user ${user._id}`, err)
@@ -71,7 +72,7 @@ async function update(user) {
 
 async function add(user) {
     try {
-        let addedUser = await dbService.addRecord(users, user)
+        let addedUser = await dbService.addRecord(instegramUsers, user)
         return addedUser
     } catch (err) {
         logger.error('user.service - cannot add user', err)

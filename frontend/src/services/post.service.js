@@ -55,7 +55,7 @@ async function getPostById(postId) {
 
 async function toggleCommenting(postId, isCommentingAllowed) {
     try {
-        // await httpService.post(POST_URL, { dataToUpdate: { isCommentingAllowed: !isCommentingAllowed }, postId })
+        // await httpService.put(POST_URL, { dataToUpdate: { isCommentingAllowed: !isCommentingAllowed }, postId })
         let post = await storageService.get(POST_KEY, postId)
         post.isCommentingAllowed = !post.isCommentingAllowed
         await storageService.put(POST_KEY, post)
@@ -68,7 +68,7 @@ async function toggleCommenting(postId, isCommentingAllowed) {
 
 async function toggleLikeCount(postId, isLikeCountVisible) {
     try {
-        // await httpService.post(POST_URL, { dataToUpdate: { isLikeCountVisible: !isLikeCountVisible }, postId })
+        // await httpService.put(POST_URL, { dataToUpdate: { isLikeCountVisible: !isLikeCountVisible }, postId })
         let post = await storageService.get(POST_KEY, postId)
         post.isLikeCountVisible = !post.isLikeCountVisible
         await storageService.put(POST_KEY, post)
@@ -83,7 +83,8 @@ async function addComment(postId, commentInfo) {
     try {
         let post = await storageService.get(POST_KEY, postId)
         commentInfo.id = utilService.makeId()
-        commentInfo.timeStamp = new Date()
+        commentInfo.timestamp = new Date()
+
         post.comments.push(commentInfo)
         await storageService.put(POST_KEY, post)
 
@@ -119,7 +120,7 @@ async function getPosts(user, numOfPostsToQuerry) {
     return posts.reduce((acc, post) => {
         if (user.following.includes(post.userId) || post.userId === user._id) acc.push(post)
         return acc
-    }, []).sort((a, b) => new Date(b.timeStamp) - new Date(a.timeStamp)).slice(0, numOfPostsToQuerry - 1)
+    }, []).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, numOfPostsToQuerry - 1)
 
 }
 
@@ -187,7 +188,7 @@ async function savePost(user, post) {
                 userImg: user.imgUrl,
                 imgsUrl: post.imgsUrl,
                 summery: post.summery || '',
-                timeStamp: new Date(),
+                timestamp: new Date(),
                 likes: [],
                 isLikeCountVisible: true,
                 isCommentingAllowed: true,
@@ -214,11 +215,11 @@ function sortByTimeStampe(posts) {
     posts = posts.map((post) => {
         return {
             ...post,
-            timeStamp: new Date(post.timeStamp).getTime(),
+            timestamp: new Date(post.timestamp).getTime(),
         };
     });
     return posts.sort(
-        (a, b) => b.timeStamp - a.timeStamp
+        (a, b) => b.timestamp - a.timestamp
     );
 }
 

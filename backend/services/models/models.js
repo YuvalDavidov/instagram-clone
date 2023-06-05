@@ -9,7 +9,7 @@ const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
 
 
 const instegramUsers = sequelize.define('instegramUsers', {
-    id: {
+    _id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -66,7 +66,7 @@ const instegramUsers = sequelize.define('instegramUsers', {
 });
 
 const instegramPosts = sequelize.define('instegramPosts', {
-    id: {
+    _id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -102,9 +102,19 @@ const instegramPosts = sequelize.define('instegramPosts', {
         allowNull: false,
     },
     username: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: [],
+        defaultValue: '',
+    },
+    isCommentingAllowed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
+    },
+    isLikeCountVisible: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
     },
 
 },

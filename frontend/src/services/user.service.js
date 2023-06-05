@@ -14,7 +14,7 @@ export const userService = {
     updatePassword
 }
 
-const BASE_URL = 'user/'
+const USER_URL = 'user/'
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
 
@@ -22,7 +22,7 @@ async function query(filterBy) {
     try {
         const loggedinUserId = getLoggedinUser()._id
         // const queryParams = `?username=${filterBy.username}&fullname=${filterBy.fullname}?isLessDetails=${true}`
-        // let users = await httpService.get(BASE_URL+ queryParams)
+        // let users = await httpService.get(USER_URL+ queryParams)
         let users = await storageService.query(USER_KEY)
         users = users.map(user => {
             return {
@@ -46,22 +46,15 @@ async function query(filterBy) {
 }
 
 
-
-async function changePassword(currPassword, newPassword, userId) {
-    let user = getUserById(userId)
-
-}
-
-
-
-async function updateUser(updatedUser) {
-    await storageService.put(USER_KEY, updatedUser)
+async function updateUser(updatedDetails) {
+    const updatedUser = await httpService.put(`${USER_URL}${updatedDetails._id}`, updatedDetails)
+    // await storageService.put(USER_KEY, updatedUser)
     saveLocalUser(updatedUser)
 }
 
 async function updatePassword(userId, currPassword, newPassword) {
     // const newCredentials = {userId, currPassword, newPassword}
-    // await httpService.put(`${USER_URL}+password`, newCredentials)
+    await httpService.put(`${USER_URL}password`, newCredentials)
 
 }
 
