@@ -8,7 +8,9 @@ module.exports = {
     getPostById,
     removePost,
     addPost,
-    updatePost
+    updatePost,
+    appendToColumn,
+    removeFromColumn
 }
 
 async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
@@ -62,5 +64,23 @@ async function updatePost(data, postId) {
     } catch (error) {
         logger.error('post.service - cannot update post', err)
         throw new Error('post.service - cannot update post', err)
+    }
+}
+
+async function appendToColumn(data, columnName, postId) {
+    try {
+        await dbService.appendToColumn(instegramPosts, data, columnName, postId)
+    } catch (error) {
+        logger.error('post.service - cannot append to array', err)
+        throw new Error('post.service - cannot append to array', err)
+    }
+}
+
+async function removeFromColumn(columnName, itemId, postId) {
+    try {
+        await dbService.removeFromColumn(instegramPosts, columnName, itemId, postId)
+    } catch (error) {
+        logger.error('post.service - cannot remove item from array', err)
+        throw new Error('post.service - cannot remove item from array', err)
     }
 }

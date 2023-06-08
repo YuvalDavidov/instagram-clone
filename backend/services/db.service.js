@@ -65,16 +65,28 @@ async function updateRecord(model, data, itemId) {
 
 }
 
-async function appendToColumn(model, data, columnName) {
+async function appendToColumn(model, data, columnName, entityId) {
     try {
         await model.update(
             {
                 [columnName]: sequelize.fn('array_append', sequelize.col(columnName), data)
             },
-            { where: { _id: data._id } }
+            { where: { _id: entityId } }
         )
     } catch (error) {
         throw new Error('db.service - failed to update/add to column', error)
+    }
+}
+async function removeFromColumn(model, columnName, itemId, entityId) {
+    try {
+        await model.update(
+            {
+                [columnName]: sequelize.fn('array_remove', sequelize.col(columnName), JSON.stringify({ id: itemId }))
+            },
+            { where: { _id: entityId } }
+        )
+    } catch (error) {
+        throw new Error('db.service - remove from column', error)
     }
 }
 
@@ -119,5 +131,6 @@ module.exports = {
     removeRecord,
     updateRecord,
     query,
-    appendToColumn
+    appendToColumn,
+    removeFromColumn
 }

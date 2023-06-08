@@ -14,7 +14,7 @@ async function getPosts(req, res) {
 
 async function getPostById(req, res) {
     try {
-        const post = await postService.getPostById(req.body.postId)
+        const post = await postService.getPostById(req.params._id)
         res.json(post)
     } catch (error) {
         logger.error('post controller - cannot get post' + err)
@@ -35,7 +35,7 @@ async function updatePost(req, res) {
 
 async function removePost(req, res) {
     try {
-        await postService.removePost(req.body.postId)
+        await postService.removePost(req.params.postId)
     } catch (error) {
         logger.error('post controller - cannot remove post' + err)
         res.status(401).send({ err: `Failed to remove post ${err}` })
@@ -52,10 +52,33 @@ async function addPost(req, res) {
     }
 }
 
+async function appendItem(req, res) {
+    const { data, entityName } = req.body
+    try {
+        await postService.appendToColumn(data, entityName, req.params._id)
+    } catch (error) {
+        logger.error('post controller - cannot append to column' + err)
+        res.status(401).send({ err: `Failed to append to column ${err}` })
+    }
+}
+
+async function removeItem(req, res) {
+    const { postId } = req.params
+    const { itemId, entityName } = req.body
+    try {
+        await postService.removeFromColumn(entityName, itemId, postId)
+    } catch (error) {
+        logger.error('post controller - cannot remove item from column' + err)
+        res.status(401).send({ err: `Failed to remove item from column ${err}` })
+    }
+}
+
 module.exports = {
     getPostById,
     getPosts,
     removePost,
     updatePost,
-    addPost
+    addPost,
+    appendItem,
+    removeItem
 }

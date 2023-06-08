@@ -84,7 +84,7 @@ async function addComment(postId, commentInfo) {
         let post = await storageService.get(POST_KEY, postId)
         commentInfo.id = utilService.makeId()
         commentInfo.timestamp = new Date()
-
+        // await httpService.put(`${POST_URL}${postId}`, {data: {...commentInfo}, entityName: 'comments' })
         post.comments.push(commentInfo)
         await storageService.put(POST_KEY, post)
 
@@ -96,6 +96,7 @@ async function addComment(postId, commentInfo) {
 
 async function removeLike(postId, userId) {
     try {
+        //await httpService.delete(`${postId}`, { itemId: userId, entityName: 'likes' })
         let post = await storageService.get(POST_KEY, postId)
         const idx = post.likes.findIndex((like) => like.userId === userId)
         post.likes.splice(idx, 1)
@@ -107,6 +108,7 @@ async function removeLike(postId, userId) {
 
 async function addLike(postId, likedUser) {
     try {
+        // await httpService.put(`${POST_URL}${postId}`, { data: { ...likedUser }, entityName: 'likes' })
         let post = await storageService.get(POST_KEY, postId)
         post.likes.push(likedUser)
         await storageService.put(POST_KEY, post)
@@ -116,6 +118,7 @@ async function addLike(postId, likedUser) {
 }
 
 async function getPosts(user, numOfPostsToQuerry) {
+    // return await httpService.get(POST_URL, {user, numOfPostsToQuerry, isUserPostsOnly: false})
     let posts = await storageService.query(POST_KEY)
     return posts.reduce((acc, post) => {
         if (user.following.includes(post.userId) || post.userId === user._id) acc.push(post)
@@ -171,18 +174,19 @@ function getCommentTime(commentTimeStamp) {
 }
 
 async function getUserPostsById(userId) {
+    // return await httpService.get(POST_URL, {user, numOfPostsToQuerry, isUserPostsOnly: true})
     const posts = await storageService.query(POST_KEY)
     const userPosts = posts.filter(post => post.userId === userId)
     return userPosts
 }
 
 async function savePost(user, post) {
-    let postToSave
     try {
         if (post._id) {
-            postToSave = await storageService.put(POST_KEY, post)
+            // return await httpService.put(POST_URL, { dataToUpdate: post, postId: post._id })
+            return await storageService.put(POST_KEY, post)
         } else {
-            postToSave = {
+            post = {
                 userId: user._id,
                 username: user.username,
                 userImg: user.imgUrl,
@@ -194,9 +198,11 @@ async function savePost(user, post) {
                 isCommentingAllowed: true,
                 comments: [],
             }
-            postToSave = await storageService.post(POST_KEY, postToSave)
+            // return await httpService.post(POST_URL, post)
+            await storageService.post(POST_KEY, postToSave)
+            return post
         }
-        return postToSave
+
     } catch (error) {
         console.log('there is a problem with posting your post', error);
     }
@@ -205,6 +211,7 @@ async function savePost(user, post) {
 
 async function removePost(postId) {
     try {
+        // await httpService.delete(`${POST_URL}${postId}`)
         await storageService.remove(POST_KEY, postId)
     } catch (error) {
 
