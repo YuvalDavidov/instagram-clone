@@ -2,6 +2,7 @@ import { storageService } from './async-storage.service'
 import { userService } from './user.service'
 
 const STORIES_KEY = 'StoriesDB'
+const SROTY_URL = 'story/'
 
 export const storiesService = {
     getStoriesByFollowings,
@@ -13,6 +14,8 @@ export const storiesService = {
 }
 
 async function getStoriesByFollowings() {
+    // const story = await httpService.get(`${SROTY_URL}`)
+
     const currUser = userService.getLoggedinUser()
     try {
         let storeis = await storageService.query(STORIES_KEY)

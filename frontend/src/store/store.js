@@ -26,7 +26,7 @@ export const myStore = createStore({
             return windowMode
         },
         GetIsDarkMode({ isDarkMode }) {
-            return true
+            return false
         }
     },
     mutations: {

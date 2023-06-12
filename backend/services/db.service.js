@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize');
-const { instegramUsers, instegramPosts } = require('./models/models');
+const { instegramUsers, instegramPosts, instegramStories } = require('./models/models');
 
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
@@ -24,6 +24,7 @@ sequelize
     .sync()
     .then(() => {
         console.log('Models synchronized successfully');
+
     })
     .catch((err) => {
         console.error('Error synchronizing models:', err);
@@ -35,7 +36,7 @@ async function addRecord(model, data) {
         console.log('data', data);
         const result = await model.create(data)
         console.log('result', result.toJSON());
-        // await Users.sync()
+        await model.sync()
         // return result.toJSON()
     } catch (error) {
         console.log('error', error);
@@ -96,6 +97,24 @@ async function query(model, filterBy, isLessDetails = false, limit = Infinity, o
         if (!filterBy) return await model.findAll()
         // constructing the conditions for the sql 
         const whereCondition = {}
+        // whereCondition[key] = { userId: { [Op.in]: userInfo[key] } }  console.log(filterBy.userInfo.userId)
+        if (model === instegramStories) {
+            Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [Op.in]: filterBy.userInfo.userId } } }
+            )
+            return model.findAll({
+                where: {
+                    [Op.and]: [{
+                        ...whereCondition,
+                        createdAt: {
+                            [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
+                        }
+                    }]
+                },
+
+            })
+        }
+
+
         Object.keys(filterBy).forEach(key => {
             (Array.isArray(filterBy[key])) ? whereCondition[key] = { [Op.in]: filterBy[key] } : whereCondition[key] = { [Op.eq]: filterBy[key] }
         })
@@ -103,6 +122,7 @@ async function query(model, filterBy, isLessDetails = false, limit = Infinity, o
             whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
             console.log('users - verfied')
         }
+
 
         if (isLessDetails) return await model.findAll({
             attributes: ['username', '_id', 'imgUrl', 'fullname'],
