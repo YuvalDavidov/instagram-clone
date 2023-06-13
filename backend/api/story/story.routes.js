@@ -1,6 +1,6 @@
 const express = require('express')
 const { getStoriesByFollowing, getStoriesByUserId, getStoryById, addStory, removeStoy } = require('./story.controller.js')
-const { requireAuth } = require('../../middlewares/requireAuth.middleware')
+const { requireAuth } = require('../../middlewares/requireAuth.middleware.js')
 
 const router = express.Router()
 
