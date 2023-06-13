@@ -29,7 +29,7 @@ async function getStoryById(req, res) {
 
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
-        if (!story.sawUsers.incluse(loggedinUser._id) && story.userId !== loggedinUser) storyService.updateStory(loggedinUser._id)
+        if (!story.sawUsers.incluse(loggedinUser._id) && story.userId !== loggedinUser) storyService.updateStory(loggedinUser._id, storyId)
         console.log(story);
     } catch (error) {
         logger.error('story controller - cannot get story' + err)

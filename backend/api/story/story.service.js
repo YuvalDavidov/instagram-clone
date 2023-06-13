@@ -18,15 +18,6 @@ async function query(entity, condition) {
     }
 }
 
-// addStory({
-//     imgUrl: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg',
-//     userInfo: {
-//         userId: 'pipi',
-//         username: 'blabla',
-//         userImg: 'balbal'
-//     }
-// })
-
 async function addStory(story) {
     try {
         const newStory = await dbService.addRecord(instegramStories, story)
@@ -47,9 +38,9 @@ async function removeStory(storyId) {
     }
 }
 
-async function updateStory(sawUser) {
+async function updateStory(sawUser, storyId) {
     try {
-        await dbService.updateRecord(instegramStories, sawUser)
+        await dbService.appendToColumn(instegramStories, sawUser, 'sawUsers', storyId)
     } catch (error) {
         logger.error('story.service - cannot update story', err)
         throw new Error('story.service - cannot update story', err)
