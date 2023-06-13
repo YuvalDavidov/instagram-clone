@@ -97,9 +97,17 @@ async function query(model, filterBy, isLessDetails = false, limit = Infinity, o
         if (!filterBy) return await model.findAll()
         // constructing the conditions for the sql 
         const whereCondition = {}
-        // whereCondition[key] = { userId: { [Op.in]: userInfo[key] } }  console.log(filterBy.userInfo.userId)
         if (model === instegramStories) {
-            Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [Op.in]: filterBy.userInfo.userId } } }
+            // dynamic query for stories userIds , storiesIds or specific story._id
+            if (filterBy._id) {
+                return model.findOne({
+                    where: {
+                        _id: filterBy._id
+                    }
+                })
+            }
+            let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
+            Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } }
             )
             return model.findAll({
                 where: {
@@ -116,7 +124,7 @@ async function query(model, filterBy, isLessDetails = false, limit = Infinity, o
 
 
         Object.keys(filterBy).forEach(key => {
-            (Array.isArray(filterBy[key])) ? whereCondition[key] = { [Op.in]: filterBy[key] } : whereCondition[key] = { [Op.eq]: filterBy[key] }
+            whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.eq]: filterBy[key] }
         })
         if (model === instegramUsers) {
             whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }

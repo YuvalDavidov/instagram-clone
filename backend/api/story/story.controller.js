@@ -4,7 +4,7 @@ const storyService = require('./story.service.js')
 async function getStoriesByFollowing(req, res) {
     let { loggedinUser } = req
     try {
-        const stories = await storyService.query(loggedinUser, filterBy = 'byFollowing')
+        const stories = await storyService.query(loggedinUser.following, condition = 'byFollowing')
         console.log(stories);
     } catch (error) {
         logger.error('story controller - cannot get stories' + err)
@@ -15,7 +15,7 @@ async function getStoriesByFollowing(req, res) {
 async function getStoriesByUserId(req, res) {
     let userId = req.params._id
     try {
-        const stories = await storyService.query(userId, filterBy = 'userId')
+        const stories = await storyService.query(userId, condition = 'userId')
         console.log(stories);
     } catch (error) {
         logger.error('story controller - cannot get user stories' + err)
@@ -28,7 +28,7 @@ async function getStoryById(req, res) {
     let { loggedinUser } = req
 
     try {
-        const story = await storyService.query(storyId, filterBy = 'storyId')
+        const story = await storyService.query(storyId, condition = 'storyId')
         if (!story.sawUsers.incluse(loggedinUser._id) && story.userId !== loggedinUser) storyService.updateStory(loggedinUser._id)
         console.log(story);
     } catch (error) {

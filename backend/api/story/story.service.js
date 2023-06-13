@@ -2,16 +2,16 @@ const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const { instegramStories } = require('../../services/models/models')
 
-query({ _id: 'ks', following: ['bla', 'pipi'] }, 'byFollowing')
-
-async function query(entity, filterBy) {
-    if (filterBy === 'userId' || filterBy === 'storyId') filterBy = entity
-    else if (filterBy === 'byFollowing') filterBy = { userInfo: { userId: entity.following } }
+async function query(entity, condition) {
+    let filterBy
+    if (condition === 'userId') filterBy = { userInfo: { [condition]: entity } }
+    else if (condition === 'byFollowing') filterBy = { userInfo: { userId: entity.following } }
+    else filterBy = { _id: entity }
     try {
         let stories = await dbService.query(instegramStories, filterBy)
-        let storiesIds = [...new Set(stories.map(story => { return story.userInfo.userId }))]
-        console.log(storiesIds);
-        return storiesIds
+        if (condition === 'storyId') return stories.dataValues
+        else return [...new Set(stories.map(story => { return condition === 'userId' ? story._id : story.userInfo.userId }))]
+
     } catch (error) {
         logger.error('story.service - cannot get story', error)
         throw new Error('story.service - cannot get story', error)
