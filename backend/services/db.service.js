@@ -35,11 +35,10 @@ async function addRecord(model, data) {
         console.log('data', data);
         const result = await model.create(data)
         console.log('result', result.toJSON());
-        // await Users.sync()
-        // return result.toJSON()
+        await model.sync()
     } catch (error) {
         console.log('error', error);
-        // throw new Error('db.service - failed to add record', error)
+        throw new Error('db.service - failed to add record', error)
     }
 
 }

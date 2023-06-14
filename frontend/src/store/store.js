@@ -10,7 +10,7 @@ export const myStore = createStore({
     state() {
         return {
             user: userService.getLoggedinUser(),
-            windowMode: 'isLabtopMode',
+            windowMode: 'isLaptopMode',
             isDarkMode: false
         }
     },
