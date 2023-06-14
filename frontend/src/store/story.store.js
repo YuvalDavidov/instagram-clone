@@ -36,6 +36,7 @@ export const storyStore = {
         async loadStories({ commit }) {
             try {
                 const stories = await storiesService.getStoriesByFollowings()
+                console.log(stories);
                 commit({ type: 'setStories', stories })
             } catch (error) {
                 throw new Error('coudl\'nt get stories', error)

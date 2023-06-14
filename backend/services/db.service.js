@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize');
-const { instegramUsers, instegramPosts } = require('./models/models');
+const { instegramUsers, instegramPosts, instegramStories } = require('./models/models');
 
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
@@ -24,6 +24,7 @@ sequelize
     .sync()
     .then(() => {
         console.log('Models synchronized successfully');
+
     })
     .catch((err) => {
         console.error('Error synchronizing models:', err);
@@ -36,6 +37,7 @@ async function addRecord(model, data) {
         const result = await model.create(data)
         console.log('result', result.toJSON());
         await model.sync()
+        // return result.toJSON()
     } catch (error) {
         console.log('error', error);
         throw new Error('db.service - failed to add record', error)
@@ -72,6 +74,7 @@ async function appendToColumn(model, data, columnName, entityId) {
             },
             { where: { _id: entityId } }
         )
+        await model.sync()
     } catch (error) {
         throw new Error('db.service - failed to update/add to column', error)
     }
@@ -80,10 +83,11 @@ async function removeFromColumn(model, columnName, itemId, entityId) {
     try {
         await model.update(
             {
-                [columnName]: sequelize.fn('array_remove', sequelize.col(columnName), JSON.stringify({ id: itemId }))
+                [columnName]: sequelize.fn('array_remove', sequelize.col(columnName), itemId)
             },
             { where: { _id: entityId } }
         )
+        await model.sync()
     } catch (error) {
         throw new Error('db.service - remove from column', error)
     }
@@ -95,13 +99,40 @@ async function query(model, filterBy, isLessDetails = false, limit = Infinity, o
         if (!filterBy) return await model.findAll()
         // constructing the conditions for the sql 
         const whereCondition = {}
+        if (model === instegramStories) {
+            // dynamic query for stories userIds , storiesIds or specific story._id
+            if (filterBy._id) {
+                return model.findOne({
+                    where: {
+                        _id: filterBy._id
+                    }
+                })
+            }
+            let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
+            Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } }
+            )
+            return model.findAll({
+                where: {
+                    [Op.and]: [{
+                        ...whereCondition,
+                        createdAt: {
+                            [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
+                        }
+                    }]
+                },
+
+            })
+        }
+
+
         Object.keys(filterBy).forEach(key => {
-            (Array.isArray(filterBy[key])) ? whereCondition[key] = { [Op.in]: filterBy[key] } : whereCondition[key] = { [Op.eq]: filterBy[key] }
+            whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.eq]: filterBy[key] }
         })
         if (model === instegramUsers) {
             whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
             console.log('users - verfied')
         }
+
 
         if (isLessDetails) return await model.findAll({
             attributes: ['username', '_id', 'imgUrl', 'fullname'],

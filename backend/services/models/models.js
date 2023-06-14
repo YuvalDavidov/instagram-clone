@@ -124,6 +124,39 @@ const instegramPosts = sequelize.define('instegramPosts', {
     }
 );
 
+const instegramStories = sequelize.define('instegramStories', {
+    _id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    imgUrl: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: '',
+    },
+    likes: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        defaultValue: [],
+    },
+    sawUsers: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        defaultValue: [],
+    },
+    userInfo: {
+        type: DataTypes.JSONB,
+        allowNull: false,
+        defaultValue: [],
+    }
+},
+    {
+        timestamps: true, // Enable timestamps
+        createdAt: 'createdAt'
+    }
+)
 
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
@@ -136,5 +169,5 @@ sequelize
         console.error('Error creating user table:', err);
     });
 
-module.exports = { instegramUsers, instegramPosts }
+module.exports = { instegramUsers, instegramPosts, instegramStories }
 
