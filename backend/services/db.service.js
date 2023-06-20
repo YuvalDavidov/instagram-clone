@@ -35,7 +35,7 @@ async function addRecord(model, data) {
     try {
         const result = await model.create(data)
         await model.sync()
-        return result.toJSON()
+        return result
     } catch (error) {
         console.log('error', error);
         throw new Error('db.service - failed to add record', error)
@@ -93,22 +93,38 @@ async function removeFromColumn(model, columnName, itemId, entityId) {
     }
 }
 
-async function query(model, filterBy, isLessDetails = false, limit = 1000, order = [['createdAt', 'ASC']]) {
+async function queryOne(model, filterBy) {
+    const whereCondition = {}
+    Object.keys(filterBy).forEach(key => {
+        whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.eq]: filterBy[key] }
+    })
+    try {
+        const entity = await model.findOne({
+            where: {
+                [Op.or]: [whereCondition]
+            }
+        })
+
+        return entity.dataValues
+    } catch (error) {
+        console.log(error)
+        throw new Error('failed to get record', error)
+    }
+}
+
+
+async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
     // filterBy needs to be an Object
     let result
+    const whereCondition = {}
+
     try {
         if (!filterBy) result = await model.findAll()
         // constructing the conditions for the sql 
-        const whereCondition = {}
         if (model === instegramStories) {
             // dynamic query for stories userIds , storiesIds or specific story._id
             if (filterBy._id) {
-                result = await model.findOne({
-                    where: {
-                        _id: filterBy._id
-                    }
-                })
-                return result.get({ plain: true })
+                return queryOne(instegramStories, filterBy)
             } else {
                 let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
                 Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } }
@@ -131,32 +147,24 @@ async function query(model, filterBy, isLessDetails = false, limit = 1000, order
         Object.keys(filterBy).forEach(key => {
             whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.eq]: filterBy[key] }
         })
-        if (model === instegramUsers) {
-            if (filterBy.fullname) whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
+        if (filterBy.fullname && model === instegramUsers) whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
 
-            if (isLessDetails) result = await model.findAll({
-                attributes: ['username', '_id', 'imgUrl', 'fullname'],
-                where: {
-                    [Op.or]: [whereCondition]
-                },
-                order,
-                limit
-            })
-        }
-
-
-
-        // else {
-        result = await model.findAll({
+        if (isLessDetails) result = await model.findAll({
+            attributes: ['username', '_id', 'imgUrl', 'fullname'],
             where: {
                 [Op.or]: [whereCondition]
             },
             order,
-            limit
+            numOfDesiredResults
         })
-        // }
-
-        return result.map((instance) => instance.get({ plain: true }))
+        else result = await model.findAll({
+            where: {
+                [Op.or]: [whereCondition]
+            },
+            order,
+            numOfDesiredResults
+        })
+        return result.map((instance) => instance.dataValues)
     } catch (error) {
         console.log(error)
         throw new Error('failed to get record', error)
@@ -168,6 +176,7 @@ module.exports = {
     removeRecord,
     updateRecord,
     query,
+    queryOne,
     appendToColumn,
     removeFromColumn
 }

@@ -21,7 +21,7 @@ async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
             filterBy = { userId: user }
             numOfPostsToQuerry = 15
         }
-        let posts = await dbService.query(instegramPosts, filterBy, false, numOfPostsToQuerry, [['createdAt', 'DESC']])
+        let posts = await dbService.query(instegramPosts, filterBy, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
         return posts
     } catch (error) {
         logger.error('post.service - cannot find posts', err)
@@ -32,7 +32,7 @@ async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
 
 async function getPostById(postId) {
     try {
-        return await dbService.query(instegramPosts, { _id: postId })[0]
+        return await dbService.queryOne(instegramPosts, { _id: postId })
     } catch (error) {
         logger.error(`post.service - cannot get post with id ${postId}`, err)
         throw new Error(`post.service - cannot get post with id ${postId}`, err)

@@ -17,7 +17,7 @@ module.exports = {
 
 async function query(filterBy = { username: '' }, isLessDetails = false) {
     try {
-        let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, isLessDetails) : await dbService.query(instegramUsers, filterBy)
+        let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, true) : await dbService.query(instegramUsers, filterBy)
         let filterdUsers = model.map(user => {
             delete user.password
             return user
@@ -31,7 +31,7 @@ async function query(filterBy = { username: '' }, isLessDetails = false) {
 
 async function getById(userId) {
     try {
-        let user = await dbService.query(instegramUsers, { _id: userId })
+        let user = await dbService.queryOne(instegramUsers, { _id: userId })
         delete user.password
         return user
     }
@@ -42,8 +42,8 @@ async function getById(userId) {
 }
 async function getByUsername(username) {
     try {
-        let user = await dbService.query(instegramUsers, { username })
-        return user[0]
+        let user = await dbService.queryOne(instegramUsers, { username })
+        return user
     } catch (err) {
         logger.error(`user.service - while finding user by username: ${username}`, err)
         throw err
