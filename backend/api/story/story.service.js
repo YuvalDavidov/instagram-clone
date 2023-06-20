@@ -2,6 +2,7 @@ const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const { instegramStories } = require('../../services/models/models')
 
+
 async function query(entity, condition) {
     let filterBy
     if (condition === 'userId') filterBy = { userInfo: { [condition]: entity } }
@@ -9,7 +10,10 @@ async function query(entity, condition) {
     else filterBy = { _id: entity }
     try {
         let stories = await dbService.query(instegramStories, filterBy)
-        if (condition === 'storyId') return stories.dataValues
+        if (condition === 'storyId') {
+            console.log('stories--->', stories)
+            return stories
+        }
         else return [...new Set(stories.map(story => { return condition === 'userId' ? story._id : story.userInfo.userId }))]
 
     } catch (error) {

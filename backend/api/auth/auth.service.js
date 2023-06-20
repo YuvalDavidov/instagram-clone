@@ -30,21 +30,18 @@ async function login(username, password) {
 }
 
 async function signup({ username, password, fullname, args }) {
-    console.log('here2');
+    let userExist
+    console.log('enter the auth service');
 
     logger.debug(`auth.service - signup with username: ${username}, fullname: ${fullname}`)
     if (!username || !password || !fullname) return new Error('Missing required signup information')
     try {
-        let userExist
-        try {
-            userExist = await userService.getByUsername(username)
-        } catch (error) {
-            userExist = false
-        }
-        if (userExist) return new Error('Username already taken')
+        userExist = await userService.getByUsername(username)
+        if (userExist) throw new Error('Username already taken')
         const hash = await bcrypt.hash(password, saltRounds)
         return await userService.add({ username, password: hash, fullname, ...args })
     } catch (error) {
+        console.log(error)
         throw new Error(`coudlnt sign-up`, error)
     }
 

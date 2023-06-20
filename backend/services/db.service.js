@@ -33,11 +33,9 @@ sequelize
 
 async function addRecord(model, data) {
     try {
-        console.log('data', data);
         const result = await model.create(data)
-        console.log('result', result.toJSON());
         await model.sync()
-        // return result.toJSON()
+        return result.toJSON()
     } catch (error) {
         console.log('error', error);
         throw new Error('db.service - failed to add record', error)
@@ -95,57 +93,49 @@ async function removeFromColumn(model, columnName, itemId, entityId) {
     }
 }
 
-async function query(model, filterBy, isLessDetails = false, limit = Infinity, order = ['createdAt', 'ASC']) {
+async function query(model, filterBy, isLessDetails = false, limit = 1000, order = [['createdAt', 'ASC']]) {
     // filterBy needs to be an Object
+    let result
     try {
-        if (!filterBy) return await model.findAll()
+        if (!filterBy) result = await model.findAll()
         // constructing the conditions for the sql 
         const whereCondition = {}
         if (model === instegramStories) {
             // dynamic query for stories userIds , storiesIds or specific story._id
             if (filterBy._id) {
-                return model.findOne({
+                result = await model.findOne({
                     where: {
                         _id: filterBy._id
                     }
                 })
+                return result.get({ plain: true })
+            } else {
+                let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
+                Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } }
+                )
+                return result = await model.findAll({
+                    where: {
+                        [Op.and]: [{
+                            ...whereCondition,
+                            createdAt: {
+                                [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
+                            }
+                        }]
+                    },
+
+                })
             }
-            let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
-            Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } }
-            )
-            return model.findAll({
-                where: {
-                    [Op.and]: [{
-                        ...whereCondition,
-                        createdAt: {
-                            [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
-                        }
-                    }]
-                },
 
-            })
         }
-
 
         Object.keys(filterBy).forEach(key => {
             whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.eq]: filterBy[key] }
         })
         if (model === instegramUsers) {
-            whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
-            console.log('users - verfied')
-        }
+            if (filterBy.fullname) whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
 
-
-        if (isLessDetails) return await model.findAll({
-            attributes: ['username', '_id', 'imgUrl', 'fullname'],
-            where: {
-                [Op.or]: [whereCondition]
-            },
-            order,
-            limit
-        })
-        else {
-            return await model.findAll({
+            if (isLessDetails) result = await model.findAll({
+                attributes: ['username', '_id', 'imgUrl', 'fullname'],
                 where: {
                     [Op.or]: [whereCondition]
                 },
@@ -153,7 +143,22 @@ async function query(model, filterBy, isLessDetails = false, limit = Infinity, o
                 limit
             })
         }
+
+
+
+        // else {
+        result = await model.findAll({
+            where: {
+                [Op.or]: [whereCondition]
+            },
+            order,
+            limit
+        })
+        // }
+
+        return result.map((instance) => instance.get({ plain: true }))
     } catch (error) {
+        console.log(error)
         throw new Error('failed to get record', error)
     }
 

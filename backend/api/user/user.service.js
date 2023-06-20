@@ -43,8 +43,7 @@ async function getById(userId) {
 async function getByUsername(username) {
     try {
         let user = await dbService.query(instegramUsers, { username })
-        delete user.password
-        return user
+        return user[0]
     } catch (err) {
         logger.error(`user.service - while finding user by username: ${username}`, err)
         throw err

@@ -116,7 +116,7 @@ async function signup(userCred) {
         saveLocalUser(user)
         return user
     } catch (err) {
-        throw new Error(err, 'coudnt post new user')
+        throw new Error('coudnt post new user', err)
     }
 
 }
