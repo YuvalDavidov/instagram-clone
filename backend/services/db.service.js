@@ -40,7 +40,7 @@ async function addRecord(model, data) {
         // return result.toJSON()
     } catch (error) {
         console.log('error', error);
-        // throw new Error('db.service - failed to add record', error)
+        throw new Error('db.service - failed to add record', error)
     }
 
 }

@@ -18,7 +18,7 @@ async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
         let filterBy
         if (!isUserPostsOnly) filterBy = { userId: user.following, username: user.username }
         else {
-            filterBy = { userId: user._id }
+            filterBy = { userId: user }
             numOfPostsToQuerry = 15
         }
         let posts = await dbService.query(instegramPosts, filterBy, false, numOfPostsToQuerry, ['createdAt', 'DESC'])

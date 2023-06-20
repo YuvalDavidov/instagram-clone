@@ -174,7 +174,7 @@ function getCommentTime(commentTimeStamp) {
 }
 
 async function getUserPostsById(userId) {
-    // return await httpService.get(POST_URL, {user, numOfPostsToQuerry, isUserPostsOnly: true})
+    // return await httpService.get(POST_URL, {user: userId, numOfPostsToQuerry, isUserPostsOnly: true})
     const posts = await storageService.query(POST_KEY)
     const userPosts = posts.filter(post => post.userId === userId)
     return userPosts
