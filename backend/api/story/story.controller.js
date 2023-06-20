@@ -2,13 +2,14 @@ const logger = require('../../services/logger.service')
 const storyService = require('./story.service.js')
 
 async function getStoriesByFollowing(req, res) {
+    console.log('hi');
     let { loggedinUser } = req
     try {
         const stories = await storyService.query(loggedinUser.following, condition = 'byFollowing')
-        console.log(stories);
+        res.json(stories)
     } catch (error) {
-        logger.error('story controller - cannot get stories' + err)
-        res.status(401).send({ err: `Failed to get stories ${err}` })
+        logger.error('story controller - cannot get stories' + error)
+        res.status(401).send({ error: `Failed to get stories ${error}` })
     }
 }
 
@@ -16,10 +17,10 @@ async function getStoriesByUserId(req, res) {
     let userId = req.params._id
     try {
         const stories = await storyService.query(userId, condition = 'userId')
-        console.log(stories);
+        res.json(stories)
     } catch (error) {
-        logger.error('story controller - cannot get user stories' + err)
-        res.status(401).send({ err: `Failed to get user stories ${err}` })
+        logger.error('story controller - cannot get user stories' + error)
+        res.status(401).send({ error: `Failed to get user stories ${error}` })
     }
 }
 
@@ -30,10 +31,10 @@ async function getStoryById(req, res) {
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
         if (!story.sawUsers.incluse(loggedinUser._id) && story.userId !== loggedinUser) storyService.updateStory(loggedinUser._id, storyId)
-        console.log(story);
+        res.json(story)
     } catch (error) {
-        logger.error('story controller - cannot get story' + err)
-        res.status(401).send({ err: `Failed to get story ${err}` })
+        logger.error('story controller - cannot get story' + error)
+        res.status(401).send({ error: `Failed to get story ${error}` })
     }
 }
 
@@ -49,8 +50,8 @@ async function addStory(req, res) {
         const addedStory = await storyService.addStory(newStory)
         res.json(addedStory)
     } catch (error) {
-        logger.error('story controller - cannot add story' + err)
-        res.status(401).send({ err: `Failed to add story ${err}` })
+        logger.error('story controller - cannot add story' + error)
+        res.status(401).send({ error: `Failed to add story ${error}` })
     }
 }
 
@@ -58,8 +59,19 @@ async function removeStoy(req, res) {
     try {
         await storyService.removeStory(req.params.storyId)
     } catch (error) {
-        logger.error('story controller - cannot remove story' + err)
-        res.status(401).send({ err: `Failed to remove story ${err}` })
+        logger.error('story controller - cannot remove story' + error)
+        res.status(401).send({ error: `Failed to remove story ${error}` })
+    }
+}
+
+async function updateStory(req, res) {
+    const { storyId } = req.body
+    let { loggedinUser } = req
+    try {
+        await storyService.updateStory(loggedinUser, storyId)
+    } catch (error) {
+        logger.error('story controller - cannot update story' + error)
+        res.status(401).send({ error: `Failed to update story ${error}` })
     }
 }
 
@@ -68,5 +80,6 @@ module.exports = {
     getStoriesByUserId,
     getStoryById,
     addStory,
-    removeStoy
+    removeStoy,
+    updateStory
 }

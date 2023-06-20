@@ -7,4 +7,5 @@ const router = express.Router()
 router.put('/add/:_id', addFollow)
 router.put('/remove/:_id', removeFollow)
 
-module.exports(router)
+module.exports = router
+

@@ -36,7 +36,6 @@ export const storyStore = {
         async loadStories({ commit }) {
             try {
                 const stories = await storiesService.getStoriesByFollowings()
-                console.log(stories);
                 commit({ type: 'setStories', stories })
             } catch (error) {
                 throw new Error('coudl\'nt get stories', error)
@@ -64,7 +63,7 @@ export const storyStore = {
             try {
                 if (!this.state.storyStore.story.sawUsers.includes(this.state.user._id) && this.state.storyStore.story.userInfo.userId !== this.state.user._id) {
                     await commit({ type: 'setUserSawStory', userId: this.state.user._id })
-                    storiesService.updateStory(this.state.storyStore.story)
+                    storiesService.updateStory(this.state.storyStore.story._id)
                 }
             } catch (error) {
                 throw new Error('coudl\'nt update sawUsers story', error)

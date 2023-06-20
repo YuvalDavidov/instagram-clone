@@ -1,8 +1,6 @@
 const logger = require('../../services/logger.service')
 const followService = require('./follow.service')
 const bcrypt = require('bcrypt')
-const cryptr = new Cryptr(process.env.SECRET1 || 'Secret-Puk-1234')
-
 
 async function addFollow(req, res) {
     const { _id } = req.params

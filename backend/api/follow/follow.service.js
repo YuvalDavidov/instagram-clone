@@ -19,8 +19,6 @@ async function appendToColumn(itemId, logdinUserId) {
     }
 }
 
-removeFromColumn('1', '2')
-
 async function removeFromColumn(itemId, logdinUserId) {
     try {
         await dbService.removeFromColumn(instegramUsers, 'followers', logdinUserId, itemId)

@@ -103,15 +103,15 @@ async function signup(userCred) {
         ...userCred,
         followers: [],
         following: [],
-        summery: '',
-        highelights: [],
+        bio: '',
+        highlights: [],
         stories: [],
-        darkMode: true
+        // darkMode: true
     })
 
     try {
-        const user = await storageService.post(USER_KEY, newUser)
-        // const user = await httpService.post('auth/signup', userCred)
+        // const user = await storageService.post(USER_KEY, newUser)
+        const user = await httpService.post('auth/signup', newUser)
         // socketService.login(user._id)
         saveLocalUser(user)
         return user

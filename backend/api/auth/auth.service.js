@@ -24,22 +24,24 @@ async function login(username, password) {
         return user
     } catch (error) {
         logger.error(`auth.service - Invalid username or password`)
-        throw new Error('auth.service - Invalid username or password', err)
+        throw new Error('auth.service - Invalid username or password', error)
     }
 
 }
 
 async function signup({ username, password, fullname, args }) {
+    console.log('here2');
+
     logger.debug(`auth.service - signup with username: ${username}, fullname: ${fullname}`)
     if (!username || !password || !fullname) return new Error('Missing required signup information')
     try {
         let userExist
         try {
             userExist = await userService.getByUsername(username)
-            return new Error('Username already taken')
         } catch (error) {
             userExist = false
         }
+        if (userExist) return new Error('Username already taken')
         const hash = await bcrypt.hash(password, saltRounds)
         return await userService.add({ username, password: hash, fullname, ...args })
     } catch (error) {
@@ -62,7 +64,7 @@ function validateToken(loginToken) {
         return loggedinUser
 
     } catch (err) {
-        throw new Error('Invalid login token')
+        throw new Error('Invalid login token', err)
     }
 }
 
