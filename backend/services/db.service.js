@@ -83,6 +83,8 @@ async function removeFromColumn(model, columnName, itemId, entityId) {
     try {
         await model.update(
             {
+                // if the column is an array of objects than the itemId should be pass on as an object with the id as a key and itemId as the value
+                // otherwise it should be pass on only as a string
                 [columnName]: sequelize.fn('array_remove', sequelize.col(columnName), itemId)
             },
             { where: { _id: entityId } }

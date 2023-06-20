@@ -78,7 +78,7 @@ async function appendToColumn(data, columnName, postId) {
 
 async function removeFromColumn(columnName, itemId, postId) {
     try {
-        await dbService.removeFromColumn(instegramPosts, columnName, itemId, postId)
+        await dbService.removeFromColumn(instegramPosts, columnName, itemId, { id: postId })
     } catch (error) {
         logger.error('post.service - cannot remove item from array', err)
         throw new Error('post.service - cannot remove item from array', err)
