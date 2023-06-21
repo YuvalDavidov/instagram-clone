@@ -47,6 +47,7 @@
               placeholder="Username"
               name="username"
             />
+            <span v-if="user === false">username is allready taken</span>
             <input
               v-if="isSignUp"
               v-model="newUser.password"
@@ -97,7 +98,9 @@ export default {
       newUser: userService.getEmptyUser(),
     };
   },
-  async created() {},
+  async created() {
+    console.log(this.user);
+  },
   methods: {
     async onLogin() {
       this.$store.dispatch({
@@ -106,7 +109,6 @@ export default {
       });
     },
     async onSignUp() {
-      console.log("hi");
       this.$store.dispatch({ type: "signUp", user: this.newUser });
     },
     toSignUp() {
@@ -116,7 +118,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.getters.User;
+      return this.$store.getters.GetUser;
     },
     isDisabled() {
       if (

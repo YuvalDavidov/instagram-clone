@@ -11,7 +11,6 @@ async function query(entity, condition) {
     try {
         let stories = await dbService.query(instegramStories, filterBy)
         if (condition === 'storyId') {
-            console.log('stories--->', stories)
             return stories
         }
         else return [...new Set(stories.map(story => { return condition === 'userId' ? story._id : story.userInfo.userId }))]

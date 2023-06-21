@@ -104,8 +104,7 @@ async function queryOne(model, filterBy) {
                 [Op.or]: [whereCondition]
             }
         })
-
-        return entity.dataValues
+        return entity ? entity.dataValues : entity
     } catch (error) {
         console.log(error)
         throw new Error('failed to get record', error)

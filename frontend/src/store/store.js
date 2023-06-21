@@ -32,7 +32,7 @@ export const myStore = createStore({
     mutations: {
         setUser(state, { user }) {
             state.user = user
-            state.isDarkMode = user.darkMode
+            if (user) state.isDarkMode = user.darkMode
         },
         setWindowMode(state, { windowMode }) {
             state.windowMode = windowMode
@@ -52,7 +52,9 @@ export const myStore = createStore({
                 await userService.signup(user)
                 commit({ type: 'setUser', user })
             } catch (err) {
+                commit({ type: 'setUser', user: false })
                 console.error(err, 'couldnt signup')
+
             }
         },
         setWindowMode({ commit }, { windowMode }) {
