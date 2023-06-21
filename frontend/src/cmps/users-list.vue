@@ -50,7 +50,7 @@ export default {
         type: "addSearchedUser",
         user,
       });
-      this.$router.push(`/profile/${user.userId}`);
+      this.$router.push(`/profile/${user._id}`);
       if (window.innerWidth < 770) this.$emit("onCloseMobileSearch");
       else this.$emit("onToggleSearch");
     },

@@ -44,8 +44,8 @@ async function getStoriesByFollowings() {
 
 async function getStoriesIdByUserId(userId) {
     try {
-        const queryParams = `?userId/${userId}`
-        const storeis = await httpService.get(`${SROTY_URL}/${queryParams}`)
+        const queryParams = `userId/${userId}`
+        const storeis = await httpService.get(SROTY_URL + queryParams)
         return storeis
         // let storeis = await storageService.query(STORIES_KEY)
         // storeis = _filetrOver24H(storeis)

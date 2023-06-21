@@ -4,7 +4,7 @@ const logger = require('../services/logger.service')
 const asyncLocalStorage = require('../services/als.service')
 
 function requireAuth(req, res, next) {
-  const { loggedinUser } = asyncLocalStorage.getStore()
+  // const { loggedinUser } = asyncLocalStorage.getStore()
 
   // if (config.isGuestMode && !loggedinUser) {
   //   req.loggedinUser = { _id: '', fullname: 'Guest' }

@@ -1,9 +1,11 @@
 const logger = require('../../services/logger.service')
 const storyService = require('./story.service.js')
+const authService = require('../auth/auth.service')
 
 async function getStoriesByFollowing(req, res) {
-    console.log('hi');
-    let { loggedinUser } = req
+    console.log('here3');
+
+    const loggedinUser = authService.getLoggedinUser(req)
     try {
         const stories = await storyService.query(loggedinUser.following, condition = 'byFollowing')
         res.json(stories)
@@ -14,6 +16,7 @@ async function getStoriesByFollowing(req, res) {
 }
 
 async function getStoriesByUserId(req, res) {
+    console.log('here');
     let userId = req.params._id
     try {
         const stories = await storyService.query(userId, condition = 'userId')
@@ -26,8 +29,9 @@ async function getStoriesByUserId(req, res) {
 
 async function getStoryById(req, res) {
     let storyId = req.params._id
-    let { loggedinUser } = req
+    const loggedinUser = authService.getLoggedinUser(req)
 
+    console.log('here2');
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
         if (!story.sawUsers.incluse(loggedinUser._id) && story.userId !== loggedinUser) storyService.updateStory(loggedinUser._id, storyId)

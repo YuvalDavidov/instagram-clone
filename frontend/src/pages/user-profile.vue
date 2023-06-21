@@ -116,7 +116,10 @@ export default {
     };
   },
   async created() {
-    this.user = this.$store.getters.GetUser;
+    this.user =
+      this.$route.params._id === this.$store.getters.GetUser._id
+        ? this.$store.getters.GetUser
+        : await userService.getUserById(this.$route.params._id);
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );

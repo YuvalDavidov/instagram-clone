@@ -60,12 +60,19 @@ async function updatePassword(userId, currPassword, newPassword) {
 }
 
 function getLoggedinUser() {
-    console.log(JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)));
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
-function getUserById(userId) {
-    return storageService.get(USER_KEY, userId)
+async function getUserById(userId) {
+    // return storageService.get(USER_KEY, userId)
+    try {
+        const user = await httpService.get(USER_URL + userId)
+        return user
+    } catch (error) {
+        throw new Error('coudnlt get this user', error)
+
+    }
+
 }
 
 function checkIfOwnByUser(id) {

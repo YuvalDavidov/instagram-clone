@@ -1,8 +1,7 @@
 const userService = require('./user.service')
 // const socketService = require('../../services/socket.service')
 const logger = require('../../services/logger.service')
-const Cryptr = require('cryptr')
-const cryptr = new Cryptr(process.env.SECRET1 || 'Secret-Puk-1234')
+const authService = require('../auth/auth.service')
 
 async function getUser(req, res) {
     try {
@@ -16,8 +15,7 @@ async function getUser(req, res) {
 
 async function getUsers(req, res) {
     try {
-        const loginToken = req.cookies.loginToken
-        const loggedinUser = JSON.parse(cryptr.decrypt(loginToken))
+        const loggedinUser = authService.getLoggedinUser(req)
         const filterBy = {
             username: req.query.filterBy || '',
             fullname: req.query.filterBy || ''

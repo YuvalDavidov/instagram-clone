@@ -11,7 +11,8 @@ module.exports = {
     getLoginToken,
     validateToken,
     validatePassword,
-    encrypt
+    encrypt,
+    getLoggedinUser
 }
 
 async function login(username, password) {
@@ -45,6 +46,11 @@ async function signup({ username, password, fullname, ...args }) {
 
 }
 
+function getLoggedinUser(req) {
+    const loginToken = req.cookies.loginToken
+    const loggedinUser = JSON.parse(cryptr.decrypt(loginToken))
+    return loggedinUser
+}
 
 function getLoginToken(user) {
     const userInfo = { _id: user._id, fullname: user.fullname, username: user.username, urlImg: user.urlImg }
