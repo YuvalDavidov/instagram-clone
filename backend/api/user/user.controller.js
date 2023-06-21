@@ -1,6 +1,8 @@
 const userService = require('./user.service')
 // const socketService = require('../../services/socket.service')
 const logger = require('../../services/logger.service')
+const Cryptr = require('cryptr')
+const cryptr = new Cryptr(process.env.SECRET1 || 'Secret-Puk-1234')
 
 async function getUser(req, res) {
     try {
@@ -14,14 +16,14 @@ async function getUser(req, res) {
 
 async function getUsers(req, res) {
     try {
-        console.log('here');
-        // console.log(req.loginToken);
+        const loginToken = req.cookies.loginToken
+        const loggedinUser = JSON.parse(cryptr.decrypt(loginToken))
         const filterBy = {
             username: req.query.filterBy || '',
             fullname: req.query.filterBy || ''
         }
         const isLessDetails = Boolean(req.query.isLessDetails)
-        const users = (req.query?.isLessDetails) ? await userService.query(filterBy, isLessDetails) : await userService.query(filterBy)
+        const users = (req.query?.isLessDetails) ? await userService.query(filterBy, isLessDetails, loggedinUser) : await userService.query(filterBy)
         res.send(users)
     } catch (err) {
         logger.error('Failed to get users', err)

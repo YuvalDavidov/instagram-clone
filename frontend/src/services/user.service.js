@@ -17,7 +17,7 @@ export const userService = {
 const USER_URL = 'user/'
 const AUTH_URL = 'auth/'
 const USER_KEY = 'UserDB'
-const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
+const STORAGE_KEY_LOGGEDIN_USER = 'loginToken'
 
 async function query(filterBy) {
     try {
@@ -60,6 +60,7 @@ async function updatePassword(userId, currPassword, newPassword) {
 }
 
 function getLoggedinUser() {
+    console.log(JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)));
     return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER))
 }
 
@@ -81,7 +82,7 @@ function logout() {
 async function login(userCred) {
     try {
         const user = await httpService.post(AUTH_URL + 'login', userCred)
-        return user
+        return saveLocalUser(user)
         // const users = await storageService.query(USER_KEY)
         // const user = users.find(user => user.username === userCred.username)
         // if (user) {
@@ -116,8 +117,7 @@ async function signup(userCred) {
         // const user = await storageService.post(USER_KEY, newUser)
         const user = await httpService.post(AUTH_URL + 'signup', newUser)
         // socketService.login(user._id)
-        saveLocalUser(user)
-        return user
+        return saveLocalUser(user)
     } catch (err) {
         throw new Error('coudnt post new user', err)
     }

@@ -15,14 +15,13 @@ module.exports = {
     encryptPassword
 }
 
-async function query(filterBy = { username: '' }, isLessDetails = false) {
+async function query(filterBy = { username: '' }, isLessDetails = false, loggedinUser) {
     try {
         let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, 10, isLessDetails) : await dbService.query(instegramUsers, filterBy)
         let filterdUsers = model.map(user => {
             delete user.password
             return user
-        })
-        // console.log(filterdUsers);
+        }).filter(u => u._id.toString() !== loggedinUser._id)
         return filterdUsers
     } catch (err) {
         logger.error('user.service - cannot find users', err)
