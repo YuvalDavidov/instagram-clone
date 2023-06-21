@@ -14,11 +14,14 @@ async function getUser(req, res) {
 
 async function getUsers(req, res) {
     try {
+        console.log('here');
+        // console.log(req.loginToken);
         const filterBy = {
-            username: req.query?.username || '',
-            fullname: req.query?.fullname || ''
+            username: req.query.filterBy || '',
+            fullname: req.query.filterBy || ''
         }
-        const users = (req.query?.isLessDetails) ? await userService.query(filterBy, req.query.isLessDetails) : await userService.query(filterBy)
+        const isLessDetails = Boolean(req.query.isLessDetails)
+        const users = (req.query?.isLessDetails) ? await userService.query(filterBy, isLessDetails) : await userService.query(filterBy)
         res.send(users)
     } catch (err) {
         logger.error('Failed to get users', err)

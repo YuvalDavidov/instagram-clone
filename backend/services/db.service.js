@@ -105,6 +105,7 @@ async function queryOne(model, filterBy) {
             }
         })
         return entity ? entity.dataValues : entity
+
     } catch (error) {
         console.log(error)
         throw new Error('failed to get record', error)
@@ -115,7 +116,7 @@ async function queryOne(model, filterBy) {
 async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
     // filterBy needs to be an Object
     let result
-    const whereCondition = {}
+    let whereCondition = {}
 
     try {
         if (!filterBy) result = await model.findAll()
@@ -142,23 +143,36 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
             }
 
         }
-
         Object.keys(filterBy).forEach(key => {
-            whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.eq]: filterBy[key] }
+            whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.like]: `%${filterBy[key]}%` }
         })
-        if (filterBy.fullname && model === instegramUsers) whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
 
-        if (isLessDetails) result = await model.findAll({
-            attributes: ['username', '_id', 'imgUrl', 'fullname'],
+        if (isLessDetails) {
+            whereCondition = []
+            Object.keys(filterBy).forEach(key => {
+                whereCondition.push({ [key]: { [Op.like]: `%${filterBy[key]}%` } })
+            })
+            result = await model.findAll({
+                attributes: ['username', '_id', 'imgUrl', 'fullname'],
+                where: {
+                    [Op.or]: whereCondition
+                },
+                order,
+                numOfDesiredResults
+            })
+        } else if (filterBy.fullname && model === instegramUsers) {
+
+            whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
+            result = await model.findAll({
+                where: {
+                    [Op.or]: [...whereCondition]
+                },
+                order,
+                numOfDesiredResults
+            })
+        } else result = await model.findAll({
             where: {
-                [Op.or]: [whereCondition]
-            },
-            order,
-            numOfDesiredResults
-        })
-        else result = await model.findAll({
-            where: {
-                [Op.or]: [whereCondition]
+                [Op.or]: [...whereCondition]
             },
             order,
             numOfDesiredResults

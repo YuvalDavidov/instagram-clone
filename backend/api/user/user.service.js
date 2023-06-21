@@ -17,11 +17,12 @@ module.exports = {
 
 async function query(filterBy = { username: '' }, isLessDetails = false) {
     try {
-        let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, true) : await dbService.query(instegramUsers, filterBy)
+        let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, 10, isLessDetails) : await dbService.query(instegramUsers, filterBy)
         let filterdUsers = model.map(user => {
             delete user.password
             return user
         })
+        // console.log(filterdUsers);
         return filterdUsers
     } catch (err) {
         logger.error('user.service - cannot find users', err)

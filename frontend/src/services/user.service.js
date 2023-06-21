@@ -15,26 +15,27 @@ export const userService = {
 }
 
 const USER_URL = 'user/'
+const AUTH_URL = 'auth/'
 const USER_KEY = 'UserDB'
 const STORAGE_KEY_LOGGEDIN_USER = 'UserS'
 
 async function query(filterBy) {
     try {
-        const loggedinUserId = getLoggedinUser()._id
-        // const queryParams = `?username=${filterBy.username}&fullname=${filterBy.fullname}?isLessDetails=${true}`
-        // let users = await httpService.get(USER_URL+ queryParams)
-        let users = await storageService.query(USER_KEY)
-        users = users.map(user => {
-            return {
-                username: user.username,
-                userId: user._id,
-                imgUrl: user.imgUrl,
-                fullname: user.fullname
-            }
-        })
-        users = users.filter(user => user.userId !== loggedinUserId && (user.username.includes(filterBy) || user.fullname.includes(filterBy)))
-        // console.log(users)
-        users = users.filter(user => user.username.includes(filterBy))
+        const queryParams = `?filterBy=${filterBy}&isLessDetails=${true}`
+        const users = await httpService.get(USER_URL + queryParams)
+        return users
+        // let users = await storageService.query(USER_KEY)
+        // users = users.map(user => {
+        //     return {
+        //         username: user.username,
+        //         userId: user._id,
+        //         imgUrl: user.imgUrl,
+        //         fullname: user.fullname
+        //     }
+        // })
+        // users = users.filter(user => user.userId !== loggedinUserId && (user.username.includes(filterBy) || user.fullname.includes(filterBy)))
+        // // console.log(users)
+        // users = users.filter(user => user.username.includes(filterBy))
         // console.log(users)
         // users = users.splice(0, 5)
         return users
@@ -79,13 +80,15 @@ function logout() {
 
 async function login(userCred) {
     try {
-        const users = await storageService.query(USER_KEY)
-        const user = users.find(user => user.username === userCred.username)
-        if (user) {
-            // // const user = await httpService.post('auth/login', userCred)
-            //     socketService.login(user._id)
-            return saveLocalUser(user)
-        } else throw new Error('couldnt find username')
+        const user = await httpService.post(AUTH_URL + 'login', userCred)
+        return user
+        // const users = await storageService.query(USER_KEY)
+        // const user = users.find(user => user.username === userCred.username)
+        // if (user) {
+        //     // // const user = await httpService.post('auth/login', userCred)
+        //     //     socketService.login(user._id)
+        //     return saveLocalUser(user)
+        // } else throw new Error('couldnt find username')
     } catch (err) {
         throw new Error('coudnlt preform query', err)
     }
@@ -111,7 +114,7 @@ async function signup(userCred) {
 
     try {
         // const user = await storageService.post(USER_KEY, newUser)
-        const user = await httpService.post('auth/signup', newUser)
+        const user = await httpService.post(AUTH_URL + 'signup', newUser)
         // socketService.login(user._id)
         saveLocalUser(user)
         return user
