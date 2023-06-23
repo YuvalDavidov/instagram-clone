@@ -161,7 +161,6 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
                 numOfDesiredResults
             })
         } else if (filterBy.fullname && model === instegramUsers) {
-
             whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
             result = await model.findAll({
                 where: {
@@ -172,7 +171,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
             })
         } else result = await model.findAll({
             where: {
-                [Op.or]: [...whereCondition]
+                [Op.or]: whereCondition
             },
             order,
             numOfDesiredResults

@@ -19,11 +19,10 @@ async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
         if (!isUserPostsOnly) filterBy = { userId: user.following, username: user.username }
         else {
             filterBy = { userId: user }
-            numOfPostsToQuerry = 15
         }
         let posts = await dbService.query(instegramPosts, filterBy, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
         return posts
-    } catch (error) {
+    } catch (err) {
         logger.error('post.service - cannot find posts', err)
         throw new Error('post.service - cannot find posts', err)
     }

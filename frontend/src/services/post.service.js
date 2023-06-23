@@ -173,11 +173,12 @@ function getCommentTime(commentTimeStamp) {
     else return houserDiff + " H";
 }
 
-async function getUserPostsById(userId) {
-    // return await httpService.get(POST_URL, {user: userId, numOfPostsToQuerry, isUserPostsOnly: true})
-    const posts = await storageService.query(POST_KEY)
-    const userPosts = posts.filter(post => post.userId === userId)
-    return userPosts
+async function getUserPostsById(userId, numOfPostsToQuerry) {
+    const queryParams = `?userId=${userId}&numOfPostsToQuerry=${numOfPostsToQuerry}&isUserPostsOnly=${true}`
+    return await httpService.get(POST_URL + queryParams)
+    // const posts = await storageService.query(POST_KEY)
+    // const userPosts = posts.filter(post => post.userId === userId)
+    // return userPosts
 }
 
 async function savePost(user, post) {

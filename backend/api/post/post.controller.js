@@ -2,9 +2,11 @@ const logger = require('../../services/logger.service')
 const postService = require('./post.service')
 
 async function getPosts(req, res) {
-    const { user, numOfPostsToQuerry, isUserPostsOnly } = req.body
+
+    let { userId, numOfPostsToQuerry, isUserPostsOnly } = req.query
+    isUserPostsOnly = Boolean(isUserPostsOnly)
     try {
-        const posts = await postService.query(user, numOfPostsToQuerry, isUserPostsOnly)
+        const posts = await postService.query(userId, numOfPostsToQuerry, isUserPostsOnly)
         res.json(posts)
     } catch (err) {
         logger.error('post controller - cannot get posts' + err)

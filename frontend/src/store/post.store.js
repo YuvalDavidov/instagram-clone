@@ -35,8 +35,8 @@ export const postStore = {
             state.numOfPostsToQuerry = num
         },
         addPost(state, { post }) {
-            state.userPosts.push(post)
-            state.followingPosts.push(post)
+            state.userPosts.unshift(post)
+            state.followingPosts.unshift(post)
         },
         updatePost(state, { post }) {
             const idx = state.userPosts.findIndex(p => p._id === post._id)
@@ -47,9 +47,9 @@ export const postStore = {
         }
     },
     actions: {
-        async loadUserPosts({ commit }, { userId }) {
+        async loadUserPosts({ commit }, { userId, numOfPostsToQuerry }) {
             try {
-                const userPosts = await postService.getUserPostsById(userId)
+                const userPosts = await postService.getUserPostsById(userId, numOfPostsToQuerry)
                 commit({ type: 'setUserPosts', userPosts })
             } catch (error) {
                 throw new Error('coudl\'nt get posts from user', error)

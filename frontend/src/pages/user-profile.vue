@@ -174,6 +174,7 @@ export default {
         this.$store.dispatch({
           type: "loadUserPosts",
           userId: this.$route.params._id,
+          numOfPostsToQuerry: 15,
         });
         this.$store.dispatch({
           type: "loadUserStories",
