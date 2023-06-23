@@ -7,9 +7,9 @@ const router = express.Router()
 router.get('/', getStoriesByFollowing)
 router.get('/userId/:_id', getStoriesByUserId)
 router.get('/storyId/:_id', getStoryById)
-router.post('/', requireAuth, addStory)
-router.put('/update', requireAuth, updateStory)
-router.delete('/:_id', requireAuth, removeStoy)
+router.post('/', addStory)
+router.put('/update', updateStory)
+router.delete('/:_id', removeStoy)
 
 module.exports = router
 

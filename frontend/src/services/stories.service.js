@@ -57,8 +57,9 @@ async function getStoriesIdByUserId(userId) {
 
 async function getStoryById(stroyId) {
     try {
-        const queryParams = `?storyId/${stroyId}`
-        const story = await httpService.get(`${SROTY_URL}/${queryParams}`)
+        const queryParams = `storyId/${stroyId}`
+        console.log('he');
+        const story = await httpService.get(SROTY_URL + queryParams)
         return story
         // return await storageService.get(STORIES_KEY, stroyId)
     } catch (error) {
@@ -79,7 +80,7 @@ async function createStory(imgUrl) {
     // }
 
     try {
-        const story = await httpService.post(`${SROTY_URL}`, newStory)
+        const story = await httpService.post(SROTY_URL, newStory)
         return story
         // await storageService.post(STORIES_KEY, story)
     } catch (error) {
@@ -99,7 +100,6 @@ async function updateStory(storyId) {
 
 function _getEmptyStory() {
     return {
-        timestampe: new Date,
         likes: [],
         sawUsers: []
     }

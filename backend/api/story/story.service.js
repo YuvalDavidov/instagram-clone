@@ -24,8 +24,7 @@ async function query(entity, condition) {
 async function addStory(story) {
     try {
         const newStory = await dbService.addRecord(instegramStories, story)
-        console.log(newStory);
-        // return newStory
+        return newStory
     } catch (error) {
         logger.error('story.service - cannot add story', err)
         throw new Error('story.service - cannot add story', err)

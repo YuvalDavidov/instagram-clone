@@ -28,10 +28,9 @@ async function getStoriesByUserId(req, res) {
 async function getStoryById(req, res) {
     let storyId = req.params._id
     const loggedinUser = authService.getLoggedinUser(req)
-
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
-        if (!story.sawUsers.incluse(loggedinUser._id) && story.userId !== loggedinUser) storyService.updateStory(loggedinUser._id, storyId)
+        if (!story.sawUsers.includes(loggedinUser._id) && story.userInfo.userId !== loggedinUser._id) await storyService.updateStory(loggedinUser._id, storyId)
         res.json(story)
     } catch (error) {
         logger.error('story controller - cannot get story' + error)
@@ -40,8 +39,8 @@ async function getStoryById(req, res) {
 }
 
 async function addStory(req, res) {
-    let newStory = req.body.story
-    let { loggedinUser } = req
+    let newStory = req.body
+    const loggedinUser = authService.getLoggedinUser(req)
     newStory.userInfo = {
         userId: loggedinUser._id,
         username: loggedinUser.username,
@@ -65,14 +64,13 @@ async function removeStoy(req, res) {
     }
 }
 
-async function updateStory(req, res) {
-    const { storyId } = req.body
-    let { loggedinUser } = req
+async function updateStory(loggedinUserId, storyId) {
+
     try {
-        await storyService.updateStory(loggedinUser, storyId)
-    } catch (error) {
-        logger.error('story controller - cannot update story' + error)
-        res.status(401).send({ error: `Failed to update story ${error}` })
+        await storyService.updateStory(loggedinUserId, storyId)
+    } catch (err) {
+        logger.error('story controller - cannot update story' + err)
+        // res.status(401).send({ error: `Failed to update story ${error}` })
     }
 }
 
