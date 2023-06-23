@@ -15,7 +15,6 @@ export const followService = {
 async function unFollow(id) {
     try {
         const user = await httpService.put(FOLLOW_URL + `remove/${id}`)
-        console.log(user);
         userService.updateLoginUser(user)
 
         // let user = await userService.getUserById(id)

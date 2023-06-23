@@ -5,11 +5,11 @@ const { requireAuth } = require('../../middlewares/requireAuth.middleware')
 const router = express.Router()
 
 router.get('/', getPosts)
-router.get('/:_id', requireAuth, getPostById)
-router.post('/', requireAuth, addPost)
-router.put('/', requireAuth, updatePost)
-router.put('/:_id', requireAuth, appendItem)
-router.delete('/', requireAuth, removePost)
-router.delete('/:postId', requireAuth, removeItem)
+router.get('/:_id', getPostById)
+router.post('/', addPost)
+router.put('/', updatePost)
+router.put('/:_id', appendItem)
+router.delete('/', removePost)
+router.delete('/:postId', removeItem)
 
-module.exports(router)
+module.exports = router

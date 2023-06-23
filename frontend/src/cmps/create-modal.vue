@@ -138,7 +138,6 @@ export default {
             post: postToSave,
           });
         } else {
-          console.log("sdfasd");
           const storyToSave = await storiesService.createStory(
             this.postToEdit.imgsUrl
           );

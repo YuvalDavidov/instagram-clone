@@ -10,11 +10,11 @@ function requireAuth(req, res, next) {
   //   req.loggedinUser = { _id: '', fullname: 'Guest' }
   //   return next()
   // }
-  if (!loggedinUser) {
-    logger.warn('attempted to call the back without auth')
-    return res.status(401).send('Not Authenticated')
-  }
-  next()
+  // if (!loggedinUser) {
+  //   logger.warn('attempted to call the back without auth')
+  //   return res.status(401).send('Not Authenticated')
+  // }
+  next(req, res)
 }
 
 function requireAdmin(req, res, next) {

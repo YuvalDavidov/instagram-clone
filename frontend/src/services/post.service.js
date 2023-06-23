@@ -192,15 +192,13 @@ async function savePost(user, post) {
                 userImg: user.imgUrl,
                 imgsUrl: post.imgsUrl,
                 summery: post.summery || '',
-                timestamp: new Date(),
                 likes: [],
                 isLikeCountVisible: true,
                 isCommentingAllowed: true,
                 comments: [],
             }
-            // return await httpService.post(POST_URL, post)
-            await storageService.post(POST_KEY, postToSave)
-            return post
+            return await httpService.post(POST_URL, post)
+            // return await storageService.post(POST_KEY, postToSave)
         }
 
     } catch (error) {

@@ -23,6 +23,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const authRoutes = require('./api/auth/auth.routes')
 const userRoutes = require('./api/user/user.routes')
+const postRoutes = require('./api/post/post.routes')
 const storyRoutes = require('./api/story/story.routes')
 const followRoutes = require('./api/follow/follow.routes')
 // const { setupSocketAPI } = require('./services/socket.service')
@@ -33,6 +34,7 @@ const followRoutes = require('./api/follow/follow.routes')
 
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/post', postRoutes)
 app.use('/api/story', storyRoutes)
 app.use('/api/follow', followRoutes)
 // setupSocketAPI(http)

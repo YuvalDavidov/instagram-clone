@@ -6,7 +6,7 @@ async function getPosts(req, res) {
     try {
         const posts = await postService.query(user, numOfPostsToQuerry, isUserPostsOnly)
         res.json(posts)
-    } catch (error) {
+    } catch (err) {
         logger.error('post controller - cannot get posts' + err)
         res.status(401).send({ err: `Failed to get posts ${err}` })
     }
@@ -27,7 +27,7 @@ async function updatePost(req, res) {
     try {
         const updatedPost = await postService.updatePost(dataToUpdate, postId)
         return updatedPost
-    } catch (error) {
+    } catch (err) {
         logger.error('post controller - cannot update post' + err)
         res.status(401).send({ err: `Failed to update post ${err}` })
     }
@@ -36,7 +36,7 @@ async function updatePost(req, res) {
 async function removePost(req, res) {
     try {
         await postService.removePost(req.params.postId)
-    } catch (error) {
+    } catch (err) {
         logger.error('post controller - cannot remove post' + err)
         res.status(401).send({ err: `Failed to remove post ${err}` })
     }
@@ -44,9 +44,10 @@ async function removePost(req, res) {
 
 async function addPost(req, res) {
     try {
-        const addedPost = await postService.addPost(req.body.post)
+        const post = req.body
+        const addedPost = await postService.addPost(post)
         res.json(addedPost)
-    } catch (error) {
+    } catch (err) {
         logger.error('post controller - cannot add post' + err)
         res.status(401).send({ err: `Failed to add post ${err}` })
     }
@@ -56,7 +57,7 @@ async function appendItem(req, res) {
     const { data, entityName } = req.body
     try {
         await postService.appendToColumn(data, entityName, req.params._id)
-    } catch (error) {
+    } catch (err) {
         logger.error('post controller - cannot append to column' + err)
         res.status(401).send({ err: `Failed to append to column ${err}` })
     }
@@ -67,7 +68,7 @@ async function removeItem(req, res) {
     const { itemId, entityName } = req.body
     try {
         await postService.removeFromColumn(entityName, itemId, postId)
-    } catch (error) {
+    } catch (err) {
         logger.error('post controller - cannot remove item from column' + err)
         res.status(401).send({ err: `Failed to remove item from column ${err}` })
     }
