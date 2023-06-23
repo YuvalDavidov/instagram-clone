@@ -11,7 +11,8 @@ export const userService = {
     saveLocalUser,
     checkIfOwnByUser,
     query,
-    updatePassword
+    updatePassword,
+    updateLoginUser
 }
 
 const USER_URL = 'user/'
@@ -84,6 +85,11 @@ function checkIfOwnByUser(id) {
 
 function logout() {
     sessionStorage.clear()
+}
+
+function updateLoginUser(user) {
+    sessionStorage.clear()
+    return saveLocalUser(user)
 }
 
 async function login(userCred) {

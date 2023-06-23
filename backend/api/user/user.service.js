@@ -21,7 +21,7 @@ async function query(filterBy = { username: '' }, isLessDetails = false, loggedi
         let filterdUsers = model.map(user => {
             delete user.password
             return user
-        }).filter(u => u._id.toString() !== loggedinUser._id)
+        }).filter(u => u._id !== loggedinUser._id)
         return filterdUsers
     } catch (err) {
         logger.error('user.service - cannot find users', err)

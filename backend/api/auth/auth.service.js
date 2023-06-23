@@ -12,7 +12,23 @@ module.exports = {
     validateToken,
     validatePassword,
     encrypt,
-    getLoggedinUser
+    getLoggedinUser,
+    updateLoginToken
+}
+
+async function updateLoginToken(user, res) {
+    try {
+        const newUser = await userService.getById(user._id)
+        const loginToken = getLoginToken(newUser)
+        res.clearCookie('loginToken')
+        res.cookie('loginToken', loginToken, { sameSite: 'None', secure: true })
+        res.json(newUser)
+
+    } catch (error) {
+        logger.error(`auth.service - cant update loginToken`)
+        throw new Error('auth.service - cant update loginToken', error)
+    }
+
 }
 
 async function login(username, password) {
