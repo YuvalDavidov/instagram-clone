@@ -6,7 +6,7 @@ const { instegramStories } = require('../../services/models/models')
 async function query(entity, condition) {
     let filterBy
     if (condition === 'userId') filterBy = { userInfo: { [condition]: entity } }
-    else if (condition === 'byFollowing') filterBy = { userInfo: { userId: entity.following } }
+    else if (condition === 'byFollowing') filterBy = { userInfo: { userId: entity } }
     else filterBy = { _id: entity }
     try {
         let stories = await dbService.query(instegramStories, filterBy)
@@ -43,6 +43,7 @@ async function removeStory(storyId) {
 async function updateStory(sawUser, storyId) {
     try {
         await dbService.appendToColumn(instegramStories, sawUser, 'sawUsers', storyId)
+        console.log(sawUser, storyId);
     } catch (error) {
         logger.error('story.service - cannot update story', err)
         throw new Error('story.service - cannot update story', err)

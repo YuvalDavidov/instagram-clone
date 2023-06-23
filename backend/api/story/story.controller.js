@@ -4,9 +4,9 @@ const authService = require('../auth/auth.service')
 
 async function getStoriesByFollowing(req, res) {
 
-    const loggedinUser = authService.getLoggedinUser(req)
+    const following = req.query.following.split(',')
     try {
-        const stories = await storyService.query(loggedinUser.following, condition = 'byFollowing')
+        const stories = await storyService.query(following, condition = 'byFollowing')
         res.json(stories)
     } catch (error) {
         logger.error('story controller - cannot get stories' + error)
@@ -30,7 +30,7 @@ async function getStoryById(req, res) {
     const loggedinUser = authService.getLoggedinUser(req)
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
-        if (!story.sawUsers.includes(loggedinUser._id) && story.userInfo.userId !== loggedinUser._id) await storyService.updateStory(loggedinUser._id, storyId)
+        if (!story.sawUsers.includes(loggedinUser._id.toString()) && story.userInfo.userId !== loggedinUser._id) await storyService.updateStory(loggedinUser._id.toString(), storyId, res)
         res.json(story)
     } catch (error) {
         logger.error('story controller - cannot get story' + error)
@@ -64,13 +64,13 @@ async function removeStoy(req, res) {
     }
 }
 
-async function updateStory(loggedinUserId, storyId) {
+async function updateStory(loggedinUserId, storyId, res) {
 
     try {
-        await storyService.updateStory(loggedinUserId, storyId)
-    } catch (err) {
-        logger.error('story controller - cannot update story' + err)
-        // res.status(401).send({ error: `Failed to update story ${error}` })
+        return await storyService.updateStory(loggedinUserId, storyId)
+    } catch (error) {
+        logger.error('story controller - cannot update story' + error)
+        res.status(401).send({ error: `Failed to update story ${error}` })
     }
 }
 

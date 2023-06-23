@@ -91,8 +91,6 @@ export default {
   },
   methods: {
     startInterval() {
-      this.$store.dispatch({ type: "userSawStory" });
-      // console.log(this.story);
       this.isIntervalStoped = false;
       this.interval = setInterval(() => {
         this.intervalTime -= 0.1;
@@ -117,7 +115,7 @@ export default {
           const idx = this.usersStory.findIndex(
             (userId) => userId === this.$route.params._id
           );
-          if (idx + 1 === this.usersStory.length) {
+          if (idx + 2 === this.usersStory.length) {
             this.$router.push("/");
           } else {
             await this.$store.dispatch({

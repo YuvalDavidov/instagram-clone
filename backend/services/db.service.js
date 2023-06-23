@@ -65,6 +65,7 @@ async function updateRecord(model, data, itemId) {
 }
 
 async function appendToColumn(model, data, columnName, entityId) {
+    console.log(model, data, columnName, entityId);
     try {
         await model.update(
             {

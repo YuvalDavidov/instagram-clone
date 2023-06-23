@@ -1,4 +1,4 @@
-
+import { userService } from '../services/user.service'
 import { httpService } from './http.service';
 
 const STORIES_KEY = 'StoriesDB'
@@ -14,9 +14,10 @@ export const storiesService = {
 
 async function getStoriesByFollowings() {
 
-    // const currUser = userService.getLoggedinUser()
+    const currUser = userService.getLoggedinUser()
+    const queryParams = `?following=${currUser.following}`
     try {
-        const story = await httpService.get(`${SROTY_URL}`)
+        const story = await httpService.get(SROTY_URL + queryParams)
         return story
         // let storeis = await storageService.query(STORIES_KEY)
         // storeis = _filetrOver24H(storeis)
@@ -92,7 +93,7 @@ async function updateStory(storyId) {
     // await storageService.put(STORIES_KEY, story)
 
     try {
-        await httpService.put(`${SROTY_URL}`, '/update', storyId)
+        // await httpService.put(`${SROTY_URL}`, '/update', storyId)
     } catch (error) {
         console.log('there is a problem with updating this story', error);
     }
