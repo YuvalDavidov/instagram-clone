@@ -9,7 +9,7 @@ export default {
   data() {
     return {
       maxPageScroll: null,
-      currNumOfPostsToQuerry: 3,
+      currNumOfPostsToQuerry: 4,
       isLoadingPosts: false,
     };
   },
@@ -40,7 +40,7 @@ export default {
       if (maxScroll > this.maxPageScroll) this.isLoadingPosts = false;
 
       if (scrollPosition >= targetHeight && !this.isLoadingPosts) {
-        this.currNumOfPostsToQuerry += 3;
+        this.currNumOfPostsToQuerry += 4;
         this.$store.dispatch({
           type: "loadPosts",
           user: this.$store.getters.GetUser,

@@ -159,7 +159,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
                     [Op.or]: whereCondition
                 },
                 order,
-                numOfDesiredResults
+                limit: numOfDesiredResults
             })
         } else if (filterBy.fullname && model === instegramUsers) {
             whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
@@ -168,14 +168,16 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
                     [Op.or]: [...whereCondition]
                 },
                 order,
-                numOfDesiredResults
+                limit: numOfDesiredResults
             })
         } else result = await model.findAll({
             where: {
                 [Op.or]: whereCondition
             },
             order,
-            numOfDesiredResults
+            offset: (numOfDesiredResults - 4), // offset is the the starting index from where you want to fetch results, 4 is the default number of added results
+            // continue - needed to add more posts to the state in the front, by minus 4 I gurantee the stating point to be precise
+            limit: numOfDesiredResults
         })
         return result.map((instance) => instance.dataValues)
     } catch (error) {

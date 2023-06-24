@@ -26,7 +26,7 @@ export const postStore = {
             state.userPosts = userPosts
         },
         setPosts(state, { posts }) {
-            state.followingPosts = posts
+            state.followingPosts = [...state.followingPosts, ...posts] // adding to the exisiting posts that were already in the state
         },
         setPost(state, { post }) {
             state.post = post
