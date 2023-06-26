@@ -3,7 +3,7 @@
     <section class="messages">
       <article class="messages-users">
         <div class="top">
-          <div class="user-name">user name</div>
+          <div class="user-name">{{ user.username }}</div>
           <button><v-icon name="ri-edit-box-line" /></button>
         </div>
 
@@ -16,7 +16,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      user: this.$store.getters.GetUser,
+    };
+  },
+  created() {
+    console.log(this.user);
+  },
+};
 </script>
 
 <style>
