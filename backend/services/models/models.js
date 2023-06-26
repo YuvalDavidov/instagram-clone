@@ -158,6 +158,27 @@ const instegramStories = sequelize.define('instegramStories', {
     }
 )
 
+const instegramChats = sequelize.define('instegramChats', {
+    _id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    chatHistory: {
+        type: DataTypes.ARRAY(DataTypes.JSONB),
+        // {userId, msg, timestamp}
+        allowNull: true,
+        defaultValue: []
+    }
+},
+    {
+        timestamps: true, // Enable timestamps
+    }
+)
+
+
+
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
     .then(() => {
@@ -169,5 +190,5 @@ sequelize
         console.error('Error creating user table:', err);
     });
 
-module.exports = { instegramUsers, instegramPosts, instegramStories }
+module.exports = { instegramUsers, instegramPosts, instegramStories, instegramChats }
 
