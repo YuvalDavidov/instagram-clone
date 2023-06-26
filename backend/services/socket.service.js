@@ -15,8 +15,10 @@ function setupSocketAPI(http) {
         })
 
         socket.on('set-chat-topic', userId => {
+            console.log('userId---', userId);
             if (socket.userId === userId) return
             if (socket.userId) {
+                console.log('sd', userId);
                 socket.leave(socket.userId)
                 logger.info(`Socket is leaving topic ${socket.userId} [id: ${socket.id}]`)
             }
@@ -29,10 +31,13 @@ function setupSocketAPI(http) {
 
             // chatService.addMsgToChat(msg)
             console.log("socket.id---->", socket.id)
+            console.log("socket.userId---->", socket.userId)
             console.log("msg---->", msg)
             gIo.to(socket.userId).emit('chat-add-msg', msg)
         })
     })
 }
 
-module.exports = {}
+module.exports = {
+    setupSocketAPI
+}

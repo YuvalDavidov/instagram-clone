@@ -26,7 +26,7 @@ const userRoutes = require('./api/user/user.routes')
 const postRoutes = require('./api/post/post.routes')
 const storyRoutes = require('./api/story/story.routes')
 const followRoutes = require('./api/follow/follow.routes')
-// const { setupSocketAPI } = require('./services/socket.service')
+const { setupSocketAPI } = require('./services/socket.service')
 
 // routes
 // const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware')
@@ -37,7 +37,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/post', postRoutes)
 app.use('/api/story', storyRoutes)
 app.use('/api/follow', followRoutes)
-// setupSocketAPI(http)
+setupSocketAPI(http)
 
 // Make every server-side-route to match the index.html
 // so when requesting http://localhost:3030/index.html/car/123 it will still respond with
