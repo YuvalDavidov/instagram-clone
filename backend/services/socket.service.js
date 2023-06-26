@@ -27,8 +27,9 @@ function setupSocketAPI(http) {
         socket.on('chat-new-msg', msg => {
             logger.info(`New chat msg from socket [id: ${socket.id}], emitting to topic ${socket.userId}`)
 
-            // chatService.addMsgToChat(msg.txt, msg.userId)
-
+            // chatService.addMsgToChat(msg)
+            console.log("socket.id---->", socket.id)
+            console.log("msg---->", msg)
             gIo.to(socket.userId).emit('chat-add-msg', msg)
         })
     })

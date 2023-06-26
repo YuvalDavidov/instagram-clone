@@ -1,7 +1,8 @@
 const dbService = require('./db.service')
 const { instegramChats } = require('./models/models')
 
-async function addMsgToChat(msg, userId) {
+async function addMsgToChat(msg) {
+    const { userId, txt, timestamp } = msg
     try {
         // if ()
         dbService.addRecord()
