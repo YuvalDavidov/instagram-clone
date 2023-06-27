@@ -179,6 +179,8 @@ const instegramChats = sequelize.define('instegramChats', {
 },
     {
         timestamps: true, // Enable timestamps
+        createdAt: 'createdAt'
+
     }
 )
 

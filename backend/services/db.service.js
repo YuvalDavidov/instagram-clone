@@ -113,11 +113,29 @@ async function queryOne(model, filterBy) {
     }
 }
 
+async function queryAggregate(model1, model2, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
+    let result
+    let whereCondition = {}
+    let model2Columns = model2.describe()
+    Object.keys(filterBy).forEach(key => {
+        whereCondition[key] = (model2Columns[key].type === 'ARRAY') ? model2.findAll({
+            attributes: [key],
+        }) : { [Op.eq]: filterBy[key] }
+    })
+}
 
 async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
     // filterBy needs to be an Object
     let result
     let whereCondition = {}
+    let modelColumns = model.describe()
+    // (modelColumns[key].type === 'ARRAY')
+    // [Op.like]: `%${filterBy[key]}%`
+    Object.keys(filterBy).forEach(key => {
+        whereCondition[key] = (Array.isArray(filterBy[key])) ? filterBy[key] : { [Op.eq]: filterBy[key] }
+        // לעשות אגרגירציה במקום להביא את רשימת עוקבים מהפרונט
+        // צריך להוסיף פרמטר של מודל שני ולתקן בהתאם
+    })
 
     try {
         if (!filterBy) result = await model.findAll()
@@ -144,15 +162,14 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
             }
 
         }
-        Object.keys(filterBy).forEach(key => {
-            whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.like]: `%${filterBy[key]}%` }
-        })
+
 
         if (isLessDetails) {
             whereCondition = []
             Object.keys(filterBy).forEach(key => {
-                whereCondition.push({ [key]: { [Op.like]: `%${filterBy[key]}%` } })
+                whereCondition.push({ [key]: { [Op.eq]: filterBy[key] } })
             })
+            if (filterBy.fullname) whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
             result = await model.findAll({
                 attributes: ['username', '_id', 'imgUrl', 'fullname'],
                 where: {
@@ -161,16 +178,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
                 order,
                 limit: numOfDesiredResults
             })
-        } else if (filterBy.fullname && model === instegramUsers) {
-            whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
-            result = await model.findAll({
-                where: {
-                    [Op.or]: [...whereCondition]
-                },
-                order,
-                limit: numOfDesiredResults
-            })
-        } else result = await model.findAll({
+        } else if (model === instegramPosts) result = await model.findAll({
             where: {
                 [Op.or]: whereCondition
             },

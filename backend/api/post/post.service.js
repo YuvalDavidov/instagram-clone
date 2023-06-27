@@ -1,6 +1,6 @@
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
-const { instegramPosts } = require('../../services/models/models')
+const { instegramPosts, instegramUsers } = require('../../services/models/models')
 
 
 module.exports = {
@@ -18,9 +18,9 @@ async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
         let filterBy
         if (!isUserPostsOnly) filterBy = { userId: user.following, username: user.username }
         else {
-            filterBy = { userId: user }
+            filterBy = { userId: user._id }
         }
-        let posts = await dbService.query(instegramPosts, filterBy, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
+        let posts = await dbService.query(instegramPosts, filterBy, numOfPostsToQuerry, false, [['createdAt', 'DESC']], instegramUsers)
         return posts
     } catch (err) {
         logger.error('post.service - cannot find posts', err)
