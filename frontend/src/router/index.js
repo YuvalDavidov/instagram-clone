@@ -29,6 +29,10 @@ const routerOptions = {
             component: Messages,
         },
         {
+            path: '/messages/:_id',
+            component: Messages,
+        },
+        {
             path: '/notifications',
             component: Notifications,
         },

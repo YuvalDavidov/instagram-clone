@@ -39,4 +39,34 @@
         }
     }
 
+    &-chat {
+        width: 585px;
+        position: relative;
+
+        & .input-form {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+
+            textarea {
+
+                margin: auto;
+                border: 1px solid $nav-border-color;
+                border-radius: 20px;
+                height: 44px;
+                width: 95%;
+                padding: 9px 35px 9px 15px;
+                resize: none;
+            }
+
+            .send-btn {
+                color: #5a97f6;
+                position: absolute;
+                right: 30px;
+            }
+        }
+    }
+
 }
