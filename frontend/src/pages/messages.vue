@@ -7,7 +7,7 @@
           <button><v-icon name="ri-edit-box-line" /></button>
         </div>
 
-        <UsersMessegesList :messegesIds="userMessages" @replace="replace" />
+        <UsersMessegesList :messegesIds="messegesIds" @replace="replace" />
       </article>
 
       <article class="messages-chat">
@@ -44,7 +44,7 @@ export default {
         timestemp: null,
         userId: null,
       },
-      userMessages: ["123", "456"],
+      messegesIds: ["123", "456"],
       mesgs: [
         { _id: "1", txt: "sd", timestemp: "12:00" },
         { _id: "1", txt: "sddd", timestemp: "12:00" },
@@ -62,11 +62,12 @@ export default {
   methods: {
     sendMes() {
       console.log(this.msg);
+      this.msg.timestemp = new Date().getTime();
       socketService.emit(SOCKET_EMIT_NEW_MSG, this.msg);
       this.msg.txt = "";
     },
-    replace() {
-      socketService.emit(SOCKET_EMIT_TOPIC, this.$route.params._id);
+    replace(chatId) {
+      socketService.emit(SOCKET_EMIT_TOPIC, chatId);
     },
   },
   computed: {

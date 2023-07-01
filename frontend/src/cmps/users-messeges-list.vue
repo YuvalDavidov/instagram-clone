@@ -17,11 +17,11 @@ export default {
   methods: {
     moveToChat(chatId) {
       if (!this.$route.params._id) {
-        this.$router.push(`messages/${chatId}`);
+        this.$router.push(`${chatId}`);
       } else {
         this.$router.replace({ params: { _id: chatId } });
       }
-      this.$emit("replace");
+      this.$emit("replace", chatId);
     },
   },
 };
