@@ -2,7 +2,8 @@ const dbService = require('./db.service')
 const { instegramChats } = require('./models/models')
 
 module.exports = {
-    addMsgToChat
+    addMsgToChat,
+    getChatById
 }
 
 async function addMsgToChat(msg, topic) {
@@ -20,7 +21,7 @@ async function addMsgToChat(msg, topic) {
 async function getChatById(topic) {
     try {
         const chat = await dbService.queryOne(instegramChats, { _id: topic })
-        return chat
+        return chat.chatHistory
     } catch (error) {
         return undefined
     }

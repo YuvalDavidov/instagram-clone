@@ -11,10 +11,27 @@
       </article>
 
       <article class="messages-chat">
-        <section class="msgs" v-for="mes in messeges" :key="mes._id">
-          <div>{{ mes }}</div>
+        <section class="msgs-container">
+          <li
+            class="msgs"
+            :class="msg.userId === user._id ? 'user-msg' : ''"
+            v-for="msg in messeges"
+            :key="msg._id"
+          >
+            <div
+              :class="
+                msg.userId === user._id
+                  ? 'user-msg' + ' msg'
+                  : 'guest-msg' + ' msg'
+              "
+            >
+              {{ msg.txt }}
+            </div>
+          </li>
         </section>
-        <span v-if="typingUsers.length">{{ typingUsers[0] }} Typing...</span>
+        <span v-if="typingUsers.length" class="typing"
+          >{{ typingUsers[0] }} Typing...</span
+        >
         <form class="input-form" @submit="sendMsg" v-if="showChat">
           <textarea
             type="text"
@@ -42,6 +59,7 @@ import {
   SOCKET_EVENT_TYPING,
   SOCKET_EVENT_STOP_TYPING,
   SOCKET_EVENT_ADD_MSG,
+  SOCKET_EVENT_TOPIC,
 } from "../services/socket.service";
 
 export default {
@@ -61,7 +79,6 @@ export default {
     };
   },
   created() {
-    // this.timeoutId = ref(null);
     this.msg.userId = this.user._id;
     if (this.$route.params._id) {
       socketService.emit(SOCKET_EMIT_TOPIC, this.$route.params._id);
@@ -69,6 +86,7 @@ export default {
   },
   mounted() {
     console.log("mount");
+    socketService.on(SOCKET_EVENT_TOPIC, this.setChatHistory);
     socketService.on(SOCKET_EVENT_ADD_MSG, this.addMsg);
     socketService.on(SOCKET_EVENT_TYPING, this.addTypingUsers);
     socketService.on(SOCKET_EVENT_STOP_TYPING, this.removeTypingUser);
@@ -78,6 +96,7 @@ export default {
     socketService.off(SOCKET_EVENT_ADD_MSG, this.addMsg);
     socketService.off(SOCKET_EVENT_TYPING, this.addTypingUsers);
     socketService.off(SOCKET_EVENT_STOP_TYPING, this.removeTypingUser);
+    socketService.off(SOCKET_EVENT_TOPIC, this.setChatHistory);
   },
   methods: {
     sendMsg() {
@@ -92,10 +111,11 @@ export default {
       if (!this.timeoutId) {
         socketService.emit(SOCKET_EMIT_TYPING, this.user);
       }
-      clearInterval(this.timeoutId);
+      clearTimeout(this.timeoutId);
 
       this.timeoutId = setTimeout(() => {
         socketService.emit(SOCKET_EMIT_STOP_TYPING, this.user);
+        this.timeoutId = null;
       }, 2000);
     },
     addTypingUsers(user) {
@@ -106,6 +126,9 @@ export default {
     },
     addMsg(msg) {
       this.messeges.push(msg);
+    },
+    setChatHistory(msgs) {
+      this.messeges = msgs;
     },
   },
   computed: {

@@ -14,7 +14,7 @@ function setupSocketAPI(http) {
             logger.info(`Socket disconnected [id: ${socket.id}]`)
         })
 
-        socket.on('set-chat-topic', userId => {
+        socket.on('set-chat-topic', async userId => {
             console.log('userId---', userId);
             if (socket.userId === userId) return
             if (socket.userId) {
@@ -24,6 +24,14 @@ function setupSocketAPI(http) {
             }
             socket.join(userId)
             socket.userId = userId
+            try {
+                const chatHistory = await chatService.getChatById(userId)
+                socket.emit('get-chat-history', chatHistory)
+
+            } catch (error) {
+                console.log(error);
+            }
+
         })
 
         socket.on('chat-new-msg', msg => {
