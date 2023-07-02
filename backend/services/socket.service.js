@@ -35,6 +35,19 @@ function setupSocketAPI(http) {
             // console.log("msg---->", msg)
             gIo.to(socket.userId).emit('chat-add-msg', msg)
         })
+
+        socket.on('chat-user-typing', user => {
+            logger.info(`User is typing from socket [id: ${socket.id}], emitting to topic ${socket.userId}`)
+            socket.broadcast.to(socket.userId).emit('chat-add-typing', user)
+            console.log('user', user);
+            // broadcast({ type: 'chat typing', data: user, room: socket.userId, userId: socket.userId })
+        })
+
+        socket.on('chat-stop-typing', user => {
+            logger.info(`User has stopped typing from socket [id: ${socket.id}], emitting to topic ${socket.userId}`)
+            socket.broadcast.to(socket.userId).emit('chat-remove-typing', user)
+            // broadcast({ type: 'chat stop-typing', data: user, room: socket.userId, userId: socket.userId })
+        })
     })
 }
 
