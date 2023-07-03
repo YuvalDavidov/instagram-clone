@@ -1,5 +1,5 @@
 const logger = require('./logger.service')
-
+const chatService = require('./chat.service')
 let gIo = null
 
 function setupSocketAPI(http) {
@@ -29,10 +29,10 @@ function setupSocketAPI(http) {
         socket.on('chat-new-msg', msg => {
             logger.info(`New chat msg from socket [id: ${socket.id}], emitting to topic ${socket.userId}`)
 
-            // chatService.addMsgToChat(msg)
-            console.log("socket.id---->", socket.id)
-            console.log("socket.userId---->", socket.userId)
-            console.log("msg---->", msg)
+            chatService.addMsgToChat(msg, socket.userId)
+            // console.log("socket.id---->", socket.id)
+            // console.log("socket.userId---->", socket.userId)
+            // console.log("msg---->", msg)
             gIo.to(socket.userId).emit('chat-add-msg', msg)
         })
     })
