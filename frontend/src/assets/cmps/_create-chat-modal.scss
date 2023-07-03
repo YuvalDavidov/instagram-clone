@@ -1,0 +1,71 @@
+.create-chat-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+
+    & .create-chat {
+        background-color: white;
+        position: absolute;
+        top: calc(100vh - 90%);
+        left: 50%;
+        transform: translateX(-50%);
+        width: 550px;
+        height: 600px;
+        border-radius: 12px;
+
+        & .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 55px;
+            border-bottom: 1px solid $nav-border-color;
+
+            & span {
+                font-weight: 700;
+            }
+
+        }
+
+        & .search-users {
+            // background-color: red;
+            height: calc(100% - 55px - 54px);
+
+            & .search-input-create {
+                padding: 16px;
+                border-bottom: 1px solid $nav-border-color;
+
+                .search-input-msg {
+                    border: none;
+                    width: 90%;
+                    padding: 4px 20px;
+
+                    &:focus-visible {
+                        outline: none;
+                    }
+                }
+
+                & span {
+                    font-weight: bold;
+                }
+            }
+        }
+
+        &-btn {
+            background-color: #0095f6;
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            border-radius: 10px;
+            bottom: 0;
+            height: 44px;
+            width: 96.4%;
+            margin: 10px;
+
+            &.isDisaabled {
+                cursor: not-allowed;
+                background-color: #b2dffc;
+            }
+        }
+    }
+}

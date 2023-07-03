@@ -26,6 +26,7 @@ const userRoutes = require('./api/user/user.routes')
 const postRoutes = require('./api/post/post.routes')
 const storyRoutes = require('./api/story/story.routes')
 const followRoutes = require('./api/follow/follow.routes')
+const chatRoutes = require('./api/chat/chat.routes')
 const { setupSocketAPI } = require('./services/socket.service')
 
 // routes
@@ -37,6 +38,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/post', postRoutes)
 app.use('/api/story', storyRoutes)
 app.use('/api/follow', followRoutes)
+app.use('/api/chat', chatRoutes)
 setupSocketAPI(http)
 
 // Make every server-side-route to match the index.html

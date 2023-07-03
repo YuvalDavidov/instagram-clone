@@ -4,7 +4,9 @@
       <article class="messages-users">
         <div class="top">
           <div class="user-name">{{ user.username }}</div>
-          <button><v-icon name="ri-edit-box-line" /></button>
+          <button @click="onToggleCreateNewChat">
+            <v-icon name="ri-edit-box-line" />
+          </button>
         </div>
 
         <UsersMessegesList :messegesIds="messegesIds" @replace="replaceTopic" />
@@ -44,11 +46,16 @@
         </form>
       </article>
     </section>
+    <CreateChatModal
+      v-if="isCreateNewChatOpen"
+      @onToggleCreateNewChat="onToggleCreateNewChat"
+      @replaceTopic="replaceTopic"
+    />
   </section>
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import CreateChatModal from "../cmps/create-chat-modal.vue";
 import UsersMessegesList from "../cmps/users-messeges-list.vue";
 import {
   socketService,
@@ -63,7 +70,7 @@ import {
 } from "../services/socket.service";
 
 export default {
-  components: { UsersMessegesList },
+  components: { UsersMessegesList, CreateChatModal },
   data() {
     return {
       user: this.$store.getters.GetUser,
@@ -76,6 +83,7 @@ export default {
       messeges: [],
       timeoutId: null,
       typingUsers: [],
+      isCreateNewChatOpen: false,
     };
   },
   created() {
@@ -129,6 +137,9 @@ export default {
     },
     setChatHistory(msgs) {
       this.messeges = msgs;
+    },
+    onToggleCreateNewChat() {
+      this.isCreateNewChatOpen = !this.isCreateNewChatOpen;
     },
   },
   computed: {

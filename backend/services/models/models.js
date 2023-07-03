@@ -160,16 +160,17 @@ const instegramStories = sequelize.define('instegramStories', {
 
 const instegramChats = sequelize.define('instegramChats', {
     _id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true,
+        // autoIncrement: true,
         allowNull: false,
+
     },
-    // betweenUsers: {
-    //     type: DataTypes.ARRAY(DataTypes.STRING),
-    //     allowNull: true,
-    //     defaultValue: []
-    // },
+    betweenUsers: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+        defaultValue: []
+    },
     chatHistory: {
         type: DataTypes.ARRAY(DataTypes.JSONB),
         // {userId, msg, timestamp}
