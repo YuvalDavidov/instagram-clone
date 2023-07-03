@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Op } = require('sequelize');
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
     host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
@@ -188,9 +188,33 @@ const instegramChats = sequelize.define('instegramChats', {
 
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
-    .then(() => {
+    .then(async () => {
         console.log('User table created');
+        // let reuslt = await instegramPosts.findAll({
+        //     where: {
+        //         [Op.or]: [
+        //             {
+        //                 userId: await instegramUsers.findAll({
+        //                     attributes: ['following'],
+        //                     where: {
+        //                         _id: 17
+        //                     }
+        //                 }).map((model2) => model2.following)
+        //             },
+        //             {
+        //                 userId: 17
+        //             }
 
+        //         ]
+        //     }
+        // })
+        let result = await instegramUsers.findAll({
+            attributes: ['following'],
+            where: {
+                _id: 17
+            }
+        })
+        console.log('result----->', result.map(instance => instance.dataValues.following))
 
     })
     .catch((err) => {
