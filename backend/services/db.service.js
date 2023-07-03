@@ -113,28 +113,25 @@ async function queryOne(model, filterBy) {
     }
 }
 
-async function queryAggregate(model1, model2, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
+async function queryAggregate(model1, model2, filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
     let result
-    let whereCondition = {}
+    let whereConditionModel1 = {}
+    let whereConditionModel2 = {}
     let model2Columns = model2.describe()
-    Object.keys(filterBy).forEach(key => {
-        whereCondition[key] = (model2Columns[key].type === 'ARRAY') ? model2.findAll({
-            attributes: [key],
+    Object.keys(filterByModel2).forEach(key => {
+        whereConditionModel2[key] = (model2Columns[key].type === 'ARRAY') ? model2.findAll({
+            attributes: [key], where: { filterByModel1 }
         }) : { [Op.eq]: filterBy[key] }
     })
 }
 
-async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
-    // filterBy needs to be an Object
+async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']], attribute = undefined) {
     let result
     let whereCondition = {}
     let modelColumns = model.describe()
-    // (modelColumns[key].type === 'ARRAY')
     // [Op.like]: `%${filterBy[key]}%`
     Object.keys(filterBy).forEach(key => {
         whereCondition[key] = (Array.isArray(filterBy[key])) ? filterBy[key] : { [Op.eq]: filterBy[key] }
-        // לעשות אגרגירציה במקום להביא את רשימת עוקבים מהפרונט
-        // צריך להוסיף פרמטר של מודל שני ולתקן בהתאם
     })
 
     try {
@@ -178,7 +175,23 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
                 order,
                 limit: numOfDesiredResults
             })
-        } else if (model === instegramPosts) result = await model.findAll({
+
+        }
+
+        if (attribute) {
+            result = await model.findAll({
+                attributes: [`${attribute}`],
+                where: {
+                    [Op.or]: filterBy
+                },
+                order
+            })
+
+            return result.map((instance) => instance.dataValues.following)[0]
+        }
+
+
+        else if (model === instegramPosts) result = await model.findAll({
             where: {
                 [Op.or]: whereCondition
             },
@@ -201,5 +214,6 @@ module.exports = {
     query,
     queryOne,
     appendToColumn,
-    removeFromColumn
+    removeFromColumn,
+    queryAggregate
 }

@@ -15,12 +15,18 @@ module.exports = {
 
 async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
     try {
-        let filterBy
-        if (!isUserPostsOnly) filterBy = { userId: user.following, username: user.username }
-        else {
-            filterBy = { userId: user._id }
-        }
-        let posts = await dbService.query(instegramPosts, filterBy, numOfPostsToQuerry, false, [['createdAt', 'DESC']], instegramUsers)
+        let followingList
+        let posts
+        if (!isUserPostsOnly) {
+
+            let filterByModelFollowing = { _id: user._id }
+            followingList = await dbService.query(instegramPosts, filterByModelFollowing, numOfPostsToQuerry, false, [['createdAt', 'DESC']], attribute = 'following')
+
+            let filterByModelPosts = { userId: followingList, username: user.username }
+            posts = await dbService.query(instegramPosts, filterByModelPosts, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
+
+        } else posts = await dbService.query(instegramPosts, { userId: user._id }, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
+
         return posts
     } catch (err) {
         logger.error('post.service - cannot find posts', err)
