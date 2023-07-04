@@ -35,6 +35,7 @@ export const usersStore = {
                     commit({ type: 'setUsers', users: [] })
                     return
                 }
+                console.log('in store !', filterBy)
                 const users = await userService.query(filterBy)
                 commit({ type: 'setUsers', users })
             } catch (error) {

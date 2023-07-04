@@ -128,11 +128,12 @@ async function queryAggregate(model1, model2, filterByModel1, filterByModel2, nu
 async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']], attribute = undefined) {
     let result
     let whereCondition = {}
-    let modelColumns = model.describe()
     // [Op.like]: `%${filterBy[key]}%`
     Object.keys(filterBy).forEach(key => {
         whereCondition[key] = (Array.isArray(filterBy[key])) ? filterBy[key] : { [Op.eq]: filterBy[key] }
     })
+
+
 
     try {
         if (!filterBy) result = await model.findAll()
@@ -161,12 +162,13 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
         }
 
 
-        if (isLessDetails) {
+        else if (isLessDetails) {
+            console.log('in dbservice', filterBy)
             whereCondition = []
             Object.keys(filterBy).forEach(key => {
-                whereCondition.push({ [key]: { [Op.eq]: filterBy[key] } })
+                whereCondition.push({ [key]: { [Op.iLike]: filterBy[key] + '%' } })
             })
-            if (filterBy.fullname) whereCondition['fullname'] = { [Op.iLike]: filterBy['fullname'] + '%' }
+
             result = await model.findAll({
                 attributes: ['username', '_id', 'imgUrl', 'fullname'],
                 where: {
@@ -178,7 +180,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
         }
 
-        if (attribute) {
+        else if (attribute) {
             result = await model.findAll({
                 attributes: [`${attribute}`],
                 where: {
@@ -200,6 +202,15 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
             // continue - needed to add more posts to the state in the front, by minus 4 I gurantee the stating point to be precise
             limit: numOfDesiredResults
         })
+
+        else result = await model.findAll({
+            where: {
+                [Op.or]: whereCondition
+            },
+            order,
+            limit: numOfDesiredResults
+        })
+
         return result.map((instance) => instance.dataValues)
     } catch (error) {
         console.log(error)

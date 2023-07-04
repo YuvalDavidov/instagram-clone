@@ -22,23 +22,9 @@ const STORAGE_KEY_LOGGEDIN_USER = 'loginToken'
 
 async function query(filterBy) {
     try {
+        console.log('filterBy---->', filterBy)
         const queryParams = `?filterBy=${filterBy}&isLessDetails=${true}`
         const users = await httpService.get(USER_URL + queryParams)
-        return users
-        // let users = await storageService.query(USER_KEY)
-        // users = users.map(user => {
-        //     return {
-        //         username: user.username,
-        //         userId: user._id,
-        //         imgUrl: user.imgUrl,
-        //         fullname: user.fullname
-        //     }
-        // })
-        // users = users.filter(user => user.userId !== loggedinUserId && (user.username.includes(filterBy) || user.fullname.includes(filterBy)))
-        // // console.log(users)
-        // users = users.filter(user => user.username.includes(filterBy))
-        // console.log(users)
-        // users = users.splice(0, 5)
         return users
     } catch (error) {
         throw new Error('coudnlt preform search query', error)
