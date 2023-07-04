@@ -9,8 +9,9 @@ export const SOCKET_EMIT_STOP_TYPING = 'chat-stop-typing';
 export const SOCKET_EMIT_USER_WATCH = 'user-watch';
 
 export const SOCKET_EVENT_TYPING = 'chat-add-typing';
+export const SOCKET_EVENT_TOPIC = 'get-chat-history'
 export const SOCKET_EVENT_STOP_TYPING = 'chat-remove-typing';
-export const SOCKET_EVENT_ADD_MSG_TO_YOU = 'chat-add-msg-to-you';
+export const SOCKET_EVENT_ADD_MSG = 'chat-add-msg';
 export const SOCKET_EVENT_USER_UPDATED = 'user-updated';
 export const SOCKET_EVENT_COMMENT_ADDED_TO_YOU = 'comment-added-to-you';
 export const SOCKET_EVENT_LIKE_ADDED_TO_YOU = 'like-added-to-you';
