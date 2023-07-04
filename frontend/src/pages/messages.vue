@@ -9,7 +9,7 @@
           </button>
         </div>
 
-        <UsersMessegesList :messegesIds="messegesIds" @replace="replaceTopic" />
+        <UsersMessegesList :messegesIds="getChatsIds" @replace="replaceTopic" />
       </article>
 
       <article class="messages-chat">
@@ -79,7 +79,7 @@ export default {
         timestemp: null,
         userId: null,
       },
-      messegesIds: ["123", "456"],
+      messegesIds: {},
       messeges: [],
       timeoutId: null,
       typingUsers: [],
@@ -87,6 +87,9 @@ export default {
     };
   },
   created() {
+    this.$store.dispatch({
+      type: "loadChatIds",
+    });
     this.msg.userId = this.user._id;
     if (this.$route.params._id) {
       socketService.emit(SOCKET_EMIT_TOPIC, this.$route.params._id);
@@ -146,6 +149,9 @@ export default {
     showChat() {
       if (this.$route.params._id) return true;
       else return false;
+    },
+    getChatsIds() {
+      return this.$store.getters.getChatsIds;
     },
   },
 };

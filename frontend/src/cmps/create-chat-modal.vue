@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       searchTxt: "",
-      usersToChat: ["1"],
+      usersToChat: ["5"],
     };
   },
   methods: {
@@ -68,7 +68,7 @@ export default {
         try {
           const topic = await chatService.createNewChat(this.usersToChat);
           if (!this.$route.params._id) {
-            this.$router.push(`messages/${topic}`);
+            this.$router.push(`${topic}`);
           } else {
             this.$router.replace({ params: { _id: topic } });
           }

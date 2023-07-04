@@ -5,6 +5,22 @@
         min-height: 56px;
         padding: 8px 24px;
 
+        & .user-msg-container {
+            display: flex;
+
+            & img {
+                margin-right: 12px;
+                border-radius: 50%;
+                width: 56px;
+            }
+
+            & .msg-info {
+                display: flex;
+                flex-direction: column;
+                width: max-content;
+            }
+        }
+
     }
 
     :hover {

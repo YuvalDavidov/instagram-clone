@@ -209,13 +209,12 @@ sequelize
         //         ]
         //     }
         // })
-        let result = await instegramUsers.findAll({
-            attributes: ['following'],
-            where: {
-                _id: 17
-            }
-        })
-        console.log('result----->', result.map(instance => instance.dataValues.following))
+        // let result = await instegramUsers.findAll({
+        //     attributes: ['following'],
+        //     where: {
+        //         _id: 17
+        //     }
+        // })
 
     })
     .catch((err) => {

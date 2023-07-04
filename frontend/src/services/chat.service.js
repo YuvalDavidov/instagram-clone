@@ -9,8 +9,13 @@ export const chatService = {
     createNewChat
 }
 
-async function query(topicId) {
+async function query() {
+    try {
+        return httpService.get(BASE_URL)
+    } catch (error) {
+        throw new Error('error - couldnt get chatIds', error)
 
+    }
 }
 
 async function createNewChat(usersId) {

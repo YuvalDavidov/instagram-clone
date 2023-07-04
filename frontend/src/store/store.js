@@ -3,6 +3,7 @@ import { userService } from '../services/user.service'
 import { postStore } from './post.store.js'
 import { usersStore } from './users.store'
 import { storyStore } from './story.store'
+import { chatStore } from './chat.store'
 
 
 export const myStore = createStore({
@@ -64,7 +65,8 @@ export const myStore = createStore({
     modules: {
         postStore,
         usersStore,
-        storyStore
+        storyStore,
+        chatStore
     }
 })
 
