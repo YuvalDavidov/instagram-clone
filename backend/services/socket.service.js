@@ -26,7 +26,7 @@ function setupSocketAPI(http) {
             socket.userId = userId
             try {
                 const chatHistory = await chatService.getChatById(userId)
-                socket.emit('get-chat-history', chatHistory)
+                socket.emit('get-chat-history', chatHistory.reverse())
 
             } catch (error) {
                 console.log(error);

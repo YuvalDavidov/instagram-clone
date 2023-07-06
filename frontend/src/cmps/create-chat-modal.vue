@@ -10,6 +10,18 @@
       <article class="search-users">
         <div class="search-input-create">
           <span>To:</span>
+          <div v-if="this.namesToShow.length" class="selected-users-container">
+            <li
+              v-for="selectedUser in namesToShow"
+              :key="selectedUser"
+              class="chosen-user"
+            >
+              {{ selectedUser }}
+              <button @click="removeUserFromChat(selectedUser)">
+                <v-icon name="bi-x" scale="1" />
+              </button>
+            </li>
+          </div>
           <input
             type="text"
             v-model="this.searchTxt"
@@ -20,12 +32,17 @@
         </div>
         <section class="users">
           <li v-for="(user, index) in filterdByUsers" :key="index">
-            <div class="list-container" @click="moveTo(user)">
+            <div class="list-container">
               <img class="user-img" :src="user.imgUrl" alt="" />
               <div class="user-info">
-                <span>{{ user.username }}</span>
                 <span>{{ user.fullname }}</span>
+                <span>{{ user.username }}</span>
               </div>
+              <input
+                :checked="isSelected(user._id)"
+                type="checkbox"
+                @click="toggleUserToChat(user)"
+              />
             </div>
           </li>
         </section>
@@ -48,12 +65,12 @@ export default {
   data() {
     return {
       searchTxt: "",
-      usersToChat: ["5"],
+      usersToChat: [],
+      namesToShow: [],
     };
   },
   methods: {
     serachUsers() {
-      console.log(this.searchTxt);
       this.$store.dispatch({
         type: "loadUsersBy",
         filterBy: this.searchTxt,
@@ -68,7 +85,7 @@ export default {
         try {
           const topic = await chatService.createNewChat(this.usersToChat);
           if (!this.$route.params._id) {
-            this.$router.push(`${topic}`);
+            this.$router.push(`messages/${topic}`);
           } else {
             this.$router.replace({ params: { _id: topic } });
           }
@@ -78,6 +95,36 @@ export default {
           new Error("coudl'nt create this chat", error);
         }
       }
+    },
+    toggleUserToChat(user) {
+      const userId = user._id;
+      const username = user.username;
+      if (!this.usersToChat.includes(userId)) {
+        this.usersToChat.push(userId);
+        this.namesToShow.push(username);
+        this.searchTxt = "";
+        this.$store.dispatch({
+          type: "loadUsersBy",
+          filterBy: this.searchTxt,
+        });
+      } else {
+        const idx = this.usersToChat.indexOf(userId);
+        this.usersToChat = this.usersToChat.filter(
+          (user, indx) => indx !== idx
+        );
+        this.namesToShow = this.namesToShow.filter(
+          (user, indx) => indx !== idx
+        );
+      }
+    },
+    isSelected(userId) {
+      if (this.usersToChat.includes(userId)) return true;
+      else return false;
+    },
+    removeUserFromChat(username) {
+      const idx = this.namesToShow.indexOf(username);
+      this.usersToChat = this.usersToChat.filter((user, indx) => indx !== idx);
+      this.namesToShow = this.namesToShow.filter((user, indx) => indx !== idx);
     },
   },
   computed: {

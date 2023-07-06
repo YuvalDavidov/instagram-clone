@@ -1,4 +1,5 @@
 
+const utilService = require('../../services/util.service')
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const { instegramUsers } = require('../../services/models/models')
@@ -70,6 +71,11 @@ async function update(user) {
 }
 
 async function add(user) {
+    const _id = utilService.makeId(10)
+    user = {
+        ...user,
+        _id
+    }
     try {
         let addedUser = await dbService.addRecord(instegramUsers, user)
         return addedUser

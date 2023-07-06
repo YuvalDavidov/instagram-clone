@@ -44,6 +44,14 @@
           ></textarea>
           <button class="send-btn">send</button>
         </form>
+        <section class="no-chat" v-if="!showChat">
+          <div class="cercul">
+            <v-icon scale="3" name="la-facebook-messenger" />
+          </div>
+          <h3>Your messages</h3>
+          <small>Send private photos and messages to a friend or group</small>
+          <button @click="onToggleCreateNewChat">Send message</button>
+        </section>
       </article>
     </section>
     <CreateChatModal
@@ -96,14 +104,12 @@ export default {
     }
   },
   mounted() {
-    console.log("mount");
     socketService.on(SOCKET_EVENT_TOPIC, this.setChatHistory);
     socketService.on(SOCKET_EVENT_ADD_MSG, this.addMsg);
     socketService.on(SOCKET_EVENT_TYPING, this.addTypingUsers);
     socketService.on(SOCKET_EVENT_STOP_TYPING, this.removeTypingUser);
   },
   beforeUnmount() {
-    console.log("unmount");
     socketService.off(SOCKET_EVENT_ADD_MSG, this.addMsg);
     socketService.off(SOCKET_EVENT_TYPING, this.addTypingUsers);
     socketService.off(SOCKET_EVENT_STOP_TYPING, this.removeTypingUser);
@@ -136,7 +142,7 @@ export default {
       this.typingUsers.splice(user.username);
     },
     addMsg(msg) {
-      this.messeges.push(msg);
+      this.messeges.unshift(msg);
     },
     setChatHistory(msgs) {
       this.messeges = msgs;

@@ -10,9 +10,8 @@ const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
 
 const instegramUsers = sequelize.define('instegramUsers', {
     _id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
     },
     followers: {
@@ -168,11 +167,6 @@ const instegramChats = sequelize.define('instegramChats', {
     },
     betweenUsers: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false,
-        defaultValue: []
-    },
-    betweenUsers: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         defaultValue: []
     },
@@ -190,37 +184,23 @@ const instegramChats = sequelize.define('instegramChats', {
     }
 )
 
+instegramChats.belongsToMany(instegramUsers, {
+    through: 'chat',
+    foreignKey: 'chatId',
+    otherKey: '_id',
+    as: 'users'
+});
 
+instegramUsers.belongsToMany(instegramChats, {
+    through: 'chat',
+    foreignKey: '_id',
+    otherKey: 'chatId',
+    as: 'chats'
+});
 
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
     .then(async () => {
-        console.log('User table created');
-        // let reuslt = await instegramPosts.findAll({
-        //     where: {
-        //         [Op.or]: [
-        //             {
-        //                 userId: await instegramUsers.findAll({
-        //                     attributes: ['following'],
-        //                     where: {
-        //                         _id: 17
-        //                     }
-        //                 }).map((model2) => model2.following)
-        //             },
-        //             {
-        //                 userId: 17
-        //             }
-
-        //         ]
-        //     }
-        // })
-        let result = await instegramUsers.findAll({
-            attributes: ['following'],
-            where: {
-                _id: 17
-            }
-        })
-        console.log('result----->', result.map(instance => instance.dataValues.following))
 
     })
     .catch((err) => {

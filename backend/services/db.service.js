@@ -112,17 +112,39 @@ async function queryOne(model, filterBy) {
         throw new Error('failed to get record', error)
     }
 }
+//  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]
+async function queryAggregate(model1, model2, user) {
+    console.log('here', user);
+    // let result
+    // let whereConditionModel1 = {}
+    // let whereConditionModel2 = {}
+    // let model2Columns = model2.describe()
+    // Object.keys(filterByModel2).forEach(key => {
+    //     whereConditionModel2[key] = (model2Columns[key].type === 'ARRAY') ? model2.findAll({
+    //         attributes: [key], where: { filterByModel1 }
+    //     }) : { [Op.eq]: filterBy[key] }
+    // })
 
-async function queryAggregate(model1, model2, filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
-    let result
-    let whereConditionModel1 = {}
-    let whereConditionModel2 = {}
-    let model2Columns = model2.describe()
-    Object.keys(filterByModel2).forEach(key => {
-        whereConditionModel2[key] = (model2Columns[key].type === 'ARRAY') ? model2.findAll({
-            attributes: [key], where: { filterByModel1 }
-        }) : { [Op.eq]: filterBy[key] }
-    })
+    try {
+        let result =
+            await model1.findAll({
+                include: {
+                    model: model2,
+                    as: 'users',
+                    attributes: { exclude: ['password'] }, // Exclude any specific attributes if needed
+                    where: {
+                        _id: { [Op.not]: user }
+                    },
+                },
+                where: {
+                    betweenUsers: { [Op.contains]: [user] }
+                },
+            })
+        console.log('result---', result);
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']], attribute = undefined) {

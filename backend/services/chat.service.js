@@ -1,12 +1,14 @@
 const utilService = require('./util.service');
 const logger = require('./logger.service')
 const dbService = require('./db.service')
-const { instegramChats } = require('./models/models')
+const { instegramChats, instegramUsers } = require('./models/models')
 
+queryChatIds('9493004838')
 async function queryChatIds(userId) {
     console.log('here2', userId);
     try {
-        // const chatIds = await dbService.queryAggregate()
+        const chatIds = await dbService.queryAggregate(instegramChats, instegramUsers, userId)
+        // console.log(chatIds);
         return { chatIds: ['123', '546'], usersInfo: [{ username: 'kaka', imgUrl: 'ss' }, { username: 'pipi', imgUrl: 'ss' }] }
     } catch (error) {
         logger.error('chat service - can not get chatIds' + error)
@@ -49,7 +51,6 @@ async function createNewChat(betweenUsers) {
         betweenUsers
     }
     try {
-        console.log(data);
         await dbService.addRecord(instegramChats, data)
         return topicId
     } catch (err) {
