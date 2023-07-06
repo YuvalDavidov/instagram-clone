@@ -4,7 +4,9 @@ const postService = require('./post.service')
 async function getPosts(req, res) {
 
     let { userId, numOfPostsToQuerry, isUserPostsOnly } = req.query
-    isUserPostsOnly = Boolean(isUserPostsOnly)
+
+    isUserPostsOnly = (isUserPostsOnly === 'true') ? true : false
+
     try {
         const posts = await postService.query(userId, numOfPostsToQuerry, isUserPostsOnly)
         res.json(posts)

@@ -13,19 +13,20 @@ module.exports = {
     removeFromColumn
 }
 
-async function query(user, numOfPostsToQuerry, isUserPostsOnly) {
+async function query(userId, numOfPostsToQuerry, isUserPostsOnly) {
     try {
-        let followingList
+        let user
         let posts
         if (!isUserPostsOnly) {
 
-            let filterByModelFollowing = { _id: user._id }
-            followingList = await dbService.query(instegramPosts, filterByModelFollowing, numOfPostsToQuerry, false, [['createdAt', 'DESC']], attribute = 'following')
-
-            let filterByModelPosts = { userId: followingList, username: user.username }
+            let filterByModelFollowing = { _id: userId }
+            user = await dbService.query(instegramUsers, filterByModelFollowing, numOfPostsToQuerry, false, [['createdAt', 'DESC']], attribute = ['following', 'username'])
+            console.log('listtttt', user)
+            let filterByModelPosts = { userId: user.following, username: user.username }
+            console.log('filterBy---->', filterByModelPosts)
             posts = await dbService.query(instegramPosts, filterByModelPosts, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
 
-        } else posts = await dbService.query(instegramPosts, { userId: user._id }, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
+        } else posts = await dbService.query(instegramPosts, { userId }, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
 
         return posts
     } catch (err) {

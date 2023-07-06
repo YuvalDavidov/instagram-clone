@@ -182,14 +182,13 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
         else if (attribute) {
             result = await model.findAll({
-                attributes: [`${attribute}`],
+                attributes: attribute,
                 where: {
                     [Op.or]: filterBy
                 },
                 order
             })
-
-            return result.map((instance) => instance.dataValues.following)[0]
+            return result.map((instance) => instance.dataValues)[0]
         }
 
 

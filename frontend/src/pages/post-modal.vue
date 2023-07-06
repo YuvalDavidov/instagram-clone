@@ -216,7 +216,7 @@ export default {
         } else {
           await this.$store.dispatch({
             type: "loadPosts",
-            user: this.loggedInUser,
+            userId: this.loggedInUser._id,
           });
         }
         this.commentTxt = "";
@@ -245,7 +245,7 @@ export default {
         } else {
           this.$store.dispatch({
             type: "loadPosts",
-            user: this.loggedInUser,
+            userId: this.loggedInUser._id,
           });
         }
       } catch (err) {
@@ -269,7 +269,7 @@ export default {
         } else {
           this.$store.dispatch({
             type: "loadPosts",
-            user: this.loggedInUser,
+            userId: this.loggedInUser._id,
           });
         }
       } catch (err) {
@@ -301,7 +301,7 @@ export default {
         } else if (this.isAtHomePage) {
           this.$store.dispatch({
             type: "loadPosts",
-            user: this.loggedInUser,
+            userId: this.loggedInUser._id,
           });
         } else {
           this.$store.dispatch({
@@ -324,7 +324,7 @@ export default {
         } else if (this.isAtHomePage) {
           this.$store.dispatch({
             type: "loadPosts",
-            user: this.loggedInUser,
+            userId: this.loggedInUser._id,
           });
         } else {
           this.$store.dispatch({

@@ -194,34 +194,8 @@ const instegramChats = sequelize.define('instegramChats', {
 
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
-    .then(async () => {
+    .then(() => {
         console.log('User table created');
-        // let reuslt = await instegramPosts.findAll({
-        //     where: {
-        //         [Op.or]: [
-        //             {
-        //                 userId: await instegramUsers.findAll({
-        //                     attributes: ['following'],
-        //                     where: {
-        //                         _id: 17
-        //                     }
-        //                 }).map((model2) => model2.following)
-        //             },
-        //             {
-        //                 userId: 17
-        //             }
-
-        //         ]
-        //     }
-        // })
-        let result = await instegramUsers.findAll({
-            attributes: ['following'],
-            where: {
-                _id: 17
-            }
-        })
-        console.log('result----->', result.map(instance => instance.dataValues.following))
-
     })
     .catch((err) => {
         console.error('Error creating user table:', err);
