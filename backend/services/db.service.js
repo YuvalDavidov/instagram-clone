@@ -112,6 +112,7 @@ async function queryOne(model, filterBy) {
         throw new Error('failed to get record', error)
     }
 }
+// aaa
 
 async function queryAggregate(model1, model2, filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]) {
     let result
