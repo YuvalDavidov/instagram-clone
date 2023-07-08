@@ -16,7 +16,7 @@ export default {
   created() {
     this.$store.dispatch({
       type: "loadPosts",
-      user: this.$store.getters.GetUser,
+      userId: this.$store.getters.GetUser._id,
       numOfPostsToQuerry: this.currNumOfPostsToQuerry,
     });
     window.addEventListener("scroll", this.onWindowScroll);
@@ -43,10 +43,9 @@ export default {
         this.currNumOfPostsToQuerry += 4;
         this.$store.dispatch({
           type: "loadPosts",
-          user: this.$store.getters.GetUser,
+          userId: this.$store.getters.GetUser._id,
           numOfPostsToQuerry: this.currNumOfPostsToQuerry,
         });
-        console.log(this.currNumOfPostsToQuerry);
         this.isLoadingPosts = true;
         this.maxPageScroll = maxScroll;
       }

@@ -26,7 +26,12 @@ export const postStore = {
             state.userPosts = userPosts
         },
         setPosts(state, { posts }) {
-            state.followingPosts = [...state.followingPosts, ...posts] // adding to the exisiting posts that were already in the state
+            let postsIdsOld = [...new Set([...state.followingPosts].map(post => post._id))]
+            let newPosts = [...posts].reduce((acc, post) => {
+                if (!postsIdsOld.includes(post._id)) acc.push(post)
+                return acc
+            }, [])
+            state.followingPosts = [...state.followingPosts, ...newPosts] // adding to the exisiting posts that were already in the state
         },
         setPost(state, { post }) {
             state.post = post
@@ -74,13 +79,14 @@ export const postStore = {
 
             }
         },
-        async loadPosts({ commit }, { user, numOfPostsToQuerry }) {
+        async loadPosts({ commit }, { userId, numOfPostsToQuerry }) {
             try {
                 if (numOfPostsToQuerry) {
                     commit({ type: 'setCurrNumOfPosts', num: numOfPostsToQuerry })
                 }
+                console.log('in store---', numOfPostsToQuerry)
 
-                const posts = await postService.getPosts(user, this.state.postStore.numOfPostsToQuerry)
+                const posts = await postService.getPosts(userId, this.state.postStore.numOfPostsToQuerry)
                 commit({ type: 'setPosts', posts })
             } catch (err) {
                 throw new Error('coudl\'nt get posts', err)

@@ -44,8 +44,8 @@ const months = [
 
 async function getPostById(postId) {
     try {
-        // const post = await httpService.get(`${POST_URL}:${postId}`)
-        const post = await storageService.get(POST_KEY, postId)
+        const post = await httpService.get(`${POST_URL}:${postId}`)
+        // const post = await storageService.get(POST_KEY, postId)
         return post
     } catch (error) {
         new Error('coudl\'nt get this post', error)
@@ -55,10 +55,10 @@ async function getPostById(postId) {
 
 async function toggleCommenting(postId, isCommentingAllowed) {
     try {
-        // await httpService.put(POST_URL, { dataToUpdate: { isCommentingAllowed: !isCommentingAllowed }, postId })
-        let post = await storageService.get(POST_KEY, postId)
-        post.isCommentingAllowed = !post.isCommentingAllowed
-        await storageService.put(POST_KEY, post)
+        await httpService.put(POST_URL, { dataToUpdate: { isCommentingAllowed: !isCommentingAllowed }, postId })
+        // let post = await storageService.get(POST_KEY, postId)
+        // post.isCommentingAllowed = !post.isCommentingAllowed
+        // await storageService.put(POST_KEY, post)
 
     } catch (error) {
         new Error('coudl\'nt do this action on this post', error)
@@ -108,23 +108,25 @@ async function removeLike(postId, userId) {
 
 async function addLike(postId, likedUser) {
     try {
-        // await httpService.put(`${POST_URL}${postId}`, { data: { ...likedUser }, entityName: 'likes' })
-        let post = await storageService.get(POST_KEY, postId)
-        post.likes.push(likedUser)
-        await storageService.put(POST_KEY, post)
+        await httpService.put(`${POST_URL}${postId}`, { data: { ...likedUser }, entityName: 'likes' })
+        // let post = await storageService.get(POST_KEY, postId)
+        // post.likes.push(likedUser)
+        // await storageService.put(POST_KEY, post)
     } catch (error) {
         new Error('coudl\'nt add like to this post', error)
     }
 }
 
-async function getPosts(user, numOfPostsToQuerry) {
-    // return await httpService.get(POST_URL, {user, numOfPostsToQuerry, isUserPostsOnly: false})
-    let posts = await storageService.query(POST_KEY)
-    return posts.reduce((acc, post) => {
-        if (user.following.includes(post.userId) || post.userId === user._id) acc.push(post)
-        return acc
-    }, []).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, numOfPostsToQuerry - 1)
-
+async function getPosts(userId, numOfPostsToQuerry) {
+    const queryParams = `?userId=${userId}&numOfPostsToQuerry=${numOfPostsToQuerry}&isUserPostsOnly=${false}`
+    let posts = await httpService.get(POST_URL + queryParams)
+    return posts
+    // let posts = await storageService.query(POST_KEY)
+    // return posts.reduce((acc, post) => {
+    //     if (user.following.includes(post.userId) || post.userId === user._id) acc.push(post)
+    //     return acc
+    // }, [])
+    // // .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, numOfPostsToQuerry - 1)
 }
 
 function isPostOwendByUser(postUserId) {

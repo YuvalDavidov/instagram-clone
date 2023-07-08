@@ -113,7 +113,7 @@ export default {
         await postService.addComment(this.post._id, commentInfo);
         this.$store.dispatch({
           type: "loadPosts",
-          user: this.loggedInUser,
+          userId: this.loggedInUser._id,
         });
       } catch (error) {
         new Error("coudl'nt add the comment to this post", error);
@@ -121,7 +121,6 @@ export default {
       this.commentTxt = "";
     },
     onOpenPostModal() {
-      console.log("ho");
       this.$emit("onOpenPostModal");
     },
     async removeLike() {
@@ -130,7 +129,7 @@ export default {
         await postService.removeLike(this.post._id, userId);
         this.$store.dispatch({
           type: "loadPosts",
-          user: this.loggedInUser,
+          userId: this.loggedInUser._id,
         });
       } catch (err) {
         throw new Error("coudl'nt remove like from this post", err);
@@ -146,7 +145,7 @@ export default {
         await postService.addLike(this.post._id, userInfo);
         this.$store.dispatch({
           type: "loadPosts",
-          user: this.loggedInUser,
+          userId: this.loggedInUser._id,
         });
       } catch (err) {
         console.error("coudl'nt like this post", err);
