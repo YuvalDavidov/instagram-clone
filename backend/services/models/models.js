@@ -200,13 +200,8 @@ instegramUsers.belongsToMany(instegramChats, {
 
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
-<<<<<<< HEAD
     .then(async () => {
 
-=======
-    .then(() => {
-        console.log('User table created');
->>>>>>> d9bd506fa766a6dc0b8efcdf7c509fccd9178a6c
     })
     .catch((err) => {
         console.error('Error creating user table:', err);
