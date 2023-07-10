@@ -14,6 +14,7 @@ export default {
     };
   },
   created() {
+    if (this.$store.getters.followingPosts.length) return
     this.$store.dispatch({
       type: "loadPosts",
       userId: this.$store.getters.GetUser._id,
@@ -25,7 +26,7 @@ export default {
 
   computed: {
     posts() {
-      return this.$store.getters.followingPosts;
+      return this.$store.getters.followingPosts
     },
   },
   destroyed() {

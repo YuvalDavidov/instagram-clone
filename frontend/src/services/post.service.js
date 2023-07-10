@@ -15,7 +15,6 @@ export const postService = {
     getTime,
     didUserLikedPost,
     getCommentTime,
-    sortByTimeStampe,
     removePost,
     getEmptyPost,
     toggleLikeCount,
@@ -53,12 +52,12 @@ async function getPostById(postId) {
     }
 }
 
-async function toggleCommenting(postId, isCommentingAllowed) {
+async function toggleCommenting(post, isCommentingAllowed) {
     try {
-        await httpService.put(POST_URL, { dataToUpdate: { isCommentingAllowed: !isCommentingAllowed }, postId })
-        // let post = await storageService.get(POST_KEY, postId)
-        // post.isCommentingAllowed = !post.isCommentingAllowed
-        // await storageService.put(POST_KEY, post)
+        post = JSON.parse(JSON.stringify(post))
+        await httpService.put(POST_URL, { dataToUpdate: { isCommentingAllowed: !isCommentingAllowed }, postId: post._id })
+        post.isCommentingAllowed = !post.isCommentingAllowed
+        return post
 
     } catch (error) {
         new Error('coudl\'nt do this action on this post', error)
@@ -66,52 +65,49 @@ async function toggleCommenting(postId, isCommentingAllowed) {
     }
 }
 
-async function toggleLikeCount(postId, isLikeCountVisible) {
+async function toggleLikeCount(post, isLikeCountVisible) {
     try {
-        // await httpService.put(POST_URL, { dataToUpdate: { isLikeCountVisible: !isLikeCountVisible }, postId })
-        let post = await storageService.get(POST_KEY, postId)
+        post = JSON.parse(JSON.stringify(post))
+        await httpService.put(POST_URL, { dataToUpdate: { isLikeCountVisible: !isLikeCountVisible }, postId: post._id })
         post.isLikeCountVisible = !post.isLikeCountVisible
-        await storageService.put(POST_KEY, post)
-
+        return post
     } catch (error) {
         new Error('coudl\'nt do this action on this post', error)
 
     }
 }
 
-async function addComment(postId, commentInfo) {
+async function addComment(post, commentInfo) {
     try {
-        let post = await storageService.get(POST_KEY, postId)
+        post = JSON.parse(JSON.stringify(post))
         commentInfo.id = utilService.makeId()
         commentInfo.timestamp = new Date()
-        // await httpService.put(`${POST_URL}${postId}`, {data: {...commentInfo}, entityName: 'comments' })
+        await httpService.put(`${POST_URL}${post._id}`, { data: { ...commentInfo }, entityName: 'comments' })
         post.comments.push(commentInfo)
-        await storageService.put(POST_KEY, post)
-
+        return post
     } catch (error) {
         new Error('coudl\'nt add the comment to this post', error)
 
     }
 }
-
-async function removeLike(postId, userId) {
+// 
+async function removeLike(post, userId,) {
     try {
-        //await httpService.delete(`${postId}`, { itemId: userId, entityName: 'likes' })
-        let post = await storageService.get(POST_KEY, postId)
-        const idx = post.likes.findIndex((like) => like.userId === userId)
-        post.likes.splice(idx, 1)
-        await storageService.put(POST_KEY, post)
+        post = JSON.parse(JSON.stringify(post))
+        await httpService.delete(`${POST_URL}`, { postId: post._id, itemId: userId, entityName: 'likes' })
+        post.likes = post.likes.filter(likedByUserId => likedByUserId !== userId)
+        return post
     } catch (error) {
         new Error('coudl\'nt remove like to this post', error)
     }
 }
 
-async function addLike(postId, likedUser) {
+async function addLike(post, likedUser) {
     try {
-        await httpService.put(`${POST_URL}${postId}`, { data: { ...likedUser }, entityName: 'likes' })
-        // let post = await storageService.get(POST_KEY, postId)
-        // post.likes.push(likedUser)
-        // await storageService.put(POST_KEY, post)
+        post = JSON.parse(JSON.stringify(post))
+        await httpService.put(`${POST_URL}${post._id}`, { data: likedUser, entityName: 'likes' })
+        post.likes.push(likedUser)
+        return post
     } catch (error) {
         new Error('coudl\'nt add like to this post', error)
     }
@@ -135,10 +131,9 @@ function isPostOwendByUser(postUserId) {
     else return false
 }
 
-function didUserLikedPost(post) {
-    let user = userService.getLoggedinUser();
-    let didUserLiked = post.likes.find(
-        (like) => like.userId === user._id
+function didUserLikedPost(postLikes, userId) {
+    let didUserLiked = postLikes.find(
+        (like) => like === userId
     );
     if (didUserLiked) return true;
     else return false;
@@ -190,6 +185,7 @@ async function savePost(user, post) {
             return await storageService.put(POST_KEY, post)
         } else {
             post = {
+                _id: utilService.makeId(7),
                 userId: user._id,
                 username: user.username,
                 userImg: user.imgUrl,
@@ -212,24 +208,13 @@ async function savePost(user, post) {
 
 async function removePost(postId) {
     try {
-        // await httpService.delete(`${POST_URL}${postId}`)
-        await storageService.remove(POST_KEY, postId)
+        await httpService.delete(`${POST_URL + postId}`)
+        // await storageService.remove(POST_KEY, postId)
     } catch (error) {
 
     }
 }
 
-function sortByTimeStampe(posts) {
-    posts = posts.map((post) => {
-        return {
-            ...post,
-            timestamp: new Date(post.timestamp).getTime(),
-        };
-    });
-    return posts.sort(
-        (a, b) => b.timestamp - a.timestamp
-    );
-}
 
 function getEmptyPost() {
     return {
@@ -238,15 +223,3 @@ function getEmptyPost() {
     }
 }
 
-// ; (async () => {
-//     await savePost({ _id: '01axk', username: 'yuval', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
-//     await savePost({ _id: '01axk', username: 'yuval', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
-//     await savePost({ _id: '01axk', username: 'yuval', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg'], summery: 'a nice livingroom' })
-//     await savePost({ _id: 'lQ8yn', username: 'shaked', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
-//     await savePost({ _id: 'lQ8yn', username: 'shaked', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
-//     await savePost({ _id: 'lQ8yn', username: 'shaked', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
-//     await savePost({ _id: 'n0SQy', username: 'daniel', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680952736/pl3nxtbd4koyswhkcna6.jpg', 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1674918908/cgsfbltc4pczqaqnciet.jpg'], summery: 'a nice livingroom' })
-//     await savePost({ _id: 'n0SQy', username: 'daniel', userImg: ' https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
-//     await savePost({ _id: 'n0SQy', username: 'daniel', userImg: 'https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png' }, { imgsUrl: ['https://res.cloudinary.com/dp32ucj0y/image/upload/v1680948751/os5oztn42pljaa5ffsuc.png'], summery: 'a nice livingroom' })
-
-// })()

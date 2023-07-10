@@ -134,7 +134,7 @@ export default {
             this.postToEdit
           );
           this.$store.dispatch({
-            type: "savePost",
+            type: "addPost",
             post: postToSave,
           });
         } else {

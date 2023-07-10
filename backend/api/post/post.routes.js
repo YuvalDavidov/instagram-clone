@@ -9,7 +9,7 @@ router.get('/:_id', getPostById)
 router.post('/', addPost)
 router.put('/', updatePost)
 router.put('/:_id', appendItem)
-router.delete('/', removePost)
-router.delete('/:postId', removeItem)
+router.delete('/:postId', removePost)
+router.delete('/', removeItem)
 
 module.exports = router

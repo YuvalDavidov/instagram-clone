@@ -37,7 +37,6 @@ async function addRecord(model, data) {
         await model.sync()
         return result
     } catch (error) {
-        console.log('error', error);
         throw new Error('db.service - failed to add record', error)
     }
 
@@ -65,11 +64,12 @@ async function updateRecord(model, data, itemId) {
 }
 
 async function appendToColumn(model, data, columnName, entityId) {
-    console.log(model, data, columnName, entityId);
+    entityId = +entityId
+
     try {
         await model.update(
             {
-                [columnName]: sequelize.fn('array_append', sequelize.col(columnName), data)
+                [columnName]: sequelize.fn('array_append', sequelize.col(columnName), JSON.stringify(data))
             },
             { where: { _id: entityId } }
         )
@@ -79,6 +79,7 @@ async function appendToColumn(model, data, columnName, entityId) {
     }
 }
 async function removeFromColumn(model, columnName, itemId, entityId) {
+
     try {
         await model.update(
             {
@@ -115,15 +116,6 @@ async function queryOne(model, filterBy) {
 //  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]
 async function queryAggregate(model1, model2, user) {
     console.log('here', user);
-    // let result
-    // let whereConditionModel1 = {}
-    // let whereConditionModel2 = {}
-    // let model2Columns = model2.describe()
-    // Object.keys(filterByModel2).forEach(key => {
-    //     whereConditionModel2[key] = (model2Columns[key].type === 'ARRAY') ? model2.findAll({
-    //         attributes: [key], where: { filterByModel1 }
-    //     }) : { [Op.eq]: filterBy[key] }
-    // })
 
     try {
         let result =
@@ -148,7 +140,7 @@ async function queryAggregate(model1, model2, user) {
 
 }
 
-async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']], attribute = undefined) {
+async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']], attribute = undefined, isUserPostsOnly = false) {
     let result
     let whereCondition = {}
     // [Op.like]: `%${filterBy[key]}%`
@@ -186,7 +178,6 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
 
         else if (isLessDetails) {
-            console.log('in dbservice', filterBy)
             whereCondition = []
             Object.keys(filterBy).forEach(key => {
                 whereCondition.push({ [key]: { [Op.iLike]: filterBy[key] + '%' } })
@@ -215,22 +206,27 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
         }
 
 
-        else if (model === instegramPosts) result = await model.findAll({
-            where: {
-                [Op.or]: whereCondition
-            },
-            order,
-            offset: (numOfDesiredResults - 4), // offset is the the starting index from where you want to fetch results, 4 is the default number of added results
-            // continue - needed to add more posts to the state in the front, by minus 4 I gurantee the stating point to be precise
-            limit: numOfDesiredResults
-        })
+        else if (model === instegramPosts) {
+            console.log('arrived in db service!', whereCondition)
+            result = await model.findAll({
+                where: {
+                    [Op.or]: whereCondition
+                },
+                order,
+                limit: numOfDesiredResults,
+                offset: (isUserPostsOnly) ? numOfDesiredResults - 9 : numOfDesiredResults - 4
+
+            })
+
+            console.log(result, '<----------------')
+        }
 
         else result = await model.findAll({
             where: {
                 [Op.or]: whereCondition
             },
             order,
-            limit: numOfDesiredResults
+            limit: numOfDesiredResults,
         })
 
         return result.map((instance) => instance.dataValues)

@@ -1,6 +1,6 @@
 <template>
   <section class="post-list-profile">
-    <li v-for="(post, index) in sotedPosts" :key="post._id" class="post-grid">
+    <li v-for="(post, index) in posts" :key="post._id" class="post-grid">
       <img
         :src="post.imgsUrl[0]"
         @click="onClickedPost(index)"
@@ -15,7 +15,7 @@
         :postIndex="index"
         :isOwnProfile="isOwnProfile"
         @onChangePostIndex="onChangePostIndex"
-        @onCloseModale="onCloseModale"
+        @onCloseModal="onCloseModal"
       />
     </li>
   </section>
@@ -48,7 +48,7 @@ export default {
       this.isModalOpen = !this.isModalOpen;
       this.postIndex = idx;
     },
-    onCloseModale() {
+    onCloseModal() {
       this.isModalOpen = !this.isModalOpen;
       this.postIndex = null;
     },
@@ -56,11 +56,7 @@ export default {
       this.postIndex += direction;
     },
   },
-  computed: {
-    sotedPosts() {
-      return postService.sortByTimeStampe(this.posts);
-    },
-  },
+  
   components: {
     PostModal,
   },

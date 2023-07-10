@@ -5,7 +5,6 @@ const { instegramChats, instegramUsers } = require('./models/models')
 
 queryChatIds('9493004838')
 async function queryChatIds(userId) {
-    console.log('here2', userId);
     try {
         const chatIds = await dbService.queryAggregate(instegramChats, instegramUsers, userId)
         // console.log(chatIds);

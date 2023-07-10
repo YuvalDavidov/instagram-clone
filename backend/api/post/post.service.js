@@ -21,13 +21,10 @@ async function query(userId, numOfPostsToQuerry, isUserPostsOnly) {
 
             let filterByModelFollowing = { _id: userId }
             user = await dbService.query(instegramUsers, filterByModelFollowing, numOfPostsToQuerry, false, [['createdAt', 'DESC']], attribute = ['following', 'username'])
-            console.log('listtttt', user)
             let filterByModelPosts = { userId: user.following, username: user.username }
-            console.log('filterBy---->', filterByModelPosts)
             posts = await dbService.query(instegramPosts, filterByModelPosts, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
 
-        } else posts = await dbService.query(instegramPosts, { userId }, numOfPostsToQuerry, false, [['createdAt', 'DESC']])
-
+        } else posts = await dbService.query(instegramPosts, { userId }, numOfPostsToQuerry, false, [['createdAt', 'DESC']], attribute = undefined, isUserPostsOnly)
         return posts
     } catch (err) {
         logger.error('post.service - cannot find posts', err)
@@ -76,7 +73,7 @@ async function updatePost(data, postId) {
 async function appendToColumn(data, columnName, postId) {
     try {
         await dbService.appendToColumn(instegramPosts, data, columnName, postId)
-    } catch (error) {
+    } catch (err) {
         logger.error('post.service - cannot append to array', err)
         throw new Error('post.service - cannot append to array', err)
     }
@@ -84,9 +81,9 @@ async function appendToColumn(data, columnName, postId) {
 
 async function removeFromColumn(columnName, itemId, postId) {
     try {
-        await dbService.removeFromColumn(instegramPosts, columnName, itemId, { id: postId })
+        await dbService.removeFromColumn(instegramPosts, columnName, itemId, postId)
     } catch (error) {
-        logger.error('post.service - cannot remove item from array', err)
-        throw new Error('post.service - cannot remove item from array', err)
+        logger.error('post.service - cannot remove item from array', error)
+        throw new Error('post.service - cannot remove item from array', error)
     }
 }

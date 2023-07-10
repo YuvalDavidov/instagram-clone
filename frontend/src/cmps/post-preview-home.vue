@@ -85,6 +85,7 @@ export default {
       commentTxt: "",
       isFullSummeryShown: false,
       isSettingsOpen: false,
+      loggedInUser: undefined
     };
   },
   props: {
@@ -92,6 +93,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  created() {
+    this.loggedInUser = this.$store.getters.GetUser
   },
   methods: {
     timeAgo(timestamp) {
@@ -110,10 +114,10 @@ export default {
           username: this.loggedInUser.username,
           userImgUrl: this.loggedInUser.imgUrl,
         };
-        await postService.addComment(this.post._id, commentInfo);
+        const updatedPost = await postService.addComment(this.post, commentInfo);
         this.$store.dispatch({
-          type: "loadPosts",
-          userId: this.loggedInUser._id,
+          type: "savePost",
+          post: updatedPost,
         });
       } catch (error) {
         new Error("coudl'nt add the comment to this post", error);
@@ -126,10 +130,12 @@ export default {
     async removeLike() {
       try {
         const userId = this.loggedInUser._id;
-        await postService.removeLike(this.post._id, userId);
+        console.log('------------------>','hooooo')
+        const updatedPost = await postService.removeLike(this.post, userId);
+        console.log('------------------>',updatedPost)
         this.$store.dispatch({
-          type: "loadPosts",
-          userId: this.loggedInUser._id,
+          type: "savePost",
+          post: updatedPost,
         });
       } catch (err) {
         throw new Error("coudl'nt remove like from this post", err);
@@ -137,22 +143,18 @@ export default {
     },
     async addLike() {
       try {
-        let userInfo = {
-          imgUrl: this.loggedInUser.imgUrl,
-          userId: this.loggedInUser._id,
-          username: this.loggedInUser.username,
-        };
-        await postService.addLike(this.post._id, userInfo);
+        
+         await postService.addLike(this.post, this.loggedInUser._id);
         this.$store.dispatch({
-          type: "loadPosts",
-          userId: this.loggedInUser._id,
+          type: "savePost",
+          post: this.post,
         });
       } catch (err) {
         console.error("coudl'nt like this post", err);
       }
     },
-    didUserLikedPost(post) {
-      return postService.didUserLikedPost(post);
+    didUserLikedPost() {
+      return postService.didUserLikedPost([...this.post.likes], this.loggedInUser._id);
     },
     onToggleSettings() {
       this.isSettingsOpen = !this.isSettingsOpen;

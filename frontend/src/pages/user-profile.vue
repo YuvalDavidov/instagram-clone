@@ -113,6 +113,9 @@ export default {
       user: null,
       isFollowing: null,
       posts: [],
+      maxPageScroll: null,
+      currNumOfPostsToQuerry: 9,
+      isLoadingPosts: false
     };
   },
   async created() {
@@ -123,6 +126,11 @@ export default {
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );
+    window.addEventListener("scroll", this.onWindowScroll);
+    this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.onWindowScroll);
   },
   methods: {
     async onFollow() {
@@ -131,7 +139,6 @@ export default {
         if (this.isFollowing)
           await followService.unFollow(this.$route.params._id);
         else await followService.addFollow(this.$route.params._id);
-        console.log("here");
         this.isFollowing = !this.isFollowing;
         this.user = await userService.getUserById(this.$route.params._id);
       } catch (err) {
@@ -146,6 +153,24 @@ export default {
       this.$router.push(
         `/stories/profile/${this.$route.params._id}/${this.userStories}`
       );
+    },
+    async onWindowScroll() {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const scrollPosition = window.scrollY;
+      const targetHeight = maxScroll * 0.7; // 70% of window height
+
+      if (maxScroll > this.maxPageScroll) this.isLoadingPosts = false;
+
+      if (scrollPosition >= targetHeight && !this.isLoadingPosts) {
+        this.currNumOfPostsToQuerry += 9;
+        await this.$store.dispatch({
+          type: "loadUserPosts",
+          userId: this.$store.getters.GetUser._id,
+          numOfPostsToQuerry: this.currNumOfPostsToQuerry,
+        });
+        this.isLoadingPosts = true;
+        this.maxPageScroll = maxScroll;
+      }
     },
   },
   computed: {
@@ -174,6 +199,7 @@ export default {
         this.$store.dispatch({
           type: "loadUserPosts",
           userId: this.$route.params._id,
+          numOfPostsToQuerry: this.currNumOfPostsToQuerry,
         });
         this.$store.dispatch({
           type: "loadUserStories",

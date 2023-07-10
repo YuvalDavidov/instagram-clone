@@ -178,16 +178,9 @@ export default {
       required: false,
     },
   },
-  created() {
-    console.log(this.post);
-  },
   methods: {
     closePost() {
-      this.$emit("onCloseModale");
-      // this.$store.dispatch({
-      //       type: 'togglePostModal',
-      //       isOpen: false
-      //   })
+      this.$emit("onCloseModal");
     },
     onChangePostIndex(direction) {
       this.$emit("onChangePostIndex", direction);
@@ -202,23 +195,11 @@ export default {
           username: this.loggedInUser.username,
           userImgUrl: this.loggedInUser.imgUrl,
         };
-        await postService.addComment(this.post._id, commentInfo);
-        if (this.isAtPostPage) {
+        let updatedPost = await postService.addComment(this.post, commentInfo);
           await this.$store.dispatch({
-            type: "loadPost",
-            postId: this.$route.params.postId,
+            type: "savePost",
+            post: updatedPost,
           });
-        } else if (this.$route.params._id) {
-          await this.$store.dispatch({
-            type: "loadUserPosts",
-            userId: this.$route.params._id,
-          });
-        } else {
-          await this.$store.dispatch({
-            type: "loadPosts",
-            userId: this.loggedInUser._id,
-          });
-        }
         this.commentTxt = "";
       } catch (error) {
         new Error("coudl'nt add the comment to this post", error);
@@ -226,28 +207,11 @@ export default {
     },
     async addLike() {
       try {
-        let userInfo = {
-          imgUrl: this.loggedInUser.imgUrl,
-          userId: this.loggedInUser._id,
-          username: this.loggedInUser.username,
-        };
-        await postService.addLike(this.post._id, userInfo);
-        if (this.isAtPostPage) {
-          await this.$store.dispatch({
-            type: "loadPost",
-            postId: this.$route.params.postId,
+        let updatedPost = await postService.addLike(this.post, this.loggedInUser._id);
+        await this.$store.dispatch({
+            type: "savePost",
+            post: updatedPost,
           });
-        } else if (this.$route.params._id) {
-          this.$store.dispatch({
-            type: "loadUserPosts",
-            userId: this.$route.params._id,
-          });
-        } else {
-          this.$store.dispatch({
-            type: "loadPosts",
-            userId: this.loggedInUser._id,
-          });
-        }
       } catch (err) {
         console.error("coudl'nt like this post", err);
       }
@@ -255,23 +219,11 @@ export default {
     async removeLike() {
       try {
         const userId = this.loggedInUser._id;
-        await postService.removeLike(this.post._id, userId);
-        if (this.isAtPostPage) {
-          await this.$store.dispatch({
-            type: "loadPost",
-            postId: this.$route.params.postId,
+       let updatedPost =  await postService.removeLike(this.post, userId);
+        await this.$store.dispatch({
+            type: "savePost",
+            post: updatedPost,
           });
-        } else if (this.$route.params._id) {
-          this.$store.dispatch({
-            type: "loadUserPosts",
-            userId: this.$route.params._id,
-          });
-        } else {
-          this.$store.dispatch({
-            type: "loadPosts",
-            userId: this.loggedInUser._id,
-          });
-        }
       } catch (err) {
         throw new Error("coudl'nt remove like from this post", err);
       }
@@ -292,46 +244,22 @@ export default {
     },
     async toggleLikes() {
       try {
-        await postService.toggleLikeCount(this.post._id, this.post.isLikeCountVisible);
-        if (this.isAtPostPage) {
-          await this.$store.dispatch({
-            type: "loadPost",
-            postId: this.$route.params.postId,
+        let updatedPost = await postService.toggleLikeCount(this.post, this.post.isLikeCountVisible);
+        await this.$store.dispatch({
+            type: "savePost",
+            post: updatedPost,
           });
-        } else if (this.isAtHomePage) {
-          this.$store.dispatch({
-            type: "loadPosts",
-            userId: this.loggedInUser._id,
-          });
-        } else {
-          this.$store.dispatch({
-            type: "loadUserPosts",
-            userId: this.$route.params._id,
-          });
-        }
       } catch (err) {
         console.error("coudl'nt do action on this post", err);
       }
     },
     async toggleCommenting() {
       try {
-        await postService.toggleCommenting(this.post._id, this.post.isCommentingAllowed);
-        if (this.isAtPostPage) {
-          await this.$store.dispatch({
-            type: "loadPost",
-            postId: this.$route.params.postId,
+       let updatedPost = await postService.toggleCommenting(this.post, this.post.isCommentingAllowed);
+       await this.$store.dispatch({
+            type: "savePost",
+            post: updatedPost,
           });
-        } else if (this.isAtHomePage) {
-          this.$store.dispatch({
-            type: "loadPosts",
-            userId: this.loggedInUser._id,
-          });
-        } else {
-          this.$store.dispatch({
-            type: "loadUserPosts",
-            userId: this.$route.params._id,
-          });
-        }
       } catch (err) {
         console.error("coudl'nt do action on this post", err);
       }
@@ -358,7 +286,7 @@ export default {
       return postService.getTime(this.post.timestamp);
     },
     didUserLikedPost() {
-      return postService.didUserLikedPost(this.post);
+      return postService.didUserLikedPost([...this.post.likes], this.loggedInUser._id);
     },
     canComment() {
       if (this.commentTxt.length >= 1) return true;
@@ -382,3 +310,15 @@ export default {
   components: { ImgSlider, CreateModal, PostSettings },
 };
 </script>
+
+<!-- } else if (this.$route.params._id) {
+          this.$store.dispatch({
+            ,
+            userId: this.$route.params._id,
+          });
+        } else {
+          this.$store.dispatch({
+            type: "loadPosts",
+            userId: this.loggedInUser._id,
+          });
+        } -->

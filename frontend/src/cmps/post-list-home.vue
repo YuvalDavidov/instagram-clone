@@ -2,8 +2,8 @@
   <section>
     <section 
       class="post-preview-home"
-      v-for="(post, index) in sortedPosts"
-      :key="post.id"
+      v-for="(post, index) in posts"
+      :key="post._id"
     >
       <post-preview-home
         :post="post"
@@ -39,9 +39,7 @@ export default {
     },
   },
   methods: {
-    timeAgo(timestamp) {
-      return postService.getTime(timestamp);
-    },
+
     onOpenPostModal(index) {
       this.isModalOpen = !this.isModalOpen;
       this.postIndex = index;
@@ -50,34 +48,7 @@ export default {
       this.isModalOpen = !this.isModalOpen;
       this.postIndex = null;
     },
-    async onLike() {
-      try {
-        let userInfo = {
-          imgUrl: this.loggedInUser.imgUrl,
-          userId: this.loggedInUser._id,
-          username: this.loggedInUser.username,
-        };
-        await postService.addLike(this.post._id, userInfo);
-        this.$store.dispatch({
-          type: "loadPosts",
-          userId: this.$route.params._id,
-        });
-      } catch (err) {
-        console.error("coudl'nt like this post", err);
-      }
-    },
-    didUserLikedPost(post) {
-      return postService.didUserLikedPost(post);
-    },
-  },
-  computed: {
-    loggedInUser() {
-      return this.$store.getters.GetUser;
-    },
-    sortedPosts() {
-      return postService.sortByTimeStampe(this.posts);
-    },
-    isOwnProfile() {},
+   
   },
 };
 </script>

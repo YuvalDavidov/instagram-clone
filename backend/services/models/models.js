@@ -66,9 +66,9 @@ const instegramUsers = sequelize.define('instegramUsers', {
 
 const instegramPosts = sequelize.define('instegramPosts', {
     _id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: false,
         allowNull: false,
     },
     comments: {
@@ -93,7 +93,7 @@ const instegramPosts = sequelize.define('instegramPosts', {
     },
     userId: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
         defaultValue: '',
     },
     userImg: {

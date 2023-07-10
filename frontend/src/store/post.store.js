@@ -1,5 +1,9 @@
 import { postService } from '../services/post.service'
-
+// let postsIdsOld = [...new Set([...state.userPosts].map(post => post._id))]
+//             let newPosts = [...userPosts].reduce((acc, post) => {
+//                 if (!postsIdsOld.includes(post._id)) acc.push(post)
+//                 return acc
+//             }, [])
 export const postStore = {
     state: {
         post: null,
@@ -23,15 +27,10 @@ export const postStore = {
     },
     mutations: {
         setUserPosts(state, { userPosts }) {
-            state.userPosts = userPosts
+            state.userPosts = [...userPosts]
         },
         setPosts(state, { posts }) {
-            let postsIdsOld = [...new Set([...state.followingPosts].map(post => post._id))]
-            let newPosts = [...posts].reduce((acc, post) => {
-                if (!postsIdsOld.includes(post._id)) acc.push(post)
-                return acc
-            }, [])
-            state.followingPosts = [...state.followingPosts, ...newPosts] // adding to the exisiting posts that were already in the state
+            state.followingPosts = [...posts]
         },
         setPost(state, { post }) {
             state.post = post
@@ -43,9 +42,15 @@ export const postStore = {
             state.userPosts.unshift(post)
             state.followingPosts.unshift(post)
         },
-        updatePost(state, { post }) {
+        updateUserPost(state, { post }) {
             const idx = state.userPosts.findIndex(p => p._id === post._id)
             state.userPosts.splice(idx, 1, post)
+            state.userPosts = [...state.userPosts]
+        },
+        updatePost(state, { post }) {
+            const idx = state.followingPosts.findIndex(p => p._id === post._id)
+            state.followingPosts.splice(idx, 1, post)
+            state.followingPosts = [...state.followingPosts]
         },
         removePost(state, { postId }) {
             state.userPosts = state.userPosts.filter(post => post._id !== postId)
@@ -61,13 +66,24 @@ export const postStore = {
             }
         },
         async savePost({ commit, state }, { post }) {
-            const actionType = (state.userPosts.includes(post._id)) ? 'updatePost' : 'addPost'
+            const actionType = (state.userPosts.find(posta => posta._id === post._id)) ? 'updateUserPost' : 'updatePost'
             try {
                 commit({ type: actionType, post })
             } catch (error) {
                 throw new Error('coudl\'nt save post', error)
 
             }
+        },
+
+        async addPost({ commit }, { post }) {
+
+            try {
+                commit({ type: 'addPost', post })
+            } catch (error) {
+                throw new Error('coudl\'nt add post', error)
+
+            }
+
         },
         async removePost({ commit }, { postId }) {
             try {
@@ -84,8 +100,6 @@ export const postStore = {
                 if (numOfPostsToQuerry) {
                     commit({ type: 'setCurrNumOfPosts', num: numOfPostsToQuerry })
                 }
-                console.log('in store---', numOfPostsToQuerry)
-
                 const posts = await postService.getPosts(userId, this.state.postStore.numOfPostsToQuerry)
                 commit({ type: 'setPosts', posts })
             } catch (err) {
