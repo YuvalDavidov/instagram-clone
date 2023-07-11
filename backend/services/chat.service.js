@@ -7,8 +7,8 @@ queryChatIds('9493004838')
 async function queryChatIds(userId) {
     try {
         const chatIds = await dbService.queryAggregate(instegramUsers, instegramChats, userId)
-        // console.log(chatIds);
-        return chatIds
+        console.log(chatIds[0]);
+        // return chatIds
         // { chatIds: ['123', '546'], usersInfo: [{ username: 'kaka', imgUrl: 'ss' }, { username: 'pipi', imgUrl: 'ss' }] }
     } catch (error) {
         logger.error('chat service - can not get chatIds' + error)

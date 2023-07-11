@@ -115,27 +115,17 @@ async function queryOne(model, filterBy) {
 }
 //  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]
 async function queryAggregate(model1, model2, userId) {
-    console.log('here', userId);
 
     try {
-        let result = await model1.findAll({
-
-
-            include: {
-                model: model2,
-                as: 'chats',
-                // where: {
-                //     // betweenUsers: { [Op.contains]: [userId] }
-                //     never: { [Op.contains]: [userId] }
-                // },
-
-            },
-            attributes: ['fullname', 'username', 'imgUrl'],
-            where: {
-                _id: { [Op.not]: userId }
-            },
-        })
-        console.log('result---', result)
+        return await sequelize.query(`SELECT "instegramChats"."_id", "instegramChats"."betweenUsers",
+       "instegramChats"."chatHistory", "instegramChats"."createdAt", 
+       "instegramChats"."updatedAt", "users"."_id" AS "users._id", 
+       "users"."fullname" AS "users.fullname", "users"."username"
+       AS "users.username", "users"."imgUrl" AS "users.imgUrl" 
+       FROM "instegramChats" AS "instegramChats" 
+       INNER JOIN "instegramUsers" AS "users" ON "users"."_id" = ANY("instegramChats"."betweenUsers")
+       WHERE "instegramChats"."betweenUsers" @> ARRAY['9493004838']::VARCHAR(255)[]
+       AND "users"."_id" <> '9493004838'`)
     } catch (error) {
         console.log(error);
     }

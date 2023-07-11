@@ -184,14 +184,7 @@ const instegramChats = sequelize.define('instegramChats', {
     }
 )
 
-instegramUsers.belongsTo(instegramChats, {
-    foreignKey: sequelize.literal('"users"."_id" = ANY("instegramChats"."betweenUsers")'),
-    targetKey: 'idaaaaaaaaaaa',
-    as: 'chats',
 
-    // scope: sequelize.literal(`"instegramUsers"."_idaa" = ANY("instegramChats"."betweenUsers")`),
-
-});
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
     .then(async () => {
