@@ -6,9 +6,10 @@ const { instegramChats, instegramUsers } = require('./models/models')
 queryChatIds('9493004838')
 async function queryChatIds(userId) {
     try {
-        const chatIds = await dbService.queryAggregate(instegramChats, instegramUsers, userId)
+        const chatIds = await dbService.queryAggregate(instegramUsers, instegramChats, userId)
         // console.log(chatIds);
-        return { chatIds: ['123', '546'], usersInfo: [{ username: 'kaka', imgUrl: 'ss' }, { username: 'pipi', imgUrl: 'ss' }] }
+        return chatIds
+        // { chatIds: ['123', '546'], usersInfo: [{ username: 'kaka', imgUrl: 'ss' }, { username: 'pipi', imgUrl: 'ss' }] }
     } catch (error) {
         logger.error('chat service - can not get chatIds' + error)
     }

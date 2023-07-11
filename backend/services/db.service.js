@@ -114,25 +114,28 @@ async function queryOne(model, filterBy) {
     }
 }
 //  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]
-async function queryAggregate(model1, model2, user) {
-    console.log('here', user);
+async function queryAggregate(model1, model2, userId) {
+    console.log('here', userId);
 
     try {
-        let result =
-            await model1.findAll({
-                include: {
-                    model: model2,
-                    as: 'users',
-                    attributes: { exclude: ['password'] }, // Exclude any specific attributes if needed
-                    where: {
-                        _id: { [Op.not]: user }
-                    },
-                },
-                where: {
-                    betweenUsers: { [Op.contains]: [user] }
-                },
-            })
-        console.log('result---', result);
+        let result = await model1.findAll({
+
+
+            include: {
+                model: model2,
+                as: 'chats',
+                // where: {
+                //     // betweenUsers: { [Op.contains]: [userId] }
+                //     never: { [Op.contains]: [userId] }
+                // },
+
+            },
+            attributes: ['fullname', 'username', 'imgUrl'],
+            where: {
+                _id: { [Op.not]: userId }
+            },
+        })
+        console.log('result---', result)
     } catch (error) {
         console.log(error);
     }
