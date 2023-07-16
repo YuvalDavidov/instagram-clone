@@ -1,13 +1,25 @@
 const utilService = require('./util.service');
 const logger = require('./logger.service')
 const dbService = require('./db.service')
-const { instegramChats, instegramUsers } = require('./models/models')
+const { instegramChats } = require('./models/models')
 
 queryChatIds('9493004838')
 async function queryChatIds(userId) {
+    let model1 = { model1Name: 'instegramChats', attributes1: ['_id', , 'betweenUsers', 'chatHistory', 'createdAt', 'updatedAt'] }
+    let model2 = {
+        model2Name: 'instegramUsers', attributes2: [{ attributeName: '_id', as: 'userId' }, { attributeName: 'fullname', as: 'fullname' },
+        { attributeName: 'username', as: 'username' }, { attributeName: 'imgUrl', as: 'imgUrl' }]
+    }
+    let aggregateCondition = [{ modelName: 'instegramUsers', modelKey: '_id' }, { condition: '=' },
+    { modelName: 'instegramChats', modelKey: 'betweenUsers', isArray: true }]
+    let filterBy = [{ condition1: userId, conditionSymbol: '=', condition2: { modelName: 'instegramChats', modelKey: 'betweenUsers', isArray: true } },
+    { condition1: userId, conditionSymbol: '<>', condition2: { modelName: 'instegramUsers', modelKey: '_id' } }]
     try {
-        const chatIds = await dbService.queryAggregate(instegramUsers, instegramChats, userId)
-        console.log(chatIds[0]);
+
+
+
+        const chatIds = await dbService.queryAggregate(model1, model2, filterBy, aggregateCondition)
+        // console.log(chatIds[0])
         // return chatIds
         // { chatIds: ['123', '546'], usersInfo: [{ username: 'kaka', imgUrl: 'ss' }, { username: 'pipi', imgUrl: 'ss' }] }
     } catch (error) {

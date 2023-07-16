@@ -114,23 +114,48 @@ async function queryOne(model, filterBy) {
     }
 }
 //  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]
-async function queryAggregate(model1, model2, userId) {
+async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
+    let { model1Name, attributes1 } = model1
+    let { model2Name, attributes2 } = model2
 
+    aggregateCondition = `"${aggregateCondition[0].modelName}"."${aggregateCondition[0].modelKey}" 
+        ${aggregateCondition[1].condition} ${(aggregateCondition[2].isArray) ? `ANY("${aggregateCondition[2].modelName}"."${aggregateCondition[2].modelKey}")` :
+            `"${aggregateCondition[2].modelName}"."${aggregateCondition[2].modelKey}"`}`
+    let selectFromModel1 = attributes1.reduce((acc, attribute) => {
+        acc += (`"${model1Name}"."${attribute}", `)
+        return acc
+    }, `SELECT `)
+    let selectFromModel2 = attributes2.reduce((acc, attribute, idx) => {
+        if (idx === attributes2.length - 1) acc += (`"${model2Name}"."${attribute.attributeName}" AS "${attribute.as}" FROM "${model1Name}" AS "${model1Name}"`)
+        else acc += (`"${model2Name}"."${attribute.attributeName}" AS "${attribute.as}", `)
+        return acc
+    }, ``)
+    let innerJoinStatment = `INNER JOIN "${model2Name}" ON ${aggregateCondition}`
+    let whereStatment = filterBy.reduce((acc, f, idx) => {
+        if (!idx) acc += (`WHERE ` + (`'${f.condition1}'${f.conditionSymbol}` + ((f.condition2.isArray) ? `ANY("${f.condition2.modelName}"."${f.condition2.modelKey}")` :
+            `"${f.condition2.modelName}"."${f.condition2.modelKey}"`)))
+
+        else acc += (' AND ' + (`'${f.condition1}'${f.conditionSymbol}` + ((f.condition2.isArray) ? `ANY("${f.condition2.modelName}"."${f.condition2.modelKey}")` :
+            `"${f.condition2.modelName}"."${f.condition2.modelKey}"`)))
+        return acc
+    }, ``)
+    let sqlRawCode = (selectFromModel1 + selectFromModel2 + innerJoinStatment + whereStatment + ';')
     try {
-        return await sequelize.query(`SELECT "instegramChats"."_id", "instegramChats"."betweenUsers",
-       "instegramChats"."chatHistory", "instegramChats"."createdAt", 
-       "instegramChats"."updatedAt", "users"."_id" AS "users._id", 
-       "users"."fullname" AS "users.fullname", "users"."username"
-       AS "users.username", "users"."imgUrl" AS "users.imgUrl" 
-       FROM "instegramChats" AS "instegramChats" 
-       INNER JOIN "instegramUsers" AS "users" ON "users"."_id" = ANY("instegramChats"."betweenUsers")
-       WHERE "instegramChats"."betweenUsers" @> ARRAY['9493004838']::VARCHAR(255)[]
-       AND "users"."_id" <> '9493004838'`)
+        console.log(`${sqlRawCode}`)
+        console.log(`${5555} '5555'`)
+        // await sequelize.query(`${sqlRawCode}`)
+        //         await sequelize.query(`SELECT "instegramChats"."_id",  "instegramChats"."betweenUsers",
+        // "instegramChats"."chatHistory", "instegramChats"."createdAt", 
+        // "instegramChats"."updatedAt", "instegramUsers"."_id" AS "userId", 
+        // "instegramUsers"."fullname" AS "fullname", "instegramUsers"."username"
+        // AS "username", "instegramUsers"."imgUrl" AS "imgUrl" 
+        // FROM "instegramChats" AS "instegramChats" 
+        // INNER JOIN "instegramUsers" ON "instegramUsers"."_id" = ANY("instegramChats"."betweenUsers")
+        // WHERE '9493004838' = ANY ("instegramChats"."betweenUsers")
+        // AND "instegramUsers"."_id" <> '9493004838';`)
     } catch (error) {
         console.log(error);
     }
-    // aaa
-
 }
 
 async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']], attribute = undefined, isUserPostsOnly = false) {
