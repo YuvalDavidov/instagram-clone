@@ -66,7 +66,8 @@ export const postStore = {
             }
         },
         async savePost({ commit, state }, { post }) {
-            const actionType = (state.userPosts.find(posta => posta._id === post._id)) ? 'updateUserPost' : 'updatePost'
+            const actionType = (state.userPosts.find(p => p._id === post._id)) ? 'updateUserPost' : 'updatePost'
+            console.log('---------->', post)
             try {
                 commit({ type: actionType, post })
             } catch (error) {

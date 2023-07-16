@@ -14,7 +14,7 @@
         :post="post"
         :user="this.$store.getters.GetUser"
         :isAtHomePage="true"
-        @onCloseModale="onCloseModale"
+        @onCloseModal="onCloseModal"
       />
     </section>
   </section>
@@ -44,7 +44,7 @@ export default {
       this.isModalOpen = !this.isModalOpen;
       this.postIndex = index;
     },
-    onCloseModale() {
+    onCloseModal() {
       this.isModalOpen = !this.isModalOpen;
       this.postIndex = null;
     },

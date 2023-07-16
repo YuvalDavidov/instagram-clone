@@ -141,9 +141,7 @@ async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
     }, ``)
     let sqlRawCode = (selectFromModel1 + selectFromModel2 + innerJoinStatment + whereStatment + ';')
     try {
-        console.log(`${sqlRawCode}`)
-        console.log(`${5555} '5555'`)
-        // await sequelize.query(`${sqlRawCode}`)
+        return await sequelize.query(`${sqlRawCode}`)
         //         await sequelize.query(`SELECT "instegramChats"."_id",  "instegramChats"."betweenUsers",
         // "instegramChats"."chatHistory", "instegramChats"."createdAt", 
         // "instegramChats"."updatedAt", "instegramUsers"."_id" AS "userId", 
@@ -225,7 +223,6 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
 
         else if (model === instegramPosts) {
-            console.log('arrived in db service!', whereCondition)
             result = await model.findAll({
                 where: {
                     [Op.or]: whereCondition
@@ -236,7 +233,6 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
             })
 
-            console.log(result, '<----------------')
         }
 
         else result = await model.findAll({

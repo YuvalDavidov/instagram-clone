@@ -3,7 +3,6 @@ const logger = require('./logger.service')
 const dbService = require('./db.service')
 const { instegramChats } = require('./models/models')
 
-queryChatIds('9493004838')
 async function queryChatIds(userId) {
     let model1 = { model1Name: 'instegramChats', attributes1: ['_id', , 'betweenUsers', 'chatHistory', 'createdAt', 'updatedAt'] }
     let model2 = {
@@ -19,9 +18,8 @@ async function queryChatIds(userId) {
 
 
         const chatIds = await dbService.queryAggregate(model1, model2, filterBy, aggregateCondition)
-        // console.log(chatIds[0])
-        // return chatIds
-        // { chatIds: ['123', '546'], usersInfo: [{ username: 'kaka', imgUrl: 'ss' }, { username: 'pipi', imgUrl: 'ss' }] }
+        // console.log('----------------->', chatIds[0])
+        return chatIds
     } catch (error) {
         logger.error('chat service - can not get chatIds' + error)
     }

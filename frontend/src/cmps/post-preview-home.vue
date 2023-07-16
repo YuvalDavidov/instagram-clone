@@ -130,9 +130,7 @@ export default {
     async removeLike() {
       try {
         const userId = this.loggedInUser._id;
-        console.log('------------------>','hooooo')
         const updatedPost = await postService.removeLike(this.post, userId);
-        console.log('------------------>',updatedPost)
         this.$store.dispatch({
           type: "savePost",
           post: updatedPost,
@@ -143,11 +141,10 @@ export default {
     },
     async addLike() {
       try {
-        
-         await postService.addLike(this.post, this.loggedInUser._id);
+       const updatedPost =  await postService.addLike(this.post, this.loggedInUser._id);
         this.$store.dispatch({
           type: "savePost",
-          post: this.post,
+          post: updatedPost,
         });
       } catch (err) {
         console.error("coudl'nt like this post", err);
