@@ -57,9 +57,9 @@ async function addPost(req, res) {
 }
 
 async function appendItem(req, res) {
-    const { data, entityName } = req.body
+    const { likedUser, entityName } = req.body
     try {
-        await postService.appendToColumn(data, entityName, req.params._id)
+        await postService.appendToColumn(likedUser, entityName, req.params._id)
         res.status(200).send(true)
     } catch (err) {
         logger.error('post controller - cannot append to column' + err)

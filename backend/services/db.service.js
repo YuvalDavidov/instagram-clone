@@ -64,12 +64,11 @@ async function updateRecord(model, data, itemId) {
 }
 
 async function appendToColumn(model, data, columnName, entityId) {
-    entityId = +entityId
 
     try {
         await model.update(
             {
-                [columnName]: sequelize.fn('array_append', sequelize.col(columnName), JSON.stringify(data))
+                [columnName]: sequelize.fn('array_append', sequelize.col(columnName), `${data}`)
             },
             { where: { _id: entityId } }
         )
@@ -223,6 +222,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
 
         else if (model === instegramPosts) {
+            console.log('---------------->', isUserPostsOnly, numOfDesiredResults)
             result = await model.findAll({
                 where: {
                     [Op.or]: whereCondition

@@ -70,9 +70,10 @@ async function updatePost(data, postId) {
     }
 }
 
-async function appendToColumn(data, columnName, postId) {
+async function appendToColumn(likedUser, columnName, postId) {
+
     try {
-        await dbService.appendToColumn(instegramPosts, data, columnName, postId)
+        await dbService.appendToColumn(instegramPosts, likedUser, columnName, postId)
     } catch (err) {
         logger.error('post.service - cannot append to array', err)
         throw new Error('post.service - cannot append to array', err)

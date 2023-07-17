@@ -22,7 +22,6 @@ const STORAGE_KEY_LOGGEDIN_USER = 'loginToken'
 
 async function query(filterBy) {
     try {
-        console.log('filterBy---->', filterBy)
         const queryParams = `?filterBy=${filterBy}&isLessDetails=${true}`
         const users = await httpService.get(USER_URL + queryParams)
         return users
@@ -51,7 +50,6 @@ function getLoggedinUser() {
 }
 
 async function getUserById(userId) {
-    // return storageService.get(USER_KEY, userId)
     try {
         const user = await httpService.get(USER_URL + userId)
         return user

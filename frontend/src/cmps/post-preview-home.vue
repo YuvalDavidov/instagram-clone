@@ -151,6 +151,7 @@ export default {
       }
     },
     didUserLikedPost() {
+      console.log('====----====>', [...this.post.likes], this.loggedInUser._id)
       return postService.didUserLikedPost([...this.post.likes], this.loggedInUser._id);
     },
     onToggleSettings() {
