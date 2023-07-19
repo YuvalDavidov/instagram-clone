@@ -4,7 +4,7 @@ import router from './router'
 import { myStore } from './store/store'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
+import { VueQueryPlugin } from "vue-query"
 import './assets/main.scss'
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import {
@@ -71,6 +71,7 @@ addIcons(BiSearch,
 const app = createApp(App)
 
 app.use(router)
+app.use(VueQueryPlugin)
 app.component('v-icon', OhVueIcon)
 app.use(myStore)
 app.mount('#app')

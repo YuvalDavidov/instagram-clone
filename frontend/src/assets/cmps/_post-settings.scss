@@ -46,11 +46,11 @@
         & .post-settings-modal {
             animation-name: settings-animasion;
             animation-duration: 1s;
-            position: absolute;
+            position: fixed;
             background-color: white;
             border-radius: 15px;
             width: 400px;
-            top: 26vh;
+            top: 50%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 4;

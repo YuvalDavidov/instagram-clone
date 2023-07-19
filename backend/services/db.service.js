@@ -68,7 +68,7 @@ async function appendToColumn(model, data, columnName, entityId) {
     try {
         await model.update(
             {
-                [columnName]: sequelize.fn('array_append', sequelize.col(columnName), `${data}`)
+                [columnName]: sequelize.fn('array_append', sequelize.col(columnName), (typeof data === "object") ? JSON.stringify(data) : data)
             },
             { where: { _id: entityId } }
         )

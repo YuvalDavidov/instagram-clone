@@ -27,10 +27,10 @@ export const postStore = {
     },
     mutations: {
         setUserPosts(state, { userPosts }) {
-            state.userPosts = [...userPosts]
+            state.userPosts = [...state.userPosts, ...userPosts]
         },
         setPosts(state, { posts }) {
-            state.followingPosts = [...posts]
+            state.followingPosts = [...state.followingPosts, ...posts]
         },
         setPost(state, { post }) {
             state.post = post
