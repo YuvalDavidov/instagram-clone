@@ -71,7 +71,5 @@ export const myStore = createStore({
 })
 
 myStore.subscribe((cmd, state) => {
-    console.log('Command:', cmd.payload)
-    console.log('storeState:\n', state)
 })
 

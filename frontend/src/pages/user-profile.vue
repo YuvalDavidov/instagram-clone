@@ -118,7 +118,12 @@ export default {
       isLoadingPosts: false
     };
   },
+  beforeMount() {
+    window.removeEventListener("scroll", this.onWindowScroll);
+  },
   async created() {
+    window.addEventListener("scroll", this.onWindowScroll);
+    this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
     this.user =
       this.$route.params._id === this.$store.getters.GetUser._id
         ? this.$store.getters.GetUser
@@ -126,16 +131,13 @@ export default {
     this.isFollowing = await followService.checkIfFollowing(
       this.$route.params._id
     );
-    window.addEventListener("scroll", this.onWindowScroll);
-    this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
   },
-  destroyed() {
+  beforeUnmount() {
     window.removeEventListener("scroll", this.onWindowScroll);
   },
   methods: {
     async onFollow() {
       try {
-        console.log(this.isFollowing);
         if (this.isFollowing)
           await followService.unFollow(this.$route.params._id);
         else await followService.addFollow(this.$route.params._id);
@@ -160,9 +162,8 @@ export default {
       const targetHeight = maxScroll * 0.7; // 70% of window height
 
       if (maxScroll > this.maxPageScroll) this.isLoadingPosts = false;
-
       if (scrollPosition >= targetHeight && !this.isLoadingPosts) {
-        this.currNumOfPostsToQuerry += 9;
+    this.currNumOfPostsToQuerry += 9;
         await this.$store.dispatch({
           type: "loadUserPosts",
           userId: this.$store.getters.GetUser._id,

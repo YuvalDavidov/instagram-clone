@@ -222,13 +222,13 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
 
         else if (model === instegramPosts) {
-            console.log('---------------->', isUserPostsOnly, numOfDesiredResults)
+            console.log('-------------->', numOfDesiredResults, (isUserPostsOnly) ? numOfDesiredResults - 9 : numOfDesiredResults - 4, order)
             result = await model.findAll({
                 where: {
                     [Op.or]: whereCondition
                 },
                 order,
-                limit: numOfDesiredResults,
+                limit: (isUserPostsOnly) ? 9 : 4,
                 offset: (isUserPostsOnly) ? numOfDesiredResults - 9 : numOfDesiredResults - 4
 
             })

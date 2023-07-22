@@ -27,10 +27,15 @@ export const postStore = {
     },
     mutations: {
         setUserPosts(state, { userPosts }) {
-            state.userPosts = [...state.userPosts, ...userPosts]
+            console.log('------------>', state.numOfPostsToQuerry)
+            if (state.numOfPostsToQuerry === 9) state.userPosts = [...userPosts] // indicates to the first run of the component - insuring the load of the right posts
+            else state.userPosts = [...state.userPosts, ...userPosts]
         },
         setPosts(state, { posts }) {
-            state.followingPosts = [...state.followingPosts, ...posts]
+            console.log('------------>', state.numOfPostsToQuerry)
+            console.log(posts)
+            if (state.numOfPostsToQuerry === 4) state.followingPosts = [...posts] // indicates to the first run of the component - insuring the load of the right posts
+            else state.followingPosts = [...state.followingPosts, ...posts]
         },
         setPost(state, { post }) {
             state.post = post
@@ -38,8 +43,8 @@ export const postStore = {
         setCurrNumOfPosts(state, { num }) {
             state.numOfPostsToQuerry = num
         },
-        addPost(state, { post }) {
-            state.userPosts.unshift(post)
+        addPost(state, { post, userId }) {
+            if (post.userId === userId) state.userPosts.unshift(post)
             state.followingPosts.unshift(post)
         },
         updateUserPost(state, { post }) {
@@ -59,6 +64,10 @@ export const postStore = {
     actions: {
         async loadUserPosts({ commit }, { userId, numOfPostsToQuerry }) {
             try {
+                if (numOfPostsToQuerry) {
+                    console.log('=============>', numOfPostsToQuerry)
+                    commit({ type: 'setCurrNumOfPosts', num: numOfPostsToQuerry })
+                }
                 const userPosts = await postService.getUserPostsById(userId, numOfPostsToQuerry)
                 commit({ type: 'setUserPosts', userPosts })
             } catch (error) {
@@ -67,7 +76,6 @@ export const postStore = {
         },
         async savePost({ commit, state }, { post }) {
             const actionType = (state.userPosts.find(p => p._id === post._id)) ? 'updateUserPost' : 'updatePost'
-            console.log('---------->', post)
             try {
                 commit({ type: actionType, post })
             } catch (error) {

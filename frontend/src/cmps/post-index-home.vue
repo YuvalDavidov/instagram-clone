@@ -14,14 +14,13 @@ export default {
     };
   },
   created() {
-    if (this.$store.getters.followingPosts.length) return
+    window.addEventListener("scroll", this.onWindowScroll);
+    this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
     this.$store.dispatch({
       type: "loadPosts",
       userId: this.$store.getters.GetUser._id,
       numOfPostsToQuerry: this.currNumOfPostsToQuerry,
     });
-    window.addEventListener("scroll", this.onWindowScroll);
-    this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
   },
 
   computed: {
@@ -29,7 +28,8 @@ export default {
       return this.$store.getters.followingPosts
     },
   },
-  destroyed() {
+  
+  beforeUnmount() {
     window.removeEventListener("scroll", this.onWindowScroll);
   },
   methods: {

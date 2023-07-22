@@ -18,7 +18,6 @@ async function queryChatIds(userId) {
 
 
         const chatIds = await dbService.queryAggregate(model1, model2, filterBy, aggregateCondition)
-        // console.log('----------------->', chatIds[0])
         return chatIds
     } catch (error) {
         logger.error('chat service - can not get chatIds' + error)

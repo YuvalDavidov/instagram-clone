@@ -1,5 +1,5 @@
 <template>
-  <section class="create-modal" :class="{ seconde: step === 'seconde' }">
+  <section class="create-modal" :class="{ second: step === 'second' }">
     <section class="first-step" v-if="step === 'first'">
       <h1 class="top">Create new {{ isPost ? "post" : "story" }}</h1>
       <div v-if="isPost" class="uploader">
@@ -23,7 +23,7 @@
       </div>
     </section>
 
-    <section class="seconde-step" v-if="step === 'seconde'">
+    <section class="second-step" v-if="step === 'second'">
       <div class="top">
         <button @click="onBack()" class="back btn">
           {{ postToEdit._id ? "Cancel" : "Back" }}
@@ -95,7 +95,7 @@ export default {
   },
   created() {
     if (this.post) {
-      this.step = "seconde";
+      this.step = "second";
       this.postToEdit = this.post;
       this.postToEdit.imgsUrl = Array.prototype.slice.call(this.post.imgsUrl);
     } else this.postToEdit = postService.getEmptyPost();
@@ -114,7 +114,7 @@ export default {
           this.postToEdit.imgsUrl = imgsUrl.url;
         });
       }
-      this.step = "seconde";
+      this.step = "second";
     },
     onBack() {
       if (this.postToEdit._id) this.$emit("onToggleCreate");
@@ -136,6 +136,7 @@ export default {
           this.$store.dispatch({
             type: "addPost",
             post: postToSave,
+            userId: this.user._id
           });
         } else {
           const storyToSave = await storiesService.createStory(
