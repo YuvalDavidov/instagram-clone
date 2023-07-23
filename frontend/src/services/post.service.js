@@ -105,7 +105,7 @@ async function removeLike(post, userId,) {
 async function addLike(post, likedUser) {
     try {
         post = JSON.parse(JSON.stringify(post))
-        await httpService.put(`${POST_URL}${post._id}`, { likedUser, entityName: 'likes' })
+        await httpService.put(`${POST_URL}${post._id}`, { data: likedUser, entityName: 'likes' })
         post.likes.push(likedUser)
         return post
     } catch (error) {

@@ -77,7 +77,6 @@ export default {
     };
   },
   created() {
-    console.log(this.post);
   },
   methods: {
     onClose() {

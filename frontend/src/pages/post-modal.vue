@@ -1,5 +1,6 @@
 <template>
   <section class="post-modal" v-bind:class="{ isAtPostPage }">
+    <div class="black-screen-settings" v-if="isSettingsOpen" @click="onToggleSettings()"></div>
     <section
       class="bg-container"
       v-if="!isAtPostPage"
@@ -117,14 +118,15 @@
         </section>
       </section>
     </section>
-
+    
+    
     <PostSettings
-      v-if="isSettingsOpen"
-      :post="post"
-      :isAtPostPage="isAtPostPage"
-      @onToggleSettings="onToggleSettings"
+    v-if="isSettingsOpen"
+    :post="post"
+    :isAtPostPage="isAtPostPage"
+    @onToggleSettings="onToggleSettings"
     />
-
+    
     <article v-if="isCreateOpen && isOwnByUser" class="create-post-modal">
       <section class="container" @click="onToggleCreate()"></section>
       <CreateModal

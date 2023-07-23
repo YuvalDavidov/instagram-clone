@@ -154,6 +154,7 @@ export default {
       return postService.didUserLikedPost([...this.post.likes], this.loggedInUser._id);
     },
     onToggleSettings() {
+      
       this.isSettingsOpen = !this.isSettingsOpen;
     },
   },

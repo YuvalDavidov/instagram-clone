@@ -54,10 +54,12 @@ async function addPost(post) {
 
 async function removePost(postId) {
     try {
-        await dbService.removeRecord(instegramPosts, postId)
+        const deletedRows = await dbService.removeRecord(instegramPosts, postId)
+        if (deletedRows) return deletedRows
+        else throw new Error('post.service - no posts has been removed')
     } catch (error) {
-        logger.error('post.service - cannot remove post', err)
-        throw new Error('post.service - cannot remove post', err)
+        logger.error('post.service - cannot remove post', error)
+        throw new Error('post.service - cannot remove post', error)
     }
 }
 
@@ -70,10 +72,10 @@ async function updatePost(data, postId) {
     }
 }
 
-async function appendToColumn(likedUser, columnName, postId) {
+async function appendToColumn(data, columnName, postId) {
 
     try {
-        await dbService.appendToColumn(instegramPosts, likedUser, columnName, postId)
+        await dbService.appendToColumn(instegramPosts, data, columnName, postId)
     } catch (err) {
         logger.error('post.service - cannot append to array', err)
         throw new Error('post.service - cannot append to array', err)

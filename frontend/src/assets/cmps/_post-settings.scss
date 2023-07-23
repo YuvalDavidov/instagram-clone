@@ -20,11 +20,11 @@
             z-index: 4;
             display: flex;
             flex-direction: column;
-            animation-name: settings-animasion-following-user;
+            animation-name: settings-animation-following-user;
             animation-duration: 1s;
 
             &.isAtPostPage {
-                animation-name: settings-animasion-following-user-at-page;
+                animation-name: settings-animation-following-user-at-page;
                 animation-duration: 1s;
             }
 
@@ -44,16 +44,16 @@
 
 
         & .post-settings-modal {
-            animation-name: settings-animasion;
+            animation-name: settings-animation;
             animation-duration: 1s;
             position: fixed;
             background-color: white;
             border-radius: 15px;
             width: 400px;
-            top: 50%;
+            top: 25%;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 4;
+            z-index: 8;
             display: flex;
             flex-direction: column;
 
@@ -62,7 +62,7 @@
             }
 
             &.isAtPostPage {
-                animation-name: settings-animasion-at-page;
+                animation-name: settings-animation-at-page;
                 animation-duration: 1s;
             }
 
@@ -73,31 +73,31 @@
     }
 }
 
-@keyframes settings-animasion {
+@keyframes settings-animation {
     from {
         width: 450px;
         height: 500px;
-        top: 24vh;
+        top: 25%;
         left: 48%;
-        transform: translateX(-48%);
+        transform: translateX(-50%);
         opacity: 0;
     }
 
     to {
         width: 400px;
-        height: 439px;
-        top: 26vh;
+        height: 450px;
+        top: 25%;
         left: 50%;
         transform: translateX(-50%);
         opacity: 1;
     }
 }
 
-@keyframes settings-animasion-at-page {
+@keyframes settings-animation-at-page {
     from {
         width: 450px;
         height: 450px;
-        top: 24vh;
+        top: 25%;
         left: 48%;
         transform: translateX(-48%);
         opacity: 0;
@@ -106,14 +106,14 @@
     to {
         width: 400px;
         height: 385px;
-        top: 26vh;
+        top: 25%;
         left: 50%;
         transform: translateX(-50%);
         opacity: 1;
     }
 }
 
-@keyframes settings-animasion-following-user-at-page {
+@keyframes settings-animation-following-user-at-page {
     from {
         width: 450px;
         height: 450px;
@@ -133,7 +133,7 @@
     }
 }
 
-@keyframes settings-animasion-following-user {
+@keyframes settings-animation-following-user {
     from {
         width: 450px;
         height: 500px;

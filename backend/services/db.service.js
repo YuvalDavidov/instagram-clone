@@ -44,10 +44,12 @@ async function addRecord(model, data) {
 
 async function removeRecord(model, itemId) {
     try {
-        await model.destroy({ where: { _id: itemId } })
-        await model.sync()
 
+        const deletedRows = await model.destroy({ where: { _id: itemId } })
+        await model.sync()
+        return deletedRows
     } catch (error) {
+        console.log(error)
         throw new Error('db.service - failed to remove record', error)
     }
 
@@ -222,7 +224,6 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
 
         else if (model === instegramPosts) {
-            console.log('-------------->', numOfDesiredResults, (isUserPostsOnly) ? numOfDesiredResults - 9 : numOfDesiredResults - 4, order)
             result = await model.findAll({
                 where: {
                     [Op.or]: whereCondition

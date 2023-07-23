@@ -99,7 +99,6 @@ export default {
     };
   },
   async created() {
-    console.log(this.user);
   },
   methods: {
     async onLogin() {

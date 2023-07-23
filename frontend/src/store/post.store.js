@@ -27,15 +27,14 @@ export const postStore = {
     },
     mutations: {
         setUserPosts(state, { userPosts }) {
-            console.log('------------>', state.numOfPostsToQuerry)
             if (state.numOfPostsToQuerry === 9) state.userPosts = [...userPosts] // indicates to the first run of the component - insuring the load of the right posts
             else state.userPosts = [...state.userPosts, ...userPosts]
+            state.followingPosts = []
         },
         setPosts(state, { posts }) {
-            console.log('------------>', state.numOfPostsToQuerry)
-            console.log(posts)
             if (state.numOfPostsToQuerry === 4) state.followingPosts = [...posts] // indicates to the first run of the component - insuring the load of the right posts
             else state.followingPosts = [...state.followingPosts, ...posts]
+            state.userPosts = []
         },
         setPost(state, { post }) {
             state.post = post
@@ -59,13 +58,13 @@ export const postStore = {
         },
         removePost(state, { postId }) {
             state.userPosts = state.userPosts.filter(post => post._id !== postId)
+            state.followingPosts = state.followingPosts.filter(post => post._id !== postId)
         }
     },
     actions: {
         async loadUserPosts({ commit }, { userId, numOfPostsToQuerry }) {
             try {
                 if (numOfPostsToQuerry) {
-                    console.log('=============>', numOfPostsToQuerry)
                     commit({ type: 'setCurrNumOfPosts', num: numOfPostsToQuerry })
                 }
                 const userPosts = await postService.getUserPostsById(userId, numOfPostsToQuerry)

@@ -37,9 +37,10 @@ async function updatePost(req, res) {
 
 async function removePost(req, res) {
     try {
-        await postService.removePost(req.params.postId)
-        res.status(200).send(true)
+        const deletedRows = await postService.removePost(req.params.postId)
+        if (deletedRows) res.status(200).send(true)
     } catch (err) {
+        console.log(err)
         logger.error('post controller - cannot remove post' + err)
         res.status(401).send({ err: `Failed to remove post ${err}` })
     }
@@ -57,9 +58,9 @@ async function addPost(req, res) {
 }
 
 async function appendItem(req, res) {
-    const { likedUser, entityName } = req.body
+    const { data, entityName } = req.body
     try {
-        await postService.appendToColumn(likedUser, entityName, req.params._id)
+        await postService.appendToColumn(data, entityName, req.params._id)
         res.status(200).send(true)
     } catch (err) {
         logger.error('post controller - cannot append to column' + err)
