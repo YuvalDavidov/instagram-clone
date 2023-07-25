@@ -34,7 +34,7 @@
             <span>{{ posts.length }}</span> posts
           </div>
           <div>
-            <span>{{ user.followers.length }}</span> followers
+            <span>{{ user.followersCount }}</span> followers
           </div>
           <div>
             <span>{{ user.following.length }}</span> following
@@ -78,7 +78,7 @@
         <span>{{ posts.length }}</span> posts
       </div>
       <div>
-        <span>{{ user.followers.length }}</span> followers
+        <span>{{ user.followersCount }}</span> followers
       </div>
       <div>
         <span>{{ user.following.length }}</span> following
@@ -122,15 +122,10 @@ export default {
     window.removeEventListener("scroll", this.onWindowScroll);
   },
   async created() {
-    window.addEventListener("scroll", this.onWindowScroll);
+   window.addEventListener("scroll", this.onWindowScroll);
     this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
-    this.user =
-      this.$route.params._id === this.$store.getters.GetUser._id
-        ? this.$store.getters.GetUser
-        : await userService.getUserById(this.$route.params._id);
-    this.isFollowing = await followService.checkIfFollowing(
-      this.$route.params._id
-    );
+    this.user = (this.$route.params._id === this.$store.getters.GetUser._id) ? this.$store.getters.GetUser : await userService.getUserById(this.$route.params._id);
+    this.isFollowing = await followService.checkIfFollowing(this.$route.params._id);
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.onWindowScroll);
@@ -138,11 +133,15 @@ export default {
   methods: {
     async onFollow() {
       try {
-        if (this.isFollowing)
+        if (this.isFollowing) {
           await followService.unFollow(this.$route.params._id);
-        else await followService.addFollow(this.$route.params._id);
+          this.user.followersCount--
+        }
+        else {
+          await followService.addFollow(this.$route.params._id);
+          this.user.followersCount++
+        } 
         this.isFollowing = !this.isFollowing;
-        this.user = await userService.getUserById(this.$route.params._id);
       } catch (err) {
         console.error(err);
       }

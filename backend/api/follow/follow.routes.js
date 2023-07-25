@@ -1,11 +1,12 @@
 const express = require('express')
-const { addFollow, removeFollow } = require('./follow.controller.js')
+const { addFollow, removeFollow, isFollowing } = require('./follow.controller.js')
 const { requireAuth } = require('../../middlewares/requireAuth.middleware')
 
 const router = express.Router()
 
-router.put('/add/:_id', addFollow)
-router.put('/remove/:_id', removeFollow)
+router.put('/add/:userId', addFollow)
+router.put('/remove/:userId', removeFollow)
+router.get('/check/:userId', isFollowing)
 
 module.exports = router
 

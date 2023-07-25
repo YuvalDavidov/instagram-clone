@@ -3,7 +3,7 @@ const authService = require('../auth/auth.service')
 const logger = require('../../services/logger.service')
 
 async function getUserChatsIds(req, res) {
-    const loggedinUser = authService.getLoggedinUser(req)
+    const loggedinUser = authService.validateToken(req.cookies.loginToken)
     try {
         const chatIds = await chatService.queryChatIds(loggedinUser._id)
         res.json(chatIds)

@@ -15,7 +15,7 @@ export const storiesService = {
 async function getStoriesByFollowings() {
 
     const currUser = userService.getLoggedinUser()
-    const queryParams = `?following=${currUser.following}`
+    const queryParams = `?userId=${currUser._id}`
     try {
         const story = await httpService.get(SROTY_URL + queryParams)
         return story

@@ -62,6 +62,11 @@ const instegramUsers = sequelize.define('instegramUsers', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    vipProfiles: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+        allowNull: true
+    }
 });
 
 const instegramPosts = sequelize.define('instegramPosts', {

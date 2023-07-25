@@ -96,17 +96,25 @@ async function removeFromColumn(model, columnName, itemId, entityId) {
     }
 }
 
-async function queryOne(model, filterBy) {
-    const whereCondition = {}
-    Object.keys(filterBy).forEach(key => {
-        whereCondition[key] = (Array.isArray(filterBy[key])) ? { [Op.in]: filterBy[key] } : { [Op.eq]: filterBy[key] }
-    })
+async function queryOne(model, filterBy, attributes) {
+
+    if (attributes && (attributes.includes('following') && attributes.includes('followers'))) attributes = [
+        ...attributes.filter(attr => attr !== 'followers' || attr !== 'following'),
+        [sequelize.fn('array_length', sequelize.col('followers'), 1), 'followersCount'],
+        [sequelize.fn('array_length', sequelize.col('following'), 1), 'followingCount']
+    ]
     try {
-        const entity = await model.findOne({
+        const entity = (attributes) ? await model.findOne({
+            attributes,
             where: {
-                [Op.or]: [whereCondition]
+                [Op.and]: [filterBy]
             }
-        })
+        }) :
+            await model.findOne({
+                where: {
+                    [Op.and]: [filterBy]
+                }
+            })
         return entity ? entity.dataValues : entity
 
     } catch (error) {

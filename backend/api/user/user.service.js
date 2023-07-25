@@ -13,16 +13,26 @@ module.exports = {
     update,
     add,
     checkPassword,
-    encryptPassword
+    encryptPassword,
+    addToViewCount
 }
 
-async function query(filterBy = { username: '' }, isLessDetails = false, loggedinUser) {
+async function addToViewCount(userId, loggedinUserId) {
+    try {
+        return await dbService.appendToColumn(instegramUsers, userId, 'vipProfiles', loggedinUserId)
+    } catch (error) {
+        console.log(error)
+        throw new Error('', error)
+    }
+}
+
+async function query(filterBy = { username: '' }, isLessDetails = false, loggedinUserId) {
     try {
         let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, 10, isLessDetails) : await dbService.query(instegramUsers, filterBy)
         let filterdUsers = model.map(user => {
             delete user.password
             return user
-        }).filter(u => u._id !== loggedinUser._id)
+        }).filter(u => u._id !== loggedinUserId)
         return filterdUsers
     } catch (err) {
         logger.error('user.service - cannot find users', err)
@@ -30,10 +40,9 @@ async function query(filterBy = { username: '' }, isLessDetails = false, loggedi
     }
 }
 
-async function getById(userId) {
+async function getById(userId, attributes) {
     try {
-        let user = await dbService.queryOne(instegramUsers, { _id: userId })
-        delete user.password
+        let user = await dbService.queryOne(instegramUsers, { _id: userId }, attributes)
         return user
     }
     catch (err) {
@@ -41,9 +50,9 @@ async function getById(userId) {
         throw err
     }
 }
-async function getByUsername(username) {
+async function getByUsername(username, attributes) {
     try {
-        let user = await dbService.queryOne(instegramUsers, { username })
+        let user = await dbService.queryOne(instegramUsers, { username }, attributes)
         return user
     } catch (err) {
         logger.error(`user.service - while finding user by username: ${username}`, err)

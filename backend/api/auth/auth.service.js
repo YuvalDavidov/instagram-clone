@@ -12,17 +12,15 @@ module.exports = {
     validateToken,
     validatePassword,
     encrypt,
-    getLoggedinUser,
     updateLoginToken
 }
 
 async function updateLoginToken(user, res) {
     try {
-        const newUser = await userService.getById(user._id)
+        const newUser = await userService.getById(user._id, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
         const loginToken = getLoginToken(newUser)
         res.clearCookie('loginToken')
         res.cookie('loginToken', loginToken, { sameSite: 'None', secure: true })
-        res.json(newUser)
 
     } catch (error) {
         logger.error(`auth.service - cant update loginToken`)
@@ -34,10 +32,9 @@ async function updateLoginToken(user, res) {
 async function login(username, password) {
     logger.debug(`auth.service - login with username: ${username}`)
     try {
-        const user = await userService.getByUsername(username)
+        const user = await userService.getByUsername(username, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
         await bcrypt.compare(password, user.password)
         delete user.password
-        user._id = user._id.toString()
         return user
     } catch (error) {
         logger.error(`auth.service - Invalid username or password`)
@@ -62,21 +59,17 @@ async function signup({ username, password, fullname, ...args }) {
 
 }
 
-function getLoggedinUser(req) {
-    const loginToken = req.cookies.loginToken
-    const loggedinUser = JSON.parse(cryptr.decrypt(loginToken))
-    return loggedinUser
+
+async function getLoginToken(user) {
+    let newUser
+    if (typeof user === 'string') newUser = await userService.getById(user._id, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
+    else newUser = { ...user }
+    return cryptr.encrypt(JSON.stringify(newUser))
 }
 
-function getLoginToken(user) {
-    const userInfo = { _id: user._id, fullname: user.fullname, username: user.username, urlImg: user.urlImg }
-    return cryptr.encrypt(JSON.stringify(userInfo))
-}
-
-function validateToken(loginToken) {
+async function validateToken(loginToken) {
     try {
-        const json = cryptr.decrypt(loginToken)
-        const loggedinUser = JSON.parse(json)
+        const loggedinUser = await JSON.parse(cryptr.decrypt(loginToken))
         return loggedinUser
 
     } catch (err) {

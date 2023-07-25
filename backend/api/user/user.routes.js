@@ -1,15 +1,16 @@
 const express = require('express')
 const { requireAuth, requireAdmin } = require('../../middlewares/requireAuth.middleware')
-const { getUser, getUsers, deleteUser, updateUser, updatePassword } = require('./user.controller')
+const { getUser, getUsers, deleteUser, updateUser, updatePassword, addToViewCount } = require('./user.controller')
 const router = express.Router()
 
 // middleware that is specific to this router
 // router.use(requireAuth)
 
 router.get('/', getUsers)
-router.get('/:_id', getUser)
+router.get('/:userId', getUser)
 router.put('/password', requireAuth, updatePassword)
-router.put('/:_id', requireAuth, updateUser)
-router.delete('/:_id', requireAuth, requireAdmin, deleteUser)
+router.put('/:userId', requireAuth, updateUser)
+router.post('/:userId', addToViewCount)
+router.delete('/:userId', requireAuth, requireAdmin, deleteUser)
 
 module.exports = router

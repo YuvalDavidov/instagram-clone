@@ -1,11 +1,13 @@
 const logger = require('../../services/logger.service')
 const storyService = require('./story.service.js')
 const authService = require('../auth/auth.service')
+const { getById } = require('../user/user.service')
 
 async function getStoriesByFollowing(req, res) {
 
-    const following = req.query.following.split(',')
+    const { userId } = req.query
     try {
+        const following = await getById(userId, ['following'])
         const stories = await storyService.query(following, condition = 'byFollowing')
         res.json(stories)
     } catch (error) {
@@ -27,7 +29,7 @@ async function getStoriesByUserId(req, res) {
 
 async function getStoryById(req, res) {
     let storyId = req.params._id
-    const loggedinUser = authService.getLoggedinUser(req)
+    const loggedinUser = authService.validateToken(req.cookies.loginToken)
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
         if (!story.sawUsers.includes(loggedinUser._id.toString()) && story.userInfo.userId !== loggedinUser._id) await storyService.updateStory(loggedinUser._id.toString(), storyId, res)
@@ -40,7 +42,7 @@ async function getStoryById(req, res) {
 
 async function addStory(req, res) {
     let newStory = req.body
-    const loggedinUser = authService.getLoggedinUser(req)
+    const loggedinUser = authService.validateToken(req.cookies.loginToken)
     newStory.userInfo = {
         userId: loggedinUser._id,
         username: loggedinUser.username,

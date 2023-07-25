@@ -14,19 +14,10 @@ export const followService = {
 
 async function unFollow(id) {
     try {
-        const user = await httpService.put(FOLLOW_URL + `remove/${id}`)
+        await httpService.put(FOLLOW_URL + `remove/${id}`)
+        const user = userService.getLoggedinUser()
+        user.followingCount--
         userService.updateLoginUser(user)
-
-        // let user = await userService.getUserById(id)
-        // let loggedInUser = userService.getLoggedinUser()
-        // // 
-        // user = { ...user, followers: user.followers.filter(currId => currId !== loggedInUser._id) }
-        // loggedInUser = { ...loggedInUser, following: loggedInUser.following.filter(currId => currId !== id) }
-        // // 
-        // await storageService.put(USER_KEY, user)
-        // await storageService.put(USER_KEY, loggedInUser)
-        // // 
-        // userService.saveLocalUser(loggedInUser)
     } catch (error) {
         throw new Error('error - couldnt remove follow', error)
 
@@ -36,18 +27,10 @@ async function unFollow(id) {
 
 async function addFollow(id) {
     try {
-        const user = await httpService.put(FOLLOW_URL + `add/${id}`)
+        await httpService.put(FOLLOW_URL + `add/${id}`)
+        const user = userService.getLoggedinUser()
+        user.followingCount++
         userService.updateLoginUser(user)
-        // const user = await userService.getUserById(id)
-        // const loggedInUser = userService.getLoggedinUser(id)
-        // // 
-        // user.followers.push(loggedInUser._id)
-        // loggedInUser.following.push(id)
-        // // 
-        // await storageService.put(USER_KEY, user)
-        // await storageService.put(USER_KEY, loggedInUser)
-        // // 
-        // userService.saveLocalUser(loggedInUser)
     } catch (error) {
         throw new Error('error - couldnt add follow', error)
     }
@@ -56,6 +39,5 @@ async function addFollow(id) {
 
 
 function checkIfFollowing(id) {
-    const loggedInUser = userService.getLoggedinUser()
-    return loggedInUser.following.includes(id)
-} 
+    return httpService.get(FOLLOW_URL + `check/${id}`)
+}

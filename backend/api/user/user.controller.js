@@ -5,7 +5,7 @@ const authService = require('../auth/auth.service')
 
 async function getUser(req, res) {
     try {
-        const user = await userService.getById(req.params._id)
+        const user = await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts'])
         res.send(user)
     } catch (err) {
         logger.error('Failed to get user', err)
@@ -15,13 +15,13 @@ async function getUser(req, res) {
 
 async function getUsers(req, res) {
     try {
-        const loggedinUser = authService.getLoggedinUser(req)
+        const loggedinUser = authService.validateToken(req.cookies.loginToken)
         const filterBy = {
             username: req.query.filterBy || '',
             fullname: req.query.filterBy || ''
         }
         const isLessDetails = Boolean(req.query.isLessDetails)
-        const users = (req.query?.isLessDetails) ? await userService.query(filterBy, isLessDetails, loggedinUser) : await userService.query(filterBy)
+        const users = (req.query?.isLessDetails) ? await userService.query(filterBy, isLessDetails, loggedinUser._id) : await userService.query(filterBy)
         res.send(users)
     } catch (err) {
         logger.error('Failed to get users', err)
@@ -31,7 +31,7 @@ async function getUsers(req, res) {
 
 async function deleteUser(req, res) {
     try {
-        await userService.remove(req.params._id)
+        await userService.remove(req.params.userId)
         res.send({ msg: 'Deleted successfully' })
     } catch (err) {
         logger.error('Failed to delete user', err)
@@ -62,10 +62,22 @@ async function updatePassword(req, res) {
     }
 }
 
+async function addToViewCount(req, res) {
+    // when this function called that means that the loggedin user has visited this user at least 5 times in the time frame that was designated 
+    const { userId } = req.params
+    const loggedinUser = authService.validateToken(req.cookies.loginToken)
+    try {
+        await userService.addToViewCount(userId, loggedinUser._id)
+    } catch (error) {
+
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
     deleteUser,
     updateUser,
-    updatePassword
+    updatePassword,
+    addToViewCount
 }
