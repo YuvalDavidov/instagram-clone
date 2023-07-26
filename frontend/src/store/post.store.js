@@ -43,8 +43,9 @@ export const postStore = {
             state.numOfPostsToQuerry = num
         },
         addPost(state, { post, userId }) {
-            if (post.userId === userId) state.userPosts.unshift(post)
+            state.userPosts.unshift(post)
             state.followingPosts.unshift(post)
+
         },
         updateUserPost(state, { post }) {
             const idx = state.userPosts.findIndex(p => p._id === post._id)

@@ -1,4 +1,5 @@
 const logger = require('../../services/logger.service')
+const { validateToken } = require('../auth/auth.service')
 const postService = require('./post.service')
 
 async function getPosts(req, res) {
@@ -37,7 +38,8 @@ async function updatePost(req, res) {
 
 async function removePost(req, res) {
     try {
-        const deletedRows = await postService.removePost(req.params.postId)
+        const loggedinUser = validateToken(req.cookies.loginToken)
+        const deletedRows = await postService.removePost(req.params.postId, loggedinUser._id)
         if (deletedRows) res.status(200).send(true)
     } catch (err) {
         console.log(err)

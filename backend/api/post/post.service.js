@@ -37,25 +37,33 @@ async function getPostById(postId) {
     try {
         return await dbService.queryOne(instegramPosts, { _id: postId })
     } catch (error) {
-        logger.error(`post.service - cannot get post with id ${postId}`, err)
-        throw new Error(`post.service - cannot get post with id ${postId}`, err)
+        logger.error(`post.service - cannot get post with id ${postId}`, error)
+        throw new Error(`post.service - cannot get post with id ${postId}`, error)
     }
 }
 
 async function addPost(post) {
     try {
         await dbService.addRecord(instegramPosts, post)
+        const { numOfPosts } = await dbService.queryOne(instegramUsers, { _id: post.userId }, ['numOfPosts'])
+        numOfPosts++
+        await dbService.appendToColumn(instegramUsers, numOfPosts, 'numOfPosts', post.userId)
         return post
     } catch (error) {
-        logger.error('post.service - cannot add post', err)
-        throw new Error('post.service - cannot add post', err)
+        logger.error('post.service - cannot add post', error)
+        throw new Error('post.service - cannot add post', error)
     }
 }
 
-async function removePost(postId) {
+async function removePost(postId, userId) {
     try {
         const deletedRows = await dbService.removeRecord(instegramPosts, postId)
-        if (deletedRows) return deletedRows
+        if (deletedRows) {
+            const { numOfPosts } = await dbService.queryOne(instegramUsers, { _id: userId }, ['numOfPosts'])
+            numOfPosts--
+            await dbService.appendToColumn(instegramUsers, numOfPosts, 'numOfPosts', userId)
+            return deletedRows
+        }
         else throw new Error('post.service - no posts has been removed')
     } catch (error) {
         logger.error('post.service - cannot remove post', error)
@@ -67,8 +75,8 @@ async function updatePost(data, postId) {
     try {
         await dbService.updateRecord(instegramPosts, data, postId)
     } catch (error) {
-        logger.error('post.service - cannot update post', err)
-        throw new Error('post.service - cannot update post', err)
+        logger.error('post.service - cannot update post', error)
+        throw new Error('post.service - cannot update post', error)
     }
 }
 

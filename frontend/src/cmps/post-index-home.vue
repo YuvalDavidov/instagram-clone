@@ -13,14 +13,16 @@ export default {
       isLoadingPosts: false,
     };
   },
-  created() {
+  async created() {
     window.addEventListener("scroll", this.onWindowScroll);
     this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
-    this.$store.dispatch({
+    await this.$store.dispatch({
       type: "loadPosts",
       userId: this.$store.getters.GetUser._id,
       numOfPostsToQuerry: this.currNumOfPostsToQuerry,
     });
+
+    console.log('user check ------------->', await this.$store.getters.GetUser)
   },
 
   computed: {

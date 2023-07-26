@@ -80,7 +80,6 @@ export default {
       postToEdit: null,
       step: "first",
       user: this.$store.getters.GetUser,
-      myCanvas: null,
     };
   },
   props: {
@@ -129,14 +128,11 @@ export default {
     async onPost() {
       try {
         if (this.isPost) {
-          const postToSave = await postService.savePost(
-            this.user,
-            this.postToEdit
-          );
+          const postToSave = await postService.savePost(this.user, this.postToEdit);
+          this.user.numOfPosts = this.user.numOfPosts+1
           this.$store.dispatch({
             type: "addPost",
-            post: postToSave,
-            userId: this.user._id
+            post: postToSave
           });
         } else {
           const storyToSave = await storiesService.createStory(

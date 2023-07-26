@@ -32,7 +32,7 @@ async function updateLoginToken(user, res) {
 async function login(username, password) {
     logger.debug(`auth.service - login with username: ${username}`)
     try {
-        const user = await userService.getByUsername(username, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
+        const user = await userService.getByUsername(username, ['_id', 'fullname', 'password', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
         await bcrypt.compare(password, user.password)
         delete user.password
         return user

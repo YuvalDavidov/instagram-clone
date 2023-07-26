@@ -99,10 +99,11 @@ async function removeFromColumn(model, columnName, itemId, entityId) {
 async function queryOne(model, filterBy, attributes) {
 
     if (attributes && (attributes.includes('following') && attributes.includes('followers'))) attributes = [
-        ...attributes.filter(attr => attr !== 'followers' || attr !== 'following'),
+        ...attributes.filter(attr => attr !== 'followers' && attr !== 'following'),
         [sequelize.fn('array_length', sequelize.col('followers'), 1), 'followersCount'],
         [sequelize.fn('array_length', sequelize.col('following'), 1), 'followingCount']
     ]
+
     try {
         const entity = (attributes) ? await model.findOne({
             attributes,
@@ -115,11 +116,12 @@ async function queryOne(model, filterBy, attributes) {
                     [Op.and]: [filterBy]
                 }
             })
+
         return entity ? entity.dataValues : entity
 
     } catch (error) {
         console.log(error)
-        throw new Error('failed to get record', error)
+        // throw new Error('failed to get record', error)
     }
 }
 //  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]

@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import { postService } from "../services/post.service";
 import postPreviewHome from "./post-preview-home.vue";
 import PostModal from "../pages/post-modal.vue";
 export default {

@@ -11,8 +11,8 @@ async function getStoriesByFollowing(req, res) {
         const stories = await storyService.query(following, condition = 'byFollowing')
         res.json(stories)
     } catch (error) {
-        logger.error('story controller - cannot get stories' + error)
-        res.status(401).send({ error: `Failed to get stories ${error}` })
+        // logger.error('story controller - cannot get stories' + error)
+        // res.status(401).send({ error: `Failed to get stories ${error}` })
     }
 }
 
@@ -22,8 +22,8 @@ async function getStoriesByUserId(req, res) {
         const stories = await storyService.query(userId, condition = 'userId')
         res.json(stories)
     } catch (error) {
-        logger.error('story controller - cannot get user stories' + error)
-        res.status(401).send({ error: `Failed to get user stories ${error}` })
+        // logger.error('story controller - cannot get user stories' + error)
+        // res.status(401).send({ error: `Failed to get user stories ${error}` })
     }
 }
 
@@ -35,8 +35,8 @@ async function getStoryById(req, res) {
         if (!story.sawUsers.includes(loggedinUser._id.toString()) && story.userInfo.userId !== loggedinUser._id) await storyService.updateStory(loggedinUser._id.toString(), storyId, res)
         res.json(story)
     } catch (error) {
-        logger.error('story controller - cannot get story' + error)
-        res.status(401).send({ error: `Failed to get story ${error}` })
+        // logger.error('story controller - cannot get story' + error)
+        // res.status(401).send({ error: `Failed to get story ${error}` })
     }
 }
 
