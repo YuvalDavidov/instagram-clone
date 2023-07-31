@@ -1,13 +1,14 @@
-const authService = require('./auth.service')
+const tokenService = require('../../services/token.service')
 const logger = require('../../services/logger.service')
+const authService = require('../auth/auth.service')
+
 
 async function login(req, res) {
+    console.log('here!')
     const { username, password } = req.body
     try {
         const user = await authService.login(username, password)
-        const loginToken = authService.getLoginToken(user)
-        logger.info('User login: ', user)
-        res.cookie('loginToken', loginToken, { sameSite: 'None', secure: true })
+        await tokenService.sendLoginToken(user, res)
         res.json(user)
     } catch (err) {
         logger.error('Failed to Login ' + err)
@@ -24,8 +25,7 @@ async function signup(req, res) {
         logger.debug(`auth.route - new account created: ` + JSON.stringify(account))
         const user = await authService.login(credentials.username, credentials.password)
         logger.info('User signup:', user)
-        const loginToken = authService.getLoginToken(user)
-        res.cookie('loginToken', loginToken, { sameSite: 'None', secure: true })
+        await tokenService.sendLoginToken(user, res)
         res.json(user)
     } catch (err) {
         logger.error('Failed to signup ' + err)

@@ -16,8 +16,9 @@ async function query(entity, condition) {
         else return [...new Set(stories.map(story => { return condition === 'userId' ? story._id : story.userInfo.userId }))]
 
     } catch (error) {
+        console.log(error)
         // logger.error('story.service - cannot get story', error)
-        throw new Error('story.service - cannot get story', error)
+        throw new Error('')
     }
 }
 
@@ -26,8 +27,8 @@ async function addStory(story) {
         const newStory = await dbService.addRecord(instegramStories, story)
         return newStory
     } catch (error) {
-        logger.error('story.service - cannot add story', err)
-        throw new Error('story.service - cannot add story', err)
+        logger.error('story.service - cannot add story', error)
+        throw new Error('story.service - cannot add story', error)
     }
 }
 
@@ -35,18 +36,17 @@ async function removeStory(storyId) {
     try {
         await dbService.removeRecord(instegramStories, storyId)
     } catch (error) {
-        logger.error('story.service - cannot remove story', err)
-        throw new Error('story.service - cannot remove story', err)
+        logger.error('story.service - cannot remove story', error)
+        throw new Error('story.service - cannot remove story', error)
     }
 }
 
 async function updateStory(sawUser, storyId) {
     try {
         await dbService.appendToColumn(instegramStories, sawUser, 'sawUsers', storyId)
-        console.log(sawUser, storyId);
     } catch (error) {
-        logger.error('story.service - cannot update story', err)
-        throw new Error('story.service - cannot update story', err)
+        logger.error('story.service - cannot update story', error)
+        throw new Error('story.service - cannot update story', error)
     }
 }
 

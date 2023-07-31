@@ -66,7 +66,7 @@ async function updateRecord(model, data, itemId) {
 }
 
 async function appendToColumn(model, data, columnName, entityId) {
-
+    console.log('in db service append to column===>', data, columnName, entityId)
     try {
         await model.update(
             {
@@ -76,7 +76,8 @@ async function appendToColumn(model, data, columnName, entityId) {
         )
         await model.sync()
     } catch (error) {
-        throw new Error('db.service - failed to update/add to column', error)
+        console.log(error)
+        // throw new Error('db.service - failed to update/add to column', error)
     }
 }
 async function removeFromColumn(model, columnName, itemId, entityId) {
@@ -103,17 +104,22 @@ async function queryOne(model, filterBy, attributes) {
         [sequelize.fn('array_length', sequelize.col('followers'), 1), 'followersCount'],
         [sequelize.fn('array_length', sequelize.col('following'), 1), 'followingCount']
     ]
+    const whereCondition = [];
+    Object.keys(filterBy).forEach(key => {
+        if (Array.isArray(filterBy[key])) whereCondition.push({ [key]: { [Op.contains]: filterBy[key] } });
+        else whereCondition.push({ [key]: filterBy[key] });
+    });
 
     try {
         const entity = (attributes) ? await model.findOne({
             attributes,
             where: {
-                [Op.and]: [filterBy]
+                [Op.and]: whereCondition
             }
         }) :
             await model.findOne({
                 where: {
-                    [Op.and]: [filterBy]
+                    [Op.and]: filterBy
                 }
             })
 
@@ -174,8 +180,6 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
     Object.keys(filterBy).forEach(key => {
         whereCondition[key] = (Array.isArray(filterBy[key])) ? filterBy[key] : { [Op.eq]: filterBy[key] }
     })
-
-
 
     try {
         if (!filterBy) result = await model.findAll()

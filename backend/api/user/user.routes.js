@@ -10,7 +10,6 @@ router.get('/', getUsers)
 router.get('/:userId', getUser)
 router.put('/password', requireAuth, updatePassword)
 router.put('/:userId', requireAuth, updateUser)
-router.post('/:userId', addToViewCount)
 router.delete('/:userId', requireAuth, requireAdmin, deleteUser)
 
 module.exports = router

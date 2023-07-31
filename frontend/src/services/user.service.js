@@ -69,6 +69,7 @@ function checkIfOwnByUser(id) {
 
 function logout() {
     sessionStorage.clear()
+    httpService.post(AUTH_URL + 'logout')
 }
 
 function updateLoginUser(user) {
@@ -114,7 +115,8 @@ async function signup(userCred) {
         // const user = await storageService.post(USER_KEY, newUser)
         const user = await httpService.post(AUTH_URL + 'signup', newUser)
         // socketService.login(user._id)
-        return saveLocalUser(user)
+        saveLocalUser(user)
+        return user
     } catch (err) {
         throw new Error('coudnt post new user', err)
     }

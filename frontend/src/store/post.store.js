@@ -42,10 +42,9 @@ export const postStore = {
         setCurrNumOfPosts(state, { num }) {
             state.numOfPostsToQuerry = num
         },
-        addPost(state, { post, userId }) {
-            state.userPosts.unshift(post)
+        addPost(state, { post, isAtProfile }) {
+            if (isAtProfile) state.userPosts.unshift(post)
             state.followingPosts.unshift(post)
-
         },
         updateUserPost(state, { post }) {
             const idx = state.userPosts.findIndex(p => p._id === post._id)
@@ -76,6 +75,7 @@ export const postStore = {
         },
         async savePost({ commit, state }, { post }) {
             const actionType = (state.userPosts.find(p => p._id === post._id)) ? 'updateUserPost' : 'updatePost'
+            console.log(actionType, state.userPosts)
             try {
                 commit({ type: actionType, post })
             } catch (error) {
@@ -84,10 +84,10 @@ export const postStore = {
             }
         },
 
-        async addPost({ commit }, { post }) {
+        async addPost({ commit }, { post, isAtProfile }) {
 
             try {
-                commit({ type: 'addPost', post })
+                await commit({ type: 'addPost', post, isAtProfile })
             } catch (error) {
                 throw new Error('coudl\'nt add post', error)
 
@@ -98,7 +98,6 @@ export const postStore = {
             try {
                 await postService.removePost(postId)
                 commit({ type: 'removePost', postId })
-
             } catch (error) {
                 throw new Error('coudl\'nt remove post', error)
 

@@ -108,7 +108,6 @@ export default {
           this.postToEdit.imgsUrl = imgsUrl.map((img) => img.url);
         });
       } else {
-        console.log("gi");
         uploadService.uploadImg(ev).then((imgsUrl) => {
           this.postToEdit.imgsUrl = imgsUrl.url;
         });
@@ -129,17 +128,17 @@ export default {
       try {
         if (this.isPost) {
           const postToSave = await postService.savePost(this.user, this.postToEdit);
-          this.user.numOfPosts = this.user.numOfPosts+1
           this.$store.dispatch({
             type: "addPost",
-            post: postToSave
+            post: postToSave,
+            isAtProfile: (this.$route.params._id) ? true : false
           });
         } else {
           const storyToSave = await storiesService.createStory(
             this.postToEdit.imgsUrl
-          );
-        }
-        this.$emit("onToggleCreate");
+            );
+          }
+          this.$emit("onToggleCreate");
       } catch (error) {
         new Error("coudl'nt create this post", error);
       }

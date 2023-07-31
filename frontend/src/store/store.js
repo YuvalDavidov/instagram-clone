@@ -32,6 +32,7 @@ export const myStore = createStore({
     },
     mutations: {
         setUser(state, { user }) {
+            console.log('in store ---------->', user)
             state.user = user
             if (user) state.isDarkMode = user.darkMode
         },
@@ -50,7 +51,8 @@ export const myStore = createStore({
         },
         async signUp({ commit }, { user }) {
             try {
-                await userService.signup(user)
+                console.log('in store actions ---------->', user)
+                user = await userService.signup(user)
                 commit({ type: 'setUser', user })
             } catch (err) {
                 commit({ type: 'setUser', user: false })

@@ -1,11 +1,16 @@
 const userService = require('./user.service')
 // const socketService = require('../../services/socket.service')
 const logger = require('../../services/logger.service')
-const authService = require('../auth/auth.service')
+const tokenService = require('../../services/token.service')
 
 async function getUser(req, res) {
     try {
-        const user = await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts'])
+        const loggedInUserId = await addToViewCount(req, res)
+        console.log('in Getuser ------>', loggedInUserId)
+        const user = (loggedInUserId === req.params.userId) ?
+            await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts'])
+            :
+            await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
         res.send(user)
     } catch (err) {
         logger.error('Failed to get user', err)
@@ -15,7 +20,7 @@ async function getUser(req, res) {
 
 async function getUsers(req, res) {
     try {
-        const loggedinUser = authService.validateToken(req.cookies.loginToken)
+        const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
         const filterBy = {
             username: req.query.filterBy || '',
             fullname: req.query.filterBy || ''
@@ -56,6 +61,7 @@ async function updatePassword(req, res) {
         await userService.checkPassword(userId, currPassword)
         const encryptedPassword = await userService.encryptPassword(newPassword)
         await userService.update({ _id: userId, password: encryptedPassword })
+        res.status(200).send(true)
     } catch (error) {
         logger.error('Failed to update password', err)
         res.status(500).send({ err: 'Failed to update password' })
@@ -65,11 +71,14 @@ async function updatePassword(req, res) {
 async function addToViewCount(req, res) {
     // when this function called that means that the loggedin user has visited this user at least 5 times in the time frame that was designated 
     const { userId } = req.params
-    const loggedinUser = authService.validateToken(req.cookies.loginToken)
     try {
-        await userService.addToViewCount(userId, loggedinUser._id)
+        let loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
+        if (loggedinUser._id === userId) return loggedinUser._id
+        console.log('in contoller ------>', userId, loggedinUser)
+        await userService.addToViewCount(userId, loggedinUser, res)
+        return loggedinUser._id
     } catch (error) {
-
+        logger.error('Failed to add to view count', err)
     }
 }
 
@@ -79,5 +88,4 @@ module.exports = {
     deleteUser,
     updateUser,
     updatePassword,
-    addToViewCount
 }

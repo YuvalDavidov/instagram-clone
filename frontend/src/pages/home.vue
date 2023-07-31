@@ -121,15 +121,14 @@ export default {
     },
     isDisabled() {
       if (
-        this.loginCredentials.username.length > 5 &&
+        this.loginCredentials.username.length > 4 &&
         this.loginCredentials.password.length > 5 &&
         !this.isSignUp
       )
         return false;
       else if (
-        this.newUser.username.length > 5 &&
+        this.newUser.username.length > 4 &&
         this.newUser.password.length > 5 &&
-        this.newUser.fullname.length > 5 &&
         this.isSignUp
       )
         return false;

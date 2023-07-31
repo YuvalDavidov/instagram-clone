@@ -31,13 +31,13 @@
         </div>
         <div class="user-amount">
           <div>
-            <span>{{ posts.length }}</span> posts
+            <span>{{ user.numOfPosts }}</span> posts
           </div>
           <div>
             <span>{{ user.followersCount }}</span> followers
           </div>
           <div>
-            <span>{{ user.following.length }}</span> following
+            <span>{{ user.followingCount }}</span> following
           </div>
         </div>
         <div class="user-summery">{{ user.fullname }}</div>
@@ -124,7 +124,6 @@ export default {
   async created() {
    window.addEventListener("scroll", this.onWindowScroll);
     this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
-    this.user = (this.$route.params._id === this.$store.getters.GetUser._id) ? this.$store.getters.GetUser : await userService.getUserById(this.$route.params._id);
     this.isFollowing = await followService.checkIfFollowing(this.$route.params._id);
   },
   beforeUnmount() {
@@ -179,7 +178,8 @@ export default {
       else return false;
     },
     userStories() {
-      return this.$store.getters.getUserStories[0];
+      if (this.$store.getters.getUserStories) return this.$store.getters.getUserStories[0];
+    
     },
     windowMode() {
       return this.$store.getters.GetWindowMode;
@@ -195,6 +195,7 @@ export default {
       immediate: true,
       async handler(params) {
         // Fetch data for the new route
+        if (this.$route.params._id === await this.$store.getters.GetUser._id) this.user = this.$store.getters.GetUser
         this.user = await userService.getUserById(params._id);
         this.$store.dispatch({
           type: "loadUserPosts",

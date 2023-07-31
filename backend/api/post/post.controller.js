@@ -3,7 +3,6 @@ const { validateToken } = require('../auth/auth.service')
 const postService = require('./post.service')
 
 async function getPosts(req, res) {
-
     let { userId, numOfPostsToQuerry, isUserPostsOnly } = req.query
     isUserPostsOnly = (isUserPostsOnly === 'true') ? true : false
     try {
@@ -38,7 +37,7 @@ async function updatePost(req, res) {
 
 async function removePost(req, res) {
     try {
-        const loggedinUser = validateToken(req.cookies.loginToken)
+        const loggedinUser = await validateToken(req.cookies.loginToken)
         const deletedRows = await postService.removePost(req.params.postId, loggedinUser._id)
         if (deletedRows) res.status(200).send(true)
     } catch (err) {

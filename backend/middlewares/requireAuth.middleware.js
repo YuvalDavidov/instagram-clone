@@ -1,4 +1,4 @@
-const authService = require('../api/auth/auth.service')
+const tokenService = require('../services/token.service')
 const logger = require('../services/logger.service')
 // const config = require('../config')
 const asyncLocalStorage = require('../services/als.service')

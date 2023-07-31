@@ -181,8 +181,7 @@ async function getUserPostsById(userId, numOfPostsToQuerry) {
 async function savePost(user, post) {
     try {
         if (post._id) {
-            // return await httpService.put(POST_URL, { dataToUpdate: post, postId: post._id })
-            return await storageService.put(POST_KEY, post)
+            return await httpService.put(POST_URL, { dataToUpdate: post, postId: post._id })
         } else {
             post = {
                 _id: utilService.makeId(7),
@@ -197,7 +196,6 @@ async function savePost(user, post) {
                 comments: [],
             }
             return await httpService.post(POST_URL, post)
-            // return await storageService.post(POST_KEY, postToSave)
         }
 
     } catch (error) {

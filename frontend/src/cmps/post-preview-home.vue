@@ -1,5 +1,5 @@
 <template>
-  <article class="post-details-home">
+  <article v-if="loggedInUser" class="post-details-home">
     <div class="post-details-header">
       <img class="user-img" :src="post.userImg" />
       <span>{{ post.username }}</span>
@@ -15,14 +15,14 @@
             scale="1.2"
             name="bi-heart"
             @click="addLike()"
-            v-if="!didUserLikedPost(post)"
+            v-if="!didUserLikedPost()"
           />
           <v-icon
             scale="1.2"
             fill="red"
             name="bi-heart-fill"
             @click="removeLike()"
-            v-if="didUserLikedPost(post)"
+            v-if="didUserLikedPost()"
           />
         </button>
         <button class="action-icon comment" @click="onOpenPostModal">
@@ -102,6 +102,9 @@ export default {
     timeAgo(timestamp) {
       return postService.getTime(timestamp);
     },
+    didUserLikedPost() {
+      return postService.didUserLikedPost([...this.post.likes], this.loggedInUser._id);
+    },
     showSummery() {
       this.isFullSummeryShown = true;
     },
@@ -143,7 +146,8 @@ export default {
     async addLike() {
       try {
        const updatedPost =  await postService.addLike(this.post, this.loggedInUser._id);
-        this.$store.dispatch({
+       console.log(updatedPost)
+        await this.$store.dispatch({
           type: "savePost",
           post: updatedPost,
         });
@@ -151,22 +155,18 @@ export default {
         console.error("coudl'nt like this post", err);
       }
     },
-    didUserLikedPost() {
-      return postService.didUserLikedPost([...this.post.likes], this.loggedInUser._id);
-    },
+    
     onToggleSettings() {
       
       this.isSettingsOpen = !this.isSettingsOpen;
     },
   },
   computed: {
-    loggedInUser() {
-      return this.$store.getters.GetUser;
-    },
     canComment() {
       if (this.commentTxt.length >= 1) return true;
       else false;
     },
+ 
   },
   components: {
     ImgSlider,

@@ -1,9 +1,10 @@
 const chatService = require('../../services/chat.service');
-const authService = require('../auth/auth.service')
+const tokenService = require('../../services/token.service')
 const logger = require('../../services/logger.service')
 
 async function getUserChatsIds(req, res) {
-    const loggedinUser = authService.validateToken(req.cookies.loginToken)
+
+    const loggedinUser = tokenService.validateToken(req.cookies.loginToken)
     try {
         const chatIds = await chatService.queryChatIds(loggedinUser._id)
         res.json(chatIds)

@@ -45,9 +45,9 @@ async function getPostById(postId) {
 async function addPost(post) {
     try {
         await dbService.addRecord(instegramPosts, post)
-        const { numOfPosts } = await dbService.queryOne(instegramUsers, { _id: post.userId }, ['numOfPosts'])
+        let { numOfPosts } = await dbService.queryOne(instegramUsers, { _id: post.userId }, ['numOfPosts'])
         numOfPosts++
-        await dbService.appendToColumn(instegramUsers, numOfPosts, 'numOfPosts', post.userId)
+        await dbService.updateRecord(instegramUsers, { numOfPosts }, post.userId)
         return post
     } catch (error) {
         logger.error('post.service - cannot add post', error)
@@ -57,11 +57,11 @@ async function addPost(post) {
 
 async function removePost(postId, userId) {
     try {
-        const deletedRows = await dbService.removeRecord(instegramPosts, postId)
+        let deletedRows = await dbService.removeRecord(instegramPosts, postId)
         if (deletedRows) {
-            const { numOfPosts } = await dbService.queryOne(instegramUsers, { _id: userId }, ['numOfPosts'])
+            let { numOfPosts } = await dbService.queryOne(instegramUsers, { _id: userId }, ['numOfPosts'])
             numOfPosts--
-            await dbService.appendToColumn(instegramUsers, numOfPosts, 'numOfPosts', userId)
+            await dbService.updateRecord(instegramUsers, { numOfPosts }, userId)
             return deletedRows
         }
         else throw new Error('post.service - no posts has been removed')

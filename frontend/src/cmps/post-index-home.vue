@@ -22,7 +22,6 @@ export default {
       numOfPostsToQuerry: this.currNumOfPostsToQuerry,
     });
 
-    console.log('user check ------------->', await this.$store.getters.GetUser)
   },
 
   computed: {

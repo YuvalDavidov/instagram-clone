@@ -1,18 +1,18 @@
 const logger = require('../../services/logger.service')
 const storyService = require('./story.service.js')
-const authService = require('../auth/auth.service')
+const tokenService = require('../../services/token.service')
 const { getById } = require('../user/user.service')
 
 async function getStoriesByFollowing(req, res) {
 
     const { userId } = req.query
     try {
-        const following = await getById(userId, ['following'])
+        let { following } = await getById(userId, ['following'])
         const stories = await storyService.query(following, condition = 'byFollowing')
         res.json(stories)
     } catch (error) {
-        // logger.error('story controller - cannot get stories' + error)
-        // res.status(401).send({ error: `Failed to get stories ${error}` })
+        logger.error('story controller - cannot get stories' + error)
+        res.status(401).send({ error: `Failed to get stories ${error}` })
     }
 }
 
@@ -22,6 +22,7 @@ async function getStoriesByUserId(req, res) {
         const stories = await storyService.query(userId, condition = 'userId')
         res.json(stories)
     } catch (error) {
+        console.log('at storybyids')
         // logger.error('story controller - cannot get user stories' + error)
         // res.status(401).send({ error: `Failed to get user stories ${error}` })
     }
@@ -29,12 +30,15 @@ async function getStoriesByUserId(req, res) {
 
 async function getStoryById(req, res) {
     let storyId = req.params._id
-    const loggedinUser = authService.validateToken(req.cookies.loginToken)
+    const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
+    console.log('getStoryById loggedInUser------->', loggedinUser)
+
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
         if (!story.sawUsers.includes(loggedinUser._id.toString()) && story.userInfo.userId !== loggedinUser._id) await storyService.updateStory(loggedinUser._id.toString(), storyId, res)
         res.json(story)
     } catch (error) {
+        console.log('at getStoryById ')
         // logger.error('story controller - cannot get story' + error)
         // res.status(401).send({ error: `Failed to get story ${error}` })
     }
@@ -42,7 +46,7 @@ async function getStoryById(req, res) {
 
 async function addStory(req, res) {
     let newStory = req.body
-    const loggedinUser = authService.validateToken(req.cookies.loginToken)
+    const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
     newStory.userInfo = {
         userId: loggedinUser._id,
         username: loggedinUser.username,

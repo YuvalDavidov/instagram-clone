@@ -11,7 +11,7 @@ module.exports = {
 
 async function checkIsFollowing(userId, loggedinUserId) {
     try {
-        let isFollowing = await dbService.queryOne(instegramUsers, { _id: loggedinUserId, following: userId }, ['_id'])
+        let isFollowing = await dbService.queryOne(instegramUsers, { _id: loggedinUserId, following: [userId] }, ['_id'])
         if (isFollowing) return true
         else return false
     } catch (error) {
