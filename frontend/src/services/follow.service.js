@@ -12,12 +12,14 @@ export const followService = {
 
 }
 
-async function unFollow(id) {
+async function unFollow(userId) {
     try {
-        await httpService.put(FOLLOW_URL + `remove/${id}`)
-        const user = userService.getLoggedinUser()
-        user.followingCount--
-        userService.updateLoginUser(user)
+        await httpService.put(FOLLOW_URL + `remove/${userId}`)
+        const loggedInuser = userService.getLoggedinUser()
+        let userProfile = await userService.getVipProfile(userId)
+        if (userProfile) userProfile.followersCount--
+        loggedInuser.followingCount--
+        await userService.updateSessionStorage(loggedInuser, userProfile)
     } catch (error) {
         throw new Error('error - couldnt remove follow', error)
 
@@ -25,12 +27,14 @@ async function unFollow(id) {
 
 }
 
-async function addFollow(id) {
+async function addFollow(userId) {
     try {
-        await httpService.put(FOLLOW_URL + `add/${id}`)
-        const user = userService.getLoggedinUser()
-        user.followingCount++
-        userService.updateLoginUser(user)
+        await httpService.put(FOLLOW_URL + `add/${userId}`)
+        const loggedInuser = userService.getLoggedinUser()
+        let userProfile = await userService.getVipProfile(userId)
+        if (userProfile) userProfile.followersCount++
+        loggedInuser.followingCount++
+        await userService.updateSessionStorage(loggedInuser, userProfile)
     } catch (error) {
         throw new Error('error - couldnt add follow', error)
     }

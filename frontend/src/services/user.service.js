@@ -12,7 +12,8 @@ export const userService = {
     checkIfOwnByUser,
     query,
     updatePassword,
-    updateLoginUser
+    updateSessionStorage,
+    getVipProfile
 }
 
 const USER_URL = 'user/'
@@ -51,7 +52,10 @@ function getLoggedinUser() {
 
 async function getUserById(userId) {
     try {
-        const user = await httpService.get(USER_URL + userId)
+        let user = getVipProfile(userId)
+        console.log('from session storage ====>', user)
+        if (user) return user
+        else user = await httpService.get(USER_URL + userId)
         return user
     } catch (error) {
         throw new Error('coudnlt get this user', error)
@@ -72,22 +76,23 @@ function logout() {
     httpService.post(AUTH_URL + 'logout')
 }
 
-function updateLoginUser(user) {
-    sessionStorage.clear()
+function updateSessionStorage(user, profile) {
+    if (profile) saveVipProfile(profile)
     return saveLocalUser(user)
 }
 
 async function login(userCred) {
     try {
+        let vipProfile
         const user = await httpService.post(AUTH_URL + 'login', userCred)
+        if (user.vipProfiles.length) {
+            user.vipProfiles.forEach(async (profileId) => {
+                vipProfile = await httpService.get(USER_URL + profileId)
+                saveVipProfile(vipProfile)
+            })
+        }
         return saveLocalUser(user)
-        // const users = await storageService.query(USER_KEY)
-        // const user = users.find(user => user.username === userCred.username)
-        // if (user) {
-        //     // // const user = await httpService.post('auth/login', userCred)
-        //     //     socketService.login(user._id)
-        //     return saveLocalUser(user)
-        // } else throw new Error('couldnt find username')
+
     } catch (err) {
         throw new Error('coudnlt preform query', err)
     }
@@ -97,6 +102,15 @@ async function login(userCred) {
 function saveLocalUser(user) {
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
     return user
+}
+
+function saveVipProfile(user) {
+    sessionStorage.setItem(user._id, JSON.stringify(user))
+    return user
+}
+
+function getVipProfile(profileId) {
+    return JSON.parse(sessionStorage.getItem(profileId))
 }
 
 async function signup(userCred) {

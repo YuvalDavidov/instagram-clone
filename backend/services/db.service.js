@@ -119,7 +119,7 @@ async function queryOne(model, filterBy, attributes) {
         }) :
             await model.findOne({
                 where: {
-                    [Op.and]: filterBy
+                    [Op.and]: whereCondition
                 }
             })
 

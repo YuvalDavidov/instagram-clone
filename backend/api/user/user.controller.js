@@ -8,9 +8,9 @@ async function getUser(req, res) {
         const loggedInUserId = await addToViewCount(req, res)
         console.log('in Getuser ------>', loggedInUserId)
         const user = (loggedInUserId === req.params.userId) ?
-            await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts'])
-            :
             await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
+            :
+            await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts'])
         res.send(user)
     } catch (err) {
         logger.error('Failed to get user', err)
@@ -88,4 +88,5 @@ module.exports = {
     deleteUser,
     updateUser,
     updatePassword,
+    addToViewCount
 }

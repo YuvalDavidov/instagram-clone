@@ -23,7 +23,7 @@ async function removeFollow(req, res) {
     try {
         await followService.removeFromColumn(userId, loggedinUser._id)
         loggedinUser.followCount -= 1
-        await sendLoginToken(loggedinUser, res)
+        await tokenService.sendLoginToken(loggedinUser, res)
         res.status(200).send(true)
     } catch (error) {
         logger.error('follow controller - cannot remove from column' + error)

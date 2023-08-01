@@ -8,6 +8,7 @@ const router = express.Router()
 
 router.get('/', getUsers)
 router.get('/:userId', getUser)
+router.post('/:userId', addToViewCount)
 router.put('/password', requireAuth, updatePassword)
 router.put('/:userId', requireAuth, updateUser)
 router.delete('/:userId', requireAuth, requireAdmin, deleteUser)
