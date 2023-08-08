@@ -41,21 +41,21 @@ function showTime(timeArr) {
         diff /= 60 * 60;
 
         let houserDiff = Math.abs(Math.round(diff))
-        console.log(diff);
+        // console.log(diff);
         if (houserDiff >= 1) return true
         else if (!nextTime) return true
         else return false
     })
-    console.log(gTimeArry);
+    // console.log(gTimeArry);
 
     // return `${new Date(timeArr[0]).getHours()}:${new Date(timeArr[0]).getMinutes()}`
 }
 
 function getTime(idx, arr) {
-    console.log('hi', idx);
+    // console.log('hi', idx);
     if (idx === 7) {
-        console.log(new Date(arr[idx]));
-        console.log(`${new Date(arr[idx]).getHours()}:${new Date(arr[idx]).getMinutes()}`);
+        // console.log(new Date(arr[idx]));
+        // console.log(`${new Date(arr[idx]).getHours()}:${new Date(arr[idx]).getMinutes()}`);
     }
     return gTimeArry[idx] ? `${new Date(arr[idx]).getHours()}:${new Date(arr[idx]).getMinutes()}` : ''
 }
