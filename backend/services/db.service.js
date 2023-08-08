@@ -157,9 +157,11 @@ async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
         return acc
     }, ``)
     let sqlRawCode = (selectFromModel1 + selectFromModel2 + innerJoinStatment + whereStatment + ';')
+    // console.log(sqlRawCode);
     try {
-        return await sequelize.query(`${sqlRawCode}`)
-        //         await sequelize.query(`SELECT "instegramChats"."_id",  "instegramChats"."betweenUsers",
+        let result = await sequelize.query(`${sqlRawCode}`)
+        return result[0]
+        //  await sequelize.query(`SELECT "instegramChats"."_id",  "instegramChats"."betweenUsers",
         // "instegramChats"."chatHistory", "instegramChats"."createdAt", 
         // "instegramChats"."updatedAt", "instegramUsers"."_id" AS "userId", 
         // "instegramUsers"."fullname" AS "fullname", "instegramUsers"."username"

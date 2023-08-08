@@ -3,10 +3,13 @@ import { httpService } from './http.service'
 import { userService } from "./user.service"
 
 const BASE_URL = 'chat/'
+let gTimeArry
 
 export const chatService = {
     query,
-    createNewChat
+    createNewChat,
+    showTime,
+    getTime
 }
 
 async function query() {
@@ -29,3 +32,45 @@ async function createNewChat(usersId) {
 
     }
 }
+
+function showTime(timeArr) {
+    const now = new Date().getTime()
+    gTimeArry = timeArr.map((currTime, idx) => {
+        let nextTime = timeArr[idx + 1]
+        let diff = (currTime - nextTime) / 1000
+        diff /= 60 * 60;
+
+        let houserDiff = Math.abs(Math.round(diff))
+        console.log(diff);
+        if (houserDiff >= 1) return true
+        else if (!nextTime) return true
+        else return false
+    })
+    console.log(gTimeArry);
+
+    // return `${new Date(timeArr[0]).getHours()}:${new Date(timeArr[0]).getMinutes()}`
+}
+
+function getTime(idx, arr) {
+    console.log('hi', idx);
+    if (idx === 7) {
+        console.log(new Date(arr[idx]));
+        console.log(`${new Date(arr[idx]).getHours()}:${new Date(arr[idx]).getMinutes()}`);
+    }
+    return gTimeArry[idx] ? `${new Date(arr[idx]).getHours()}:${new Date(arr[idx]).getMinutes()}` : ''
+}
+
+// let now = new Date().getTime();
+// let postTime = new Date(postTimeStamp).getTime();
+// let diff = (now - postTime) / 1000;
+// diff /= 60 * 60;
+// let houserDiff = Math.abs(Math.round(diff));
+// if (houserDiff >= 24 && houserDiff <= 168)
+//     return Math.round(houserDiff / 24) + " DAYS AGO";
+// else if (houserDiff >= 168) {
+//     return (
+//         new Date(postTimeStamp).getDate() +
+//         " " +
+//         months[new Date(postTimeStamp).getMonth()]
+//     );
+// } else return houserDiff + " HOURS AGO";

@@ -1,18 +1,16 @@
 <template>
   <section class="users-messeges-list">
     <li
-      v-for="(messegesId, index) in messegesIds.chatIds"
+      v-for="messegesId in messegesIds"
       :key="messegesId"
       class="msg-list"
+      :class="isActive(messegesId._id) ? 'active' : ''"
     >
-      <div class="user-msg-container" @click="moveToChat(messegesId)">
-        <img
-          src="http://res.cloudinary.com/dp32ucj0y/image/upload/v1684499340/flz2v8jhwu9z7irwiy06.png"
-          alt=""
-        />
+      <div class="user-msg-container" @click="moveToChat(messegesId._id)">
+        <img :src="messegesId.imgUrl" />
         <div class="msg-info">
-          <span>{{ messegesIds.usersInfo[index].username }}</span>
-          <!-- <span>{{ messegesIds.usersInfo[index].username }}</span> -->
+          <span>{{ messegesId.username }}</span>
+          <!-- <span>{{ messegesId.fullname }}</span> -->
         </div>
       </div>
     </li>
@@ -21,25 +19,29 @@
 
 <script>
 export default {
-  created() {
-    console.log(this.messegesIds);
-  },
   props: {
     messegesIds: {
-      type: Object,
+      type: Array,
       required: false,
     },
   },
   methods: {
     moveToChat(chatId) {
       if (!this.$route.params._id) {
-        this.$router.push(`${chatId}`);
+        this.$router.push(`messages/${chatId}`);
       } else {
         this.$router.replace({ params: { _id: chatId } });
       }
       this.$emit("replace", chatId);
     },
+    isActive(id) {
+      if (!this.$route.params) return false;
+      return this.$route.params._id === id ? true : false;
+    },
   },
+  // computed: {
+  //  ,
+  // },
 };
 </script>
 
