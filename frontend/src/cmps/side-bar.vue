@@ -4,6 +4,11 @@
     v-bind:class="{ darkMode: darkMode }"
     v-if="!isInStory"
   >
+    <div
+      class="close-bg"
+      v-if="isWantToCreate || isSettingsModalOpen"
+      @click="isWantToCreate ? wantToCreate() : onToggleSettings()"
+    ></div>
     <section
       class="side-bar"
       v-if="!this.isMobileMode"
@@ -197,6 +202,7 @@
         </button>
       </section>
       <UsersList @onToggleSearch="onToggleSearch" />
+      <div class="close-bg" @click="onToggleSearch()"></div>
     </article>
 
     <article v-if="isCreateOpen" class="create-post-modal">

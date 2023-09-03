@@ -65,6 +65,7 @@
                     color: white;
                 }
             }
+
         }
 
         .clear-search-input-btn {
@@ -226,6 +227,8 @@
                         animation-name: story-btn-animasion;
                         animation-duration: 1s;
                     }
+
+
                 }
             }
         }
@@ -266,6 +269,18 @@
         }
 
     }
+
+    & .close-bg {
+        cursor: pointer;
+        position: fixed;
+        z-index: -1;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0;
+    }
+
 }
 
 .mobile-bar {
@@ -400,6 +415,8 @@
 
     }
 
+
+
 }
 
 .side-bar-btn {
@@ -483,6 +500,7 @@
     bottom: 50px;
     right: calc(150px + 2vw);
 }
+
 
 @keyframes search-bar-animasion {
     from {
