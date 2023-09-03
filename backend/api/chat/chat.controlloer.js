@@ -20,6 +20,7 @@ async function createNewChat(req, res) {
     let topic
     try {
         const isChatExist = await chatService.checkIfChatExist(betweenUsers)
+        console.log(isChatExist);
         if (!isChatExist) {
             topic = await chatService.createNewChat(betweenUsers)
         } else topic = isChatExist

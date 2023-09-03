@@ -20,13 +20,20 @@
             v-for="(msg, idx) in messeges"
             :key="msg._id"
           >
-            <div>{{ showTime(idx) }}</div>
             <div
+              class="msgs-time"
               :class="
-                msg.userId === user._id
-                  ? 'user-msg' + ' msg'
-                  : 'guest-msg' + ' msg'
+                msg.userId === user._id ? 'user-msg-time' : 'guest-msg-time'
               "
+            >
+              {{ showTime(idx) }}
+            </div>
+            <div
+              class="msg"
+              :class="[
+                msg.userId === user._id ? 'user-msg' : 'guest-msg',
+                timeClass(idx) ? 'time-on' : '',
+              ]"
             >
               {{ msg.txt }}
             </div>
@@ -162,6 +169,9 @@ export default {
     },
     showTime(idx) {
       return chatService.getTime(idx, this.msgTimestampes);
+    },
+    timeClass(idx) {
+      return chatService.getClass(idx);
     },
   },
   computed: {

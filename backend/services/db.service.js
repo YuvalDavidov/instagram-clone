@@ -54,6 +54,7 @@ async function removeRecord(model, itemId) {
     }
 
 }
+
 async function updateRecord(model, data, itemId) {
     try {
         await model.update(data, { where: { _id: itemId } })
@@ -80,6 +81,7 @@ async function appendToColumn(model, data, columnName, entityId) {
         // throw new Error('db.service - failed to update/add to column', error)
     }
 }
+
 async function removeFromColumn(model, columnName, itemId, entityId) {
 
     try {
@@ -267,6 +269,26 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
     }
 
 }
+
+async function checkIfChatExist(model, usersIds) {
+    console.log('usersIds', usersIds);
+    sqlRawCode = `
+  SELECT chat."betweenUsers" , chat."_id"
+  FROM "instegramChats" as chat
+  WHERE 
+`;
+
+    usersIds = usersIds.map(u => `'${u}' = ANY(chat."betweenUsers")`).join(' AND ');
+
+    sqlRawCode += usersIds;
+
+    try {
+        let result = await sequelize.query(`${sqlRawCode}`)
+        return result[0]
+    } catch (error) {
+        console.log('error', error);
+    }
+}
 module.exports = {
     addRecord,
     removeRecord,
@@ -275,5 +297,6 @@ module.exports = {
     queryOne,
     appendToColumn,
     removeFromColumn,
-    queryAggregate
+    queryAggregate,
+    checkIfChatExist
 }

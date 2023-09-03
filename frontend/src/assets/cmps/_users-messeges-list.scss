@@ -4,6 +4,7 @@
     .msg-list {
         min-height: 56px;
         padding: 8px 24px;
+        cursor: pointer;
 
         & .user-msg-container {
             display: flex;
