@@ -26,7 +26,6 @@ async function addToViewCount(userId, loggedinUser, res) {
     try {
         let profileIdx = loggedinUser.vipProfiles.findIndex(profile => profile.userId === userId)
         let { vipProfiles } = await getById(loggedinUser._id, ['vipProfiles'])
-        console.log('vip list------->', vipProfiles)
         if (vipProfiles.includes(userId)) {
             loggedinUser.vipProfiles.splice(profileIdx, 1)
             await tokenService.sendLoginToken(loggedinUser, res)

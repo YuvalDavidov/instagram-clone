@@ -33,6 +33,7 @@ sequelize
 
 async function addRecord(model, data) {
     try {
+        console.log(model, data);
         const result = await model.create(data)
         await model.sync()
         return result

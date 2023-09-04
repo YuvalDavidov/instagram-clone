@@ -15,6 +15,7 @@ export const SOCKET_EVENT_ADD_MSG = 'chat-add-msg';
 export const SOCKET_EVENT_USER_UPDATED = 'user-updated';
 export const SOCKET_EVENT_COMMENT_ADDED_TO_YOU = 'comment-added-to-you';
 export const SOCKET_EVENT_LIKE_ADDED_TO_YOU = 'like-added-to-you';
+export const SOCKET_EVENT_NEW_FOLLOWER = 'new-follower'
 
 const SOCKET_EMIT_LOGIN = 'set-user-socket';
 const SOCKET_EMIT_LOGOUT = 'unset-user-socket';

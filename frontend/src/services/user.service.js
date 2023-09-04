@@ -73,6 +73,7 @@ function checkIfOwnByUser(id) {
 
 function logout() {
     sessionStorage.clear()
+    socketService.logout()
     httpService.post(AUTH_URL + 'logout')
 }
 
@@ -85,6 +86,8 @@ async function login(userCred) {
     try {
         let vipProfile
         const user = await httpService.post(AUTH_URL + 'login', userCred)
+        socketService.login(user._id)
+
         if (user.vipProfiles.length) {
             user.vipProfiles.forEach(async (profileId) => {
                 vipProfile = await httpService.get(USER_URL + profileId)

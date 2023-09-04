@@ -59,7 +59,9 @@
             :color="darkMode ? 'white' : 'black'"
             scale="1.6"
           />
-          <span v-if="!isSearchOpen && !isTabletMode">Notifications</span>
+          <span v-if="!isSearchOpen && !isTabletMode"
+            >Notifications {{ notification ? "z" : "s" }}
+          </span>
         </RouterLink>
 
         <button
@@ -239,6 +241,7 @@ import instagramLogo from "../assets/imgs/instagram_logo.png";
 import instagramLogoWhite from "../assets/imgs/instagram_logo_white.png";
 import instagramLogoLine from "../assets/imgs/instagram_logo_line.png";
 import instagramLogoLineWhite from "../assets/imgs/instagram_logo_line_white.png";
+import { socketService } from "../services/socket.service";
 
 export default {
   data() {
@@ -252,10 +255,10 @@ export default {
       isWantToCreate: false,
       isMoblieWantToCreate: false,
       isPost: true,
+      notification: true,
     };
   },
   created() {
-    console.log("hi");
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
       this.$store.dispatch({
         type: "setWindowMode",
@@ -273,6 +276,11 @@ export default {
       });
     }
     window.addEventListener("resize", this.windowSizeHandeler);
+    socketService.on("new-notification", (data) => {
+      console.log(data);
+      // this.notification = data;
+    });
+    // this.$store.dispatch({ type: "loadUserUnsawNotifications" });
   },
   destroyed() {
     window.removeEventListener("resize", this.windowSizeHandeler);

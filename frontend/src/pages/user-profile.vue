@@ -78,10 +78,11 @@
         <span>{{ posts.length }}</span> posts
       </div>
       <div>
-        <span>{{ user.followersCount }}</span> followers
+        <span>{{ user.followersCount ? user.followersCount : 0 }}</span>
+        followers
       </div>
       <div>
-        <span>{{ user.following.length }}</span> following
+        <span>{{ user.followingCount }}</span> following
       </div>
     </div>
     <section class="actions">
@@ -115,16 +116,18 @@ export default {
       posts: [],
       maxPageScroll: null,
       currNumOfPostsToQuerry: 9,
-      isLoadingPosts: false
+      isLoadingPosts: false,
     };
   },
   beforeMount() {
     window.removeEventListener("scroll", this.onWindowScroll);
   },
   async created() {
-   window.addEventListener("scroll", this.onWindowScroll);
+    window.addEventListener("scroll", this.onWindowScroll);
     this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
-    this.isFollowing = await followService.checkIfFollowing(this.$route.params._id);
+    this.isFollowing = await followService.checkIfFollowing(
+      this.$route.params._id
+    );
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.onWindowScroll);
@@ -134,12 +137,11 @@ export default {
       try {
         if (this.isFollowing) {
           await followService.unFollow(this.$route.params._id);
-          this.user.followersCount--
-        }
-        else {
+          this.user.followersCount--;
+        } else {
           await followService.addFollow(this.$route.params._id);
-          this.user.followersCount++
-        } 
+          this.user.followersCount++;
+        }
         this.isFollowing = !this.isFollowing;
       } catch (err) {
         console.error(err);
@@ -161,7 +163,7 @@ export default {
 
       if (maxScroll > this.maxPageScroll) this.isLoadingPosts = false;
       if (scrollPosition >= targetHeight && !this.isLoadingPosts) {
-    this.currNumOfPostsToQuerry += 9;
+        this.currNumOfPostsToQuerry += 9;
         await this.$store.dispatch({
           type: "loadUserPosts",
           userId: this.$store.getters.GetUser._id,
@@ -178,8 +180,8 @@ export default {
       else return false;
     },
     userStories() {
-      if (this.$store.getters.getUserStories) return this.$store.getters.getUserStories[0];
-    
+      if (this.$store.getters.getUserStories)
+        return this.$store.getters.getUserStories[0];
     },
     windowMode() {
       return this.$store.getters.GetWindowMode;
@@ -195,8 +197,10 @@ export default {
       immediate: true,
       async handler(params) {
         // Fetch data for the new route
-        if (this.$route.params._id === await this.$store.getters.GetUser._id) this.user = this.$store.getters.GetUser
-        this.user = await userService.getUserById(params._id);
+
+        if (this.$route.params._id === (await this.$store.getters.GetUser._id))
+          this.user = this.$store.getters.GetUser;
+        else this.user = await userService.getUserById(params._id);
         this.$store.dispatch({
           type: "loadUserPosts",
           userId: this.$route.params._id,

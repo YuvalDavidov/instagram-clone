@@ -4,6 +4,7 @@ import { postStore } from './post.store.js'
 import { usersStore } from './users.store'
 import { storyStore } from './story.store'
 import { chatStore } from './chat.store'
+import { notificationStore } from './notigication.store'
 
 
 export const myStore = createStore({
@@ -68,7 +69,8 @@ export const myStore = createStore({
         postStore,
         usersStore,
         storyStore,
-        chatStore
+        chatStore,
+        notificationStore
     }
 })
 
