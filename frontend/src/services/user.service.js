@@ -1,5 +1,6 @@
 import { storageService } from './async-storage.service'
 import { httpService } from './http.service.js'
+import { socketService } from './socket.service'
 export const userService = {
     getUserById,
     getLoggedinUser,
@@ -87,7 +88,6 @@ async function login(userCred) {
         let vipProfile
         const user = await httpService.post(AUTH_URL + 'login', userCred)
         socketService.login(user._id)
-
         if (user.vipProfiles.length) {
             user.vipProfiles.forEach(async (profileId) => {
                 vipProfile = await httpService.get(USER_URL + profileId)

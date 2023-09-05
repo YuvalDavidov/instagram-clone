@@ -26,7 +26,6 @@ async function addNotification(notific) {
         const data = { _id: _id, userId: toUser, type: type, fromUser: fromUser }
         const result = await dbService.addRecord(instegramNotifications, data)
         socketService.emitToUser({ type: 'new-notification', data: result.dataValues, userId: toUser })
-
         console.log(result);
     } catch (error) {
         logger.error('notification.service - cannot add notification', error)

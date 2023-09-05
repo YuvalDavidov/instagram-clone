@@ -33,7 +33,6 @@ export const myStore = createStore({
     },
     mutations: {
         setUser(state, { user }) {
-            console.log('in store ---------->', user)
             state.user = user
             if (user) state.isDarkMode = user.darkMode
         },

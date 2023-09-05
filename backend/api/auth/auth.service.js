@@ -10,11 +10,11 @@ const saltRounds = 10
 
 
 async function login(username, password) {
-    logger.debug(`auth.service - login with username: ${username}`)
     try {
         const user = await userService.getByUsername(username, ['_id', 'fullname', 'password', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
         await bcrypt.compare(password, user.password)
         delete user.password
+        logger.debug(`auth.service - login with username: ${username}`)
         return user
     } catch (error) {
         logger.error(`auth.service - Invalid username or password`)

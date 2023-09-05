@@ -231,6 +231,18 @@
 
                 }
             }
+
+            & .notifications-btn {
+                // color: red;
+                justify-content: space-between;
+
+                & .btn-container {
+                    display: flex;
+                    align-items: center;
+                }
+
+                // & .pop-up-notic {}
+            }
         }
 
         .settings-btn {

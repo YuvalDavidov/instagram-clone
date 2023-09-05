@@ -46,22 +46,31 @@
           >
         </button>
 
+        <!-- TODO - add pop-up-notic -->
+
         <RouterLink active-class="active" to="/messages">
           <v-icon scale="1.6" name="la-facebook-messenger" /><span
             v-if="!isSearchOpen && !isTabletMode"
             >Messages</span
           ></RouterLink
         >
-
-        <RouterLink to="/notifications">
-          <v-icon
-            name="fa-regular-heart"
-            :color="darkMode ? 'white' : 'black'"
-            scale="1.6"
+        <!-- TODO - add pop-up-notic -->
+        <RouterLink to="/notifications" class="notifications-btn">
+          <div class="btn-container">
+            <v-icon
+              name="fa-regular-heart"
+              :color="darkMode ? 'white' : 'black'"
+              scale="1.6"
+            />
+            <span v-if="!isSearchOpen && !isTabletMode">Notifications </span>
+          </div>
+          <PopUpNotic
+            v-if="
+              notifications.followersNotifics.length ||
+              notifications.likesNotofics.length
+            "
+            :notifications="notifications"
           />
-          <span v-if="!isSearchOpen && !isTabletMode"
-            >Notifications {{ notification ? "z" : "s" }}
-          </span>
         </RouterLink>
 
         <button
@@ -236,6 +245,7 @@ import { userService } from "../services/user.service";
 import CreateModal from "@/cmps/create-modal.vue";
 import UsersList from "@/cmps/users-list.vue";
 import SearchMobileBar from "@/cmps/search-mobile-bar.vue";
+import PopUpNotic from "./pop-up-notic.vue";
 
 import instagramLogo from "../assets/imgs/instagram_logo.png";
 import instagramLogoWhite from "../assets/imgs/instagram_logo_white.png";
@@ -255,7 +265,11 @@ export default {
       isWantToCreate: false,
       isMoblieWantToCreate: false,
       isPost: true,
-      notification: true,
+      notifications: {
+        msgsNotifics: [],
+        likesNotofics: [],
+        followersNotifics: [],
+      },
     };
   },
   created() {
@@ -277,8 +291,9 @@ export default {
     }
     window.addEventListener("resize", this.windowSizeHandeler);
     socketService.on("new-notification", (data) => {
-      console.log(data);
-      // this.notification = data;
+      // this.notifications.unshift(data);
+      this.sortNotifics(data);
+      // console.log(this.notifications);
     });
     // this.$store.dispatch({ type: "loadUserUnsawNotifications" });
   },
@@ -359,6 +374,20 @@ export default {
     changePostingSelection() {
       this.isPost = !this.isPost;
     },
+    sortNotifics(data) {
+      console.log("data", data);
+      switch (data.type) {
+        case "new-follower":
+          this.notifications.followersNotifics.unshift(data);
+          break;
+
+        default:
+          console.log("default");
+          break;
+      }
+
+      // console.log(this.notifications);
+    },
   },
   computed: {
     user() {
@@ -393,6 +422,7 @@ export default {
     CreateModal,
     UsersList,
     SearchMobileBar,
+    PopUpNotic,
   },
 };
 </script>

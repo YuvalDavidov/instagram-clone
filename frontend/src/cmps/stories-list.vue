@@ -19,7 +19,6 @@ export default {
     this.$store.dispatch({
       type: "loadStories",
     });
-    console.log(this.stories);
   },
   watch: {
     "$store.getters.getStories": {
