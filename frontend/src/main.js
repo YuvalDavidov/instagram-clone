@@ -35,10 +35,12 @@ import {
     FaPlay,
     MdKeyboardarrowdownRound,
     MdKeyboardarrowupRound,
-    MdCheckcircleoutlineRound
+    MdCheckcircleoutlineRound,
+    IoPerson
 } from "oh-vue-icons/icons";
 
-addIcons(BiSearch,
+addIcons(
+    BiSearch,
     FaHome,
     FaRegularHeart,
     FaHeart,
@@ -65,7 +67,9 @@ addIcons(BiSearch,
     FaPlay,
     MdKeyboardarrowdownRound,
     MdKeyboardarrowupRound,
-    MdCheckcircleoutlineRound);
+    MdCheckcircleoutlineRound,
+    IoPerson
+);
 
 
 const app = createApp(App)

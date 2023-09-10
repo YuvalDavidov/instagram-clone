@@ -10,10 +10,8 @@
         opacity: 0;
     }
 
-    // right: 25px;
-    // top: calc(100vh - 66%);
     & .container-pop-up {
-        background-color: red;
+        background-color: #ff3c4b;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -25,6 +23,20 @@
         border-radius: 15%;
         z-index: 4;
 
+        & .follow-liks-comments-notic {
+            display: flex;
+
+            &>* {
+                color: white;
+                display: flex;
+                align-items: center;
+
+                span {
+                    margin-left: 3px;
+                }
+            }
+        }
+
     }
 
     & .arrow {
@@ -35,7 +47,7 @@
         left: -16%;
         z-index: 1;
         border-top: 10px solid transparent;
-        border-right: 10px solid red;
+        border-right: 10px solid #ff3c4b;
         border-bottom: 10px solid transparent;
     }
 }
