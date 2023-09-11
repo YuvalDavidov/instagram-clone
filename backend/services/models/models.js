@@ -223,6 +223,7 @@ const instegramNotifications = sequelize.define('instegramNotifications', {
 
     })
 
+instegramNotifications.belongsTo(instegramUsers, { foreignKey: 'fromUser', targetKey: '_id' })
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
     .then(async () => {

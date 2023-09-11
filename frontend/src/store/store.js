@@ -4,7 +4,7 @@ import { postStore } from './post.store.js'
 import { usersStore } from './users.store'
 import { storyStore } from './story.store'
 import { chatStore } from './chat.store'
-import { notificationStore } from './notigication.store'
+import { notificationStore } from './notification.store'
 
 
 export const myStore = createStore({
@@ -74,5 +74,11 @@ export const myStore = createStore({
 })
 
 myStore.subscribe((cmd, state) => {
+    if (cmd.payload.type === 'setUnsawNotifications') {
+
+        console.log('Command:', cmd.payload.type)
+        console.log('storeState:\n', state.notificationStore)
+
+    }
 })
 

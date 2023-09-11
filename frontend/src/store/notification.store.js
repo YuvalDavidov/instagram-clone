@@ -31,8 +31,7 @@ export const notificationStore = {
         async loadUserUnsawNotifications({ commit }) {
             try {
                 const unsawNotifictions = await notificationsService.getUserUnsawNotifications()
-                console.log(unsawNotifictions);
-                // commit({ type: 'setUnsawNotifications', unsawNotifictions: unsawNotifictions })
+                commit({ type: 'setUnsawNotifications', unsawNotifictions })
             } catch (error) {
                 throw Error('store - coudl\'nt get user unsaw notifications', error)
             }

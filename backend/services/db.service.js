@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize');
-const { instegramUsers, instegramPosts, instegramStories } = require('./models/models');
+const { instegramUsers, instegramPosts, instegramStories, instegramNotifications } = require('./models/models');
 
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
@@ -135,6 +135,8 @@ async function queryOne(model, filterBy, attributes) {
 }
 //  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]
 async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
+    console.log('here - queryAggregate');
+    console.log(model1, model2, filterBy, aggregateCondition);
     let { model1Name, attributes1 } = model1
     let { model2Name, attributes2 } = model2
 
@@ -185,7 +187,6 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
     Object.keys(filterBy).forEach(key => {
         whereCondition[key] = (Array.isArray(filterBy[key])) ? filterBy[key] : { [Op.eq]: filterBy[key] }
     })
-
     try {
         if (!filterBy) result = await model.findAll()
         // constructing the conditions for the sql 
@@ -212,6 +213,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
         }
 
+        else if (model === instegramNotifications) return _noticQuery(numOfDesiredResults)
 
         else if (isLessDetails) {
             whereCondition = []
@@ -300,4 +302,41 @@ module.exports = {
     removeFromColumn,
     queryAggregate,
     checkIfChatExist
+}
+
+async function _noticQuery(numOfDesiredResults) {
+    let resultToSend = []
+    try {
+        console.log('here111');
+        let result = await instegramNotifications.findAll({
+            include: instegramUsers,
+            where: {
+                status: 'pending'
+            },
+            limit: numOfDesiredResults,
+        })
+        result.forEach((notic) => {
+            const data = notic.dataValues
+            const { createdAt, status, _id, type } = data
+            const { _id: formUserId, username, fullname, imgUrl } = data.instegramUser.dataValues
+            let newNotic = {
+                createdAt,
+                status,
+                _id,
+                type,
+                fromUser: {
+                    formUserId,
+                    username,
+                    fullname,
+                    imgUrl
+                }
+            }
+            resultToSend.push(newNotic)
+        })
+        console.log(resultToSend);
+        return resultToSend
+    } catch (error) {
+        throw new Error('_noticQuery - failed to get record', error)
+
+    }
 }

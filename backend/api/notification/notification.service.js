@@ -12,6 +12,9 @@ module.exports = {
 async function query(type, userId) {
     try {
         console.log('here', type, userId);
+        const filterBy = { userId }
+        const notific = await dbService.query(instegramNotifications, filterBy, 10)
+        return notific
     } catch (error) {
         logger.error('notification.service - cannot find unsaw notification', err)
         throw new Error('notification.service - cannot find unsaw notification', err)

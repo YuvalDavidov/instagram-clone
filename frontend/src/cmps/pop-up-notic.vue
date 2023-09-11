@@ -23,12 +23,10 @@
       <div v-if="notifications.msgsNotifics.length" class="msg-notic"></div>
     </article>
     <div class="arrow"></div>
-    <div>x</div>
   </section>
 </template>
 
 <script>
-import { followService } from "../services/follow.service";
 export default {
   data() {
     return {
@@ -40,6 +38,9 @@ export default {
   created() {
     // console.log("created", this.notifications);
     this.startTimeOut();
+  },
+  update() {
+    console.log("update");
   },
   props: {
     notifications: {

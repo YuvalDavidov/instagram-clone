@@ -46,17 +46,21 @@
           >
         </button>
 
-        <!-- TODO - add pop-up-notic -->
-
         <RouterLink active-class="active" to="/messages">
           <v-icon scale="1.6" name="la-facebook-messenger" /><span
             v-if="!isSearchOpen && !isTabletMode"
             >Messages</span
           ></RouterLink
         >
-        <!-- TODO - add pop-up-notic -->
         <RouterLink to="/notifications" class="notifications-btn">
           <div class="btn-container">
+            <div
+              class="dot"
+              v-if="
+                notifications.followersNotifics.length ||
+                notifications.likesNotofics.length
+              "
+            ></div>
             <v-icon
               name="fa-regular-heart"
               :color="darkMode ? 'white' : 'black'"
@@ -295,7 +299,7 @@ export default {
       this.sortNotifics(data);
       // console.log(this.notifications);
     });
-    // this.$store.dispatch({ type: "loadUserUnsawNotifications" });
+    this.$store.dispatch({ type: "loadUserUnsawNotifications" });
   },
   destroyed() {
     window.removeEventListener("resize", this.windowSizeHandeler);
@@ -375,7 +379,6 @@ export default {
       this.isPost = !this.isPost;
     },
     sortNotifics(data) {
-      console.log("data", data);
       switch (data.type) {
         case "new-follower":
           this.notifications.followersNotifics.unshift(data);
@@ -385,8 +388,6 @@ export default {
           console.log("default");
           break;
       }
-
-      // console.log(this.notifications);
     },
   },
   computed: {
@@ -416,6 +417,14 @@ export default {
     },
     logoTabletSrc() {
       return this.darkMode ? instagramLogoLineWhite : instagramLogoLine;
+    },
+  },
+  watch: {
+    "$store.getters.getUnsawNotifications": {
+      handler(newValue) {
+        newValue.forEach((value) => this.sortNotifics(value));
+      },
+      deep: true,
     },
   },
   components: {

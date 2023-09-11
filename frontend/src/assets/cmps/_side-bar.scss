@@ -218,13 +218,13 @@
 
                     & .create-post-btn {
                         flex-grow: 1;
-                        animation-name: post-btn-animasion;
+                        animation-name: post-btn-animation;
                         animation-duration: 1s;
                     }
 
                     & .create-story-btn {
                         flex-grow: 1;
-                        animation-name: story-btn-animasion;
+                        animation-name: story-btn-animation;
                         animation-duration: 1s;
                     }
 
@@ -233,15 +233,26 @@
             }
 
             & .notifications-btn {
-                // color: red;
                 justify-content: space-between;
 
                 & .btn-container {
+                    position: relative;
                     display: flex;
                     align-items: center;
+
+                    .dot {
+                        position: absolute;
+                        left: 22px;
+                        top: 0;
+                        border-radius: 50%;
+                        border: solid 2px white;
+                        background-color: red;
+                        width: 12px;
+                        height: 12px;
+                        animation: dot-animation 0.5s;
+                    }
                 }
 
-                // & .pop-up-notic {}
             }
         }
 
@@ -392,7 +403,7 @@
 }
 
 .search-bar {
-    animation-name: search-bar-animasion;
+    animation-name: search-bar-animation;
     animation-duration: 1s;
     position: fixed;
     border-right: 1px solid $nav-border-color;
@@ -514,7 +525,7 @@
 }
 
 
-@keyframes search-bar-animasion {
+@keyframes search-bar-animation {
     from {
         width: 200px;
         left: 20px;
@@ -526,7 +537,7 @@
     }
 }
 
-@keyframes story-btn-animasion {
+@keyframes story-btn-animation {
     from {
         transform: rotateX(0.25turn);
 
@@ -538,7 +549,7 @@
     }
 }
 
-@keyframes post-btn-animasion {
+@keyframes post-btn-animation {
     from {
         transform: rotateX(0.75turn);
     }
@@ -547,5 +558,19 @@
         transform: rotateX(1turn);
 
 
+    }
+}
+
+@keyframes dot-animation {
+    from {
+        width: 0px;
+        height: 0px;
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+        width: 12px;
+        height: 12px;
     }
 }
