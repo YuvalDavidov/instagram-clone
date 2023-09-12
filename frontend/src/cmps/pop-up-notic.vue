@@ -1,5 +1,8 @@
 <template>
-  <section class="pop-up-notic" :class="isClassOff ? 'off' : ''">
+  <section
+    class="pop-up-notic"
+    v-bind:class="{ isClosing: isClosing, isClassOff: isClassOff }"
+  >
     <article class="container-pop-up">
       <div
         class="follow-liks-comments-notic"
@@ -20,7 +23,6 @@
           <span> {{ notifications.likesNotofics.length }} </span>
         </div>
       </div>
-      <div v-if="notifications.msgsNotifics.length" class="msg-notic"></div>
     </article>
     <div class="arrow"></div>
   </section>
@@ -30,17 +32,14 @@
 export default {
   data() {
     return {
-      txt: "s",
-      interval: null,
-      isClassOff: false,
+      timeoutIdOne: null,
+      timeoutIdTwo: null,
+      isClassOff: true,
+      isClosing: false,
     };
   },
   created() {
-    // console.log("created", this.notifications);
     this.startTimeOut();
-  },
-  update() {
-    console.log("update");
   },
   props: {
     notifications: {
@@ -51,13 +50,22 @@ export default {
   methods: {
     startTimeOut() {
       this.isClassOff = false;
-      this.interval = setTimeout(() => {
-        this.isClassOff = true;
-        clearTimeout(this.interval);
+
+      this.timeoutIdOne = setTimeout(() => {
+        this.isClosing = true;
+        clearTimeout(this.timeoutIdOne);
       }, 2000);
+
+      this.timeoutIdTwo = setTimeout(() => {
+        this.isClosing = false;
+        this.isClassOff = true;
+        clearTimeout(this.timeoutIdTwo);
+      }, 2600);
     },
     restartTimeOut() {
-      clearTimeout(this.interval);
+      clearTimeout(this.timeoutIdOne);
+      clearTimeout(this.timeoutIdTwo);
+
       this.startTimeOut();
     },
   },

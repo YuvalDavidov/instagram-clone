@@ -1,7 +1,7 @@
 <template>
   <section
     class="side-bar-container"
-    v-bind:class="{ darkMode: darkMode }"
+    v-bind:class="{ darkMode }"
     v-if="!isInStory"
   >
     <div
@@ -13,20 +13,22 @@
       class="side-bar"
       v-if="!this.isMobileMode"
       v-bind:class="{
-        isSearchOpen: this.isSearchOpen,
-        isTabletMode: this.isTabletMode,
-        isWantToCreate: this.isWantToCreate,
+        isSearchOpen,
+        isSidebarWindowOpen,
+        isClosing,
+        isTabletMode,
+        isWantToCreate,
       }"
     >
       <div class="logo">
         <RouterLink to="/">
           <img
-            v-if="!isSearchOpen && !isTabletMode"
+            v-if="!isSidebarWindowOpen && !isTabletMode"
             class="logo-img"
             :src="logoSrc"
           />
           <img
-            v-if="isSearchOpen || isTabletMode"
+            v-if="isSidebarWindowOpen || isTabletMode"
             class="logo-line-img"
             :src="logoTabletSrc"
           />
@@ -35,24 +37,29 @@
       <nav>
         <RouterLink active-class="active" to="/"
           ><v-icon scale="1.6" name="fa-home" /><span
-            v-if="!isSearchOpen && !isTabletMode"
+            :class="{ isClosing, isSidebarWindowOpen }"
+            v-if="!isTabletMode"
             >Home</span
           ></RouterLink
         >
-        <button @click="onToggleSearch()" class="side-bar-btn">
+        <button @click="onToggleSidebarWindow()" class="side-bar-btn">
           <v-icon scale="1.6" name="bi-search" /><span
-            v-if="!isSearchOpen && !isTabletMode"
+            v-if="!isTabletMode"
+            :class="{ isClosing, isSidebarWindowOpen }"
             >Search</span
           >
         </button>
 
         <RouterLink active-class="active" to="/messages">
           <v-icon scale="1.6" name="la-facebook-messenger" /><span
-            v-if="!isSearchOpen && !isTabletMode"
+            v-if="!isTabletMode"
+            :class="{ isClosing, isSidebarWindowOpen }"
             >Messages</span
           ></RouterLink
         >
-        <RouterLink to="/notifications" class="notifications-btn">
+        <!-- TODO -->
+
+        <button class="notifications-btn side-bar-btn">
           <div class="btn-container">
             <div
               class="dot"
@@ -66,7 +73,11 @@
               :color="darkMode ? 'white' : 'black'"
               scale="1.6"
             />
-            <span v-if="!isSearchOpen && !isTabletMode">Notifications </span>
+            <span
+              v-if="!isTabletMode"
+              :class="{ isClosing, isSidebarWindowOpen }"
+              >Notifications
+            </span>
           </div>
           <PopUpNotic
             v-if="
@@ -75,7 +86,7 @@
             "
             :notifications="notifications"
           />
-        </RouterLink>
+        </button>
 
         <button
           v-if="!isWantToCreate"
@@ -83,7 +94,9 @@
           class="side-bar-btn"
         >
           <v-icon scale="1.6" name="bi-plus-square" />
-          <span v-if="!isSearchOpen && !isTabletMode">create</span>
+          <span v-if="!isTabletMode" :class="{ isClosing, isSidebarWindowOpen }"
+            >create</span
+          >
         </button>
 
         <div v-if="isWantToCreate" class="side-bar-btn create">
@@ -108,7 +121,8 @@
           :to="`/profile/${user._id}`"
         >
           <img :src="`${user.imgUrl}`" class="profile-img" /><span
-            v-if="!isSearchOpen && !isTabletMode"
+            v-if="!isTabletMode"
+            :class="{ isClosing, isSidebarWindowOpen }"
           >
             Profile</span
           ></RouterLink
@@ -120,7 +134,9 @@
         v-bind:class="{ isSettingsModalOpen }"
       >
         <v-icon scale="1.6" name="co-hamburger-menu" />
-        <span v-if="!isSearchOpen && !isTabletMode">More</span>
+        <span :class="{ isClosing, isSidebarWindowOpen }" v-if="!isTabletMode"
+          >More</span
+        >
       </button>
     </section>
 
@@ -172,6 +188,12 @@
       </section>
     </section>
 
+    <article v-if="isMobileSearchOpen" class="search-mobile">
+      <div class="bg-container" @click="onCloseMobileSearch()"></div>
+
+      <SearchMobileBar @onCloseMobileSearch="onCloseMobileSearch" />
+    </article>
+
     <article v-if="isSettingsModalOpen" class="settings-modal">
       <section class="genetal-settings">
         <a href=""
@@ -198,37 +220,18 @@
       </section>
     </article>
 
-    <article class="search-bar" v-if="isSearchOpen">
-      <section class="top">
-        <h1>Search</h1>
-        <input
-          @input="onSearch"
-          class="search-input"
-          type="text"
-          placeholder="Search"
-          v-model="this.searchTxt"
-        />
-        <button
-          v-if="this.searchTxt.length"
-          @click="onClearSearch()"
-          class="clear-search-input-btn"
-        >
-          x
-        </button>
-      </section>
-      <UsersList @onToggleSearch="onToggleSearch" />
-      <div class="close-bg" @click="onToggleSearch()"></div>
+    <article v-if="isSidebarWindowOpen">
+      <SideBarSideWindow
+        @onToggleSidebarWindow="onToggleSidebarWindow"
+        :isSidebarWindowOpen="isSidebarWindowOpen"
+        :isClosingProp="isClosing"
+      />
+      <div class="bg-container" @click="onToggleSidebarWindow()"></div>
     </article>
 
     <article v-if="isCreateOpen" class="create-post-modal">
       <section class="bg-container" @click="onToggleCreate()"></section>
       <CreateModal @onToggleCreate="onToggleCreate" :isPost="isPost" />
-    </article>
-
-    <article v-if="isMobileSearchOpen" class="search-mobile">
-      <div class="container" @click="onCloseMobileSearch()"></div>
-
-      <SearchMobileBar @onCloseMobileSearch="onCloseMobileSearch" />
     </article>
 
     <article class="want-to-create-modal" v-if="isMoblieWantToCreate">
@@ -247,6 +250,7 @@
 import { userService } from "../services/user.service";
 
 import CreateModal from "@/cmps/create-modal.vue";
+import SideBarSideWindow from "./side-bar-side-window.vue";
 import UsersList from "@/cmps/users-list.vue";
 import SearchMobileBar from "@/cmps/search-mobile-bar.vue";
 import PopUpNotic from "./pop-up-notic.vue";
@@ -261,10 +265,12 @@ export default {
   data() {
     return {
       isSettingsModalOpen: false,
-      isSearchOpen: false,
+      searchTxt: "",
+      isClosing: false,
+      isSidebarWindowOpen: false,
+      timeoutId: null,
       isMobileSearchOpen: false,
       isCreateOpen: false,
-      searchTxt: "",
       usersBySearch: [],
       isWantToCreate: false,
       isMoblieWantToCreate: false,
@@ -308,24 +314,28 @@ export default {
     onToggleSettings() {
       this.isSettingsModalOpen = !this.isSettingsModalOpen;
     },
-    onToggleSearch() {
-      this.isSearchOpen = !this.isSearchOpen;
+    onToggleSidebarWindow() {
+      if (this.isTabletMode)
+        this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+      else if (this.isSidebarWindowOpen) {
+        clearTimeout(this.timeoutId);
+        this.isClosing = true;
+        console.log("closing");
+
+        this.timeoutId = setTimeout(() => {
+          this.isClosing = false;
+          this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+          console.log("closed");
+        }, 500);
+      } else {
+        this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+      }
     },
     onOpenMobileSearch() {
       this.isMobileSearchOpen = true;
     },
     onCloseMobileSearch() {
       this.isMobileSearchOpen = false;
-    },
-    onClearSearch() {
-      this.searchTxt = "";
-      this.onSearch();
-    },
-    onSearch() {
-      this.$store.dispatch({
-        type: "loadUsersBy",
-        filterBy: this.searchTxt,
-      });
     },
     onLogout() {
       userService.logout();
@@ -389,6 +399,16 @@ export default {
           break;
       }
     },
+    onSearch() {
+      this.$store.dispatch({
+        type: "loadUsersBy",
+        filterBy: this.searchTxt,
+      });
+    },
+    onClearSearch() {
+      this.searchTxt = "";
+      this.onSearch();
+    },
   },
   computed: {
     user() {
@@ -432,6 +452,7 @@ export default {
     UsersList,
     SearchMobileBar,
     PopUpNotic,
+    SideBarSideWindow,
   },
 };
 </script>

@@ -5,9 +5,13 @@
     height: 100%;
     animation: pop-up-animation 0.5s;
 
-    &.off {
+    &.isClosing {
         transition: 0.5s;
         opacity: 0;
+    }
+
+    &.isClassOff {
+        display: none;
     }
 
     & .container-pop-up {
