@@ -62,7 +62,7 @@
         <button class="notifications-btn side-bar-btn">
           <div class="btn-container">
             <div
-              class="dot"
+              class="dot-notic"
               v-if="
                 notifications.followersNotifics.length ||
                 notifications.likesNotofics.length
@@ -140,7 +140,7 @@
       </button>
     </section>
 
-    <section class="mobile-bar" v-if="this.isMobileMode">
+    <section class="mobile-bar" v-if="isMobileMode">
       <section class="top-bar">
         <div class="logo">
           <RouterLink to="/">
@@ -165,6 +165,21 @@
           </button>
           <RouterLink to="/notifications">
             <v-icon name="fa-regular-heart" color="black" scale="1.5" />
+            <div
+              class="dot-notic"
+              :class="{ isMobileMode }"
+              v-if="
+                notifications.followersNotifics.length ||
+                notifications.likesNotofics.length
+              "
+            ></div>
+            <PopUpNotic
+              v-if="
+                notifications.followersNotifics.length ||
+                notifications.likesNotofics.length
+              "
+              :notifications="notifications"
+            />
           </RouterLink>
         </div>
       </section>
