@@ -159,6 +159,8 @@ async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
     let sqlRawCode = (selectFromModel1 + selectFromModel2 + innerJoinStatment + whereStatment + ';')
     try {
         return await sequelize.query(`${sqlRawCode}`)
+
+        // return reuslt
         //         await sequelize.query(`SELECT "instegramChats"."_id",  "instegramChats"."betweenUsers",
         // "instegramChats"."chatHistory", "instegramChats"."createdAt", 
         // "instegramChats"."updatedAt", "instegramUsers"."_id" AS "userId", 

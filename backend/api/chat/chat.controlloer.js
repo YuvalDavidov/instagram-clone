@@ -4,9 +4,10 @@ const logger = require('../../services/logger.service')
 
 async function getUserChatsIds(req, res) {
 
-    const loggedinUser = tokenService.validateToken(req.cookies.loginToken)
+    const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
     try {
         const chatIds = await chatService.queryChatIds(loggedinUser._id)
+        console.log('chat Ids ---->', chatIds)
         res.json(chatIds)
     } catch (err) {
         logger.error('Failed to get chatIds' + err)

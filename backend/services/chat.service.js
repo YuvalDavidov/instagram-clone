@@ -14,9 +14,6 @@ async function queryChatIds(userId) {
     let filterBy = [{ condition1: userId, conditionSymbol: '=', condition2: { modelName: 'instegramChats', modelKey: 'betweenUsers', isArray: true } },
     { condition1: userId, conditionSymbol: '<>', condition2: { modelName: 'instegramUsers', modelKey: '_id' } }]
     try {
-
-
-
         const chatIds = await dbService.queryAggregate(model1, model2, filterBy, aggregateCondition)
         return chatIds
     } catch (error) {
