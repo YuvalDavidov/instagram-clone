@@ -1,6 +1,9 @@
 const tokenService = require('../../services/token.service')
 const logger = require('../../services/logger.service')
 const followService = require('./follow.service')
+const notificationsService = require('../notification/notification.service')
+
+
 
 async function addFollow(req, res) {
     const { userId } = req.params
@@ -9,6 +12,13 @@ async function addFollow(req, res) {
         await followService.appendToColumn(userId, loggedinUser._id)
         loggedinUser.followCount += 1
         await tokenService.sendLoginToken(loggedinUser, res)
+        const notific = {
+            type: 'new-follower',
+            fromUser: loggedinUser._id,
+            toUser: userId
+        }
+        console.log('here');
+        await notificationsService.addNotification(notific)
         res.status(200).send(true)
     } catch (err) {
         logger.error('follow controller - cannot append to column' + err)

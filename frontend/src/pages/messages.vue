@@ -17,15 +17,23 @@
           <li
             class="msgs"
             :class="msg.userId === user._id ? 'user-msg' : ''"
-            v-for="msg in messeges"
+            v-for="(msg, idx) in messeges"
             :key="msg._id"
           >
             <div
+              class="msgs-time"
               :class="
-                msg.userId === user._id
-                  ? 'user-msg' + ' msg'
-                  : 'guest-msg' + ' msg'
+                msg.userId === user._id ? 'user-msg-time' : 'guest-msg-time'
               "
+            >
+              {{ showTime(idx) }}
+            </div>
+            <div
+              class="msg"
+              :class="[
+                msg.userId === user._id ? 'user-msg' : 'guest-msg',
+                timeClass(idx) ? 'time-on' : '',
+              ]"
             >
               {{ msg.txt }}
             </div>
@@ -65,6 +73,7 @@
 <script>
 import CreateChatModal from "../cmps/create-chat-modal.vue";
 import UsersMessegesList from "../cmps/users-messeges-list.vue";
+import { chatService } from "../services/chat.service";
 import {
   socketService,
   SOCKET_EMIT_TOPIC,
@@ -81,24 +90,27 @@ export default {
   components: { UsersMessegesList, CreateChatModal },
   data() {
     return {
-      user: this.$store.getters.GetUser,
+      user: null,
       msg: {
         txt: "",
         timestemp: null,
         userId: null,
       },
-      messegesIds: {},
       messeges: [],
       timeoutId: null,
       typingUsers: [],
       isCreateNewChatOpen: false,
+      msgTimestampes: [],
     };
   },
-  created() {
-    this.$store.dispatch({
+  async created() {
+    this.user = this.$store.getters.GetUser;
+    this.msg.userId = this.user._id;
+
+    await this.$store.dispatch({
       type: "loadChatIds",
     });
-    this.msg.userId = this.user._id;
+
     if (this.$route.params._id) {
       socketService.emit(SOCKET_EMIT_TOPIC, this.$route.params._id);
     }
@@ -146,9 +158,20 @@ export default {
     },
     setChatHistory(msgs) {
       this.messeges = msgs;
+      this.msgTimestampes = this.messeges.map((m) => m.timestemp);
+      this.calculateTimeDiff();
     },
     onToggleCreateNewChat() {
       this.isCreateNewChatOpen = !this.isCreateNewChatOpen;
+    },
+    calculateTimeDiff() {
+      chatService.showTime(this.msgTimestampes);
+    },
+    showTime(idx) {
+      return chatService.getTime(idx, this.msgTimestampes);
+    },
+    timeClass(idx) {
+      return chatService.getClass(idx);
     },
   },
   computed: {

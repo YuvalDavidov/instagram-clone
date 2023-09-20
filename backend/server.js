@@ -27,6 +27,7 @@ const postRoutes = require('./api/post/post.routes')
 const storyRoutes = require('./api/story/story.routes')
 const followRoutes = require('./api/follow/follow.routes')
 const chatRoutes = require('./api/chat/chat.routes')
+const notificationsRoutes = require('./api/notification/notification.routes.js')
 const { setupSocketAPI } = require('./services/socket.service')
 
 // routes
@@ -39,6 +40,7 @@ app.use('/api/post', postRoutes)
 app.use('/api/story', storyRoutes)
 app.use('/api/follow', followRoutes)
 app.use('/api/chat', chatRoutes)
+app.use('/api/notifications', notificationsRoutes)
 setupSocketAPI(http)
 
 // Make every server-side-route to match the index.html

@@ -1,5 +1,5 @@
 const express = require('express')
-const { createNewChat, getUserChatsIds } = require('./chat.controlloer')
+const { createNewChat, getUserChatsIds } = require('./chat.controller')
 const router = express.Router()
 
 router.get('/', getUserChatsIds)

@@ -4,6 +4,7 @@
     .msg-list {
         min-height: 56px;
         padding: 8px 24px;
+        cursor: pointer;
 
         & .user-msg-container {
             display: flex;
@@ -19,11 +20,24 @@
                 flex-direction: column;
                 width: max-content;
             }
+
+
+        }
+
+
+        &.active {
+            background-color: #efefef;
+
+            &:hover {
+                background-color: #efefef;
+            }
+        }
+
+        &:hover {
+            background-color: #fafafa;
         }
 
     }
 
-    :hover {
-        background-color: #fafafa;
-    }
+
 }

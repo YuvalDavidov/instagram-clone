@@ -43,8 +43,8 @@ async function getChatById(topic) {
 
 async function checkIfChatExist(users) {
     try {
-        // dbService.
-        return false
+        const chat = await dbService.checkIfChatExist(instegramChats, users)
+        return chat[0]._id
     } catch (error) {
 
     }

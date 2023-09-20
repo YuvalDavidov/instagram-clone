@@ -85,7 +85,7 @@
                 border-right: 1px solid $nav-border-color;
 
                 .swiper-wrapper {
-                    max-height: calc(710px - 42px);
+                    max-height: calc(710px - 57px);
                     width: 710px;
                     border-bottom-left-radius: 15px;
 
@@ -93,7 +93,7 @@
 
                         img {
                             width: 710px;
-                            height: calc(710px - 42px);
+                            height: calc(710px - 57px);
                             object-fit: contain;
                             border-bottom-left-radius: 15px;
                         }

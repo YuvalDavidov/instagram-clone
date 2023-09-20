@@ -78,8 +78,30 @@
                     border-bottom-right-radius: 18px;
                     border-top-left-radius: 18px;
                     border-bottom-left-radius: 5px;
+
+
+                }
+
+                &.time-on {
+                    margin-top: 15px;
                 }
             }
+
+            & .msgs-time {
+                position: absolute;
+                width: 80%;
+                text-align: center;
+                left: 50%;
+                transform: translateX(-50%);
+                color: rgb(101, 103, 107);
+                font-size: 12px;
+
+                // &.guest-msg-time {
+                //     // flex-direction: row-reverse;
+                // }
+            }
+
+
         }
 
         & .typing {

@@ -51,6 +51,7 @@ export default {
         user,
       });
       this.$router.push(`/profile/${user._id}`);
+      this.$emit("onToggleSearch");
       if (window.innerWidth < 770) this.$emit("onCloseMobileSearch");
       else this.$emit("onToggleSearch");
     },

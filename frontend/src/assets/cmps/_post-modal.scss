@@ -19,7 +19,7 @@
             padding: 10px;
 
             &:hover {
-                background: rgb(224, 224, 224);
+                background: rgba(255, 254, 254, 0.782);
             }
         }
 
@@ -37,6 +37,8 @@
     }
 
     .post {
+        transition: 0.5s;
+
         width: calc(100vw * 0.8);
         max-width: 1300px;
         height: calc(100vw * 0.5);
@@ -44,7 +46,7 @@
         border-radius: 5px;
         display: flex;
         position: absolute;
-        top: calc(220px - 3vw);
+        top: calc(20% - 3vw);
         left: 50%;
         transform: translateX(-50%);
         z-index: 4;
@@ -322,6 +324,19 @@
         }
 
     }
+}
+
+@media (min-width: 1200px) {
+    .post-modal {
+
+        .post {
+            top: calc(20% - 7vw);
+            max-height: calc(100vw - 70%);
+            max-width: 1070px;
+        }
+
+    }
+
 }
 
 @media (max-width: 1200px) {

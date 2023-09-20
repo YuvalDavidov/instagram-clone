@@ -4,6 +4,7 @@ import { postStore } from './post.store.js'
 import { usersStore } from './users.store'
 import { storyStore } from './story.store'
 import { chatStore } from './chat.store'
+import { notificationStore } from './notification.store'
 
 
 export const myStore = createStore({
@@ -32,7 +33,6 @@ export const myStore = createStore({
     },
     mutations: {
         setUser(state, { user }) {
-            console.log('in store ---------->', user)
             state.user = user
             if (user) state.isDarkMode = user.darkMode
         },
@@ -68,10 +68,17 @@ export const myStore = createStore({
         postStore,
         usersStore,
         storyStore,
-        chatStore
+        chatStore,
+        notificationStore
     }
 })
 
 myStore.subscribe((cmd, state) => {
+    if (cmd.payload.type === 'setUnsawNotifications') {
+
+        console.log('Command:', cmd.payload.type)
+        console.log('storeState:\n', state.notificationStore)
+
+    }
 })
 

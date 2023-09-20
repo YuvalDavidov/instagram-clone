@@ -6,7 +6,6 @@ const tokenService = require('../../services/token.service')
 async function getUser(req, res) {
     try {
         const loggedInUserId = await addToViewCount(req, res)
-        console.log('in Getuser ------>', loggedInUserId)
         const user = (loggedInUserId === req.params.userId) ?
             await userService.getById(req.params.userId, ['_id', 'fullname', 'username', 'imgUrl', 'following', 'followers', 'bio', 'numOfPosts', 'vipProfiles'])
             :
@@ -74,7 +73,6 @@ async function addToViewCount(req, res) {
     try {
         let loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
         if (loggedinUser._id === userId) return loggedinUser._id
-        console.log('in contoller ------>', userId, loggedinUser)
         await userService.addToViewCount(userId, loggedinUser, res)
         return loggedinUser._id
     } catch (error) {

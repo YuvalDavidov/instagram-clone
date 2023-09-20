@@ -1,5 +1,6 @@
 import { storageService } from './async-storage.service'
 import { httpService } from './http.service.js'
+import { socketService } from './socket.service'
 export const userService = {
     getUserById,
     getLoggedinUser,
@@ -73,6 +74,7 @@ function checkIfOwnByUser(id) {
 
 function logout() {
     sessionStorage.clear()
+    socketService.logout()
     httpService.post(AUTH_URL + 'logout')
 }
 
@@ -85,6 +87,7 @@ async function login(userCred) {
     try {
         let vipProfile
         const user = await httpService.post(AUTH_URL + 'login', userCred)
+        socketService.login(user._id)
         if (user.vipProfiles.length) {
             user.vipProfiles.forEach(async (profileId) => {
                 vipProfile = await httpService.get(USER_URL + profileId)
