@@ -52,14 +52,14 @@ export default {
       this.isClassOff = false;
 
       this.timeoutIdOne = setTimeout(() => {
-        // this.isClosing = true;
-        // clearTimeout(this.timeoutIdOne);
+        this.isClosing = true;
+        clearTimeout(this.timeoutIdOne);
       }, 2000);
 
       this.timeoutIdTwo = setTimeout(() => {
-        // this.isClosing = false;
-        // this.isClassOff = true;
-        // clearTimeout(this.timeoutIdTwo);
+        this.isClosing = false;
+        this.isClassOff = true;
+        clearTimeout(this.timeoutIdTwo);
       }, 2600);
     },
     restartTimeOut() {

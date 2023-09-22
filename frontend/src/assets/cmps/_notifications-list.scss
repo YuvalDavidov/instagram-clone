@@ -1,0 +1,56 @@
+.notifications-list {
+    height: calc(100vh - 50px);
+    padding: 0;
+    overflow-y: auto;
+
+
+    & .notic-follower-prev {
+        display: flex;
+        align-items: center;
+        padding: 8px 24px;
+        justify-content: center;
+
+        & .user-img {
+            border-radius: 50%;
+            width: 44px;
+            margin-right: 14px;
+        }
+
+        & .notic-info {
+            max-width: 175px;
+            font-size: 14px;
+
+            .username-link {
+                color: black;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            .and-others {
+                font-weight: bolder;
+
+                &:hover {
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        & .notic-follower-btn {
+            width: 100px;
+            background: #efefef;
+            padding: 7px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+
+            &.not-following {
+                background: #0095f6;
+                color: white;
+
+            }
+        }
+    }
+
+
+}

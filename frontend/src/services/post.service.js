@@ -144,16 +144,16 @@ function getTime(postTimeStamp) {
     let postTime = new Date(postTimeStamp).getTime();
     let diff = (now - postTime) / 1000;
     diff /= 60 * 60;
-    let houserDiff = Math.abs(Math.round(diff));
-    if (houserDiff >= 24 && houserDiff <= 168)
-        return Math.round(houserDiff / 24) + " DAYS AGO";
-    else if (houserDiff >= 168) {
+    let hoursDiff = Math.abs(Math.round(diff));
+    if (hoursDiff >= 24 && hoursDiff <= 168)
+        return Math.round(hoursDiff / 24) + " DAYS AGO";
+    else if (hoursDiff >= 168) {
         return (
             new Date(postTimeStamp).getDate() +
             " " +
             months[new Date(postTimeStamp).getMonth()]
         );
-    } else return houserDiff + " HOURS AGO";
+    } else return hoursDiff + " HOURS AGO";
 }
 
 function getCommentTime(commentTimeStamp) {

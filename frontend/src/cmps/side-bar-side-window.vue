@@ -4,29 +4,40 @@
     :class="{ isClosing: isClosingProp }"
     v-if="isSidebarWindowOpen"
   >
-    <section class="top">
-      <h1>Search</h1>
-      <input
-        @input="onSearch"
-        class="search-input"
-        type="text"
-        placeholder="Search"
-        v-model="this.searchTxt"
-      />
-      <button
-        v-if="this.searchTxt.length"
-        @click="onClearSearch()"
-        class="clear-search-input-btn"
-      >
-        x
-      </button>
+    <section v-if="contant === 'search'" class="side-bar-side-window-search">
+      <article class="top">
+        <h1>Search</h1>
+        <input
+          @input="onSearch"
+          class="search-input"
+          type="text"
+          placeholder="Search"
+          v-model="this.searchTxt"
+        />
+        <button
+          v-if="this.searchTxt.length"
+          @click="onClearSearch()"
+          class="clear-search-input-btn"
+        >
+          x
+        </button>
+      </article>
+      <UsersList @onToggleSearch="onToggleWindow" />
     </section>
-    <UsersList @onToggleSearch="onToggleWindow" />
+
+    <section
+      v-if="contant === 'notic'"
+      class="side-bar-side-window-notifications"
+    >
+      <h1>Notifications</h1>
+      <NotificationsList @onToggleNoticList="onToggleNoticList" />
+    </section>
   </section>
 </template>
 
 <script>
 import UsersList from "@/cmps/users-list.vue";
+import NotificationsList from "@/cmps/notifications-list.vue";
 
 export default {
   data() {
@@ -35,8 +46,14 @@ export default {
       timeoutId: false,
     };
   },
+  created() {
+    // console.log("side", this.contant);
+  },
   props: {
-    contant: {},
+    contant: {
+      type: String,
+      required: true,
+    },
     isClosingProp: {
       type: Boolean,
       required: true,
@@ -60,9 +77,13 @@ export default {
     onToggleWindow() {
       this.$emit("onToggleSidebarWindow");
     },
+    onToggleNoticList(list) {
+      this.$emit("onToggleNoticList", list);
+    },
   },
   components: {
     UsersList,
+    NotificationsList,
   },
 };
 </script>

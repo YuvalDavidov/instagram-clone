@@ -1,6 +1,6 @@
 .side-bar-container {
     position: fixed;
-    z-index: 2;
+    z-index: 0;
 
     &.darkMode {
 
@@ -300,9 +300,10 @@
         }
 
         &.isSidebarWindowOpen {
-            z-index: 2;
+            z-index: 1;
             transition: 1s;
-            width: 70px;
+            width: $nav-medium-width;
+
         }
 
         &.isClosing,
@@ -318,7 +319,8 @@
 
         &.isTabletMode.isWantToCreate {
             transition: 1s;
-            width: 120px;
+            width: $nav-medium-width;
+
 
         }
 
@@ -326,8 +328,22 @@
 
     & .bg-container {
         opacity: 0;
+
+        &.on-bar {
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: $nav-medium-width;
+
+        }
     }
 
+}
+
+.side-bar-modal {
+    & .bg-container {
+        z-index: -1;
+    }
 }
 
 .mobile-bar {
@@ -429,7 +445,7 @@
 .side-bar-side-window {
     animation: side-window-animation .5s;
     position: fixed;
-    z-index: 1;
+    z-index: 0;
     border-right: 1px solid $nav-border-color;
     height: 100vh;
     border-top-right-radius: 15px;
@@ -565,6 +581,36 @@
     }
 }
 
+.list-modal {
+
+
+    .lists-container {
+        background-color: red;
+        padding: 10px;
+
+        position: fixed;
+        top: calc(100vh - 90%);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 4;
+    }
+
+    & .followers-list {
+
+        background-color: #0095f6;
+
+        & .list-info {
+            list-style: none;
+        }
+    }
+
+    & .bg-container {
+        position: fixed;
+        opacity: 1;
+        z-index: 2;
+        background-color: rgba(255, 0, 0, 0.066)(0, 0, 0);
+    }
+}
 
 @keyframes side-window-animation {
     from {

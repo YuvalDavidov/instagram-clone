@@ -5,6 +5,7 @@ import { usersStore } from './users.store'
 import { storyStore } from './story.store'
 import { chatStore } from './chat.store'
 import { notificationStore } from './notification.store'
+import { followStore } from './follow.store'
 
 
 export const myStore = createStore({
@@ -69,16 +70,16 @@ export const myStore = createStore({
         usersStore,
         storyStore,
         chatStore,
-        notificationStore
+        notificationStore,
+        followStore
     }
 })
 
 myStore.subscribe((cmd, state) => {
-    if (cmd.payload.type === 'setUnsawNotifications') {
+    if (cmd.payload.type === 'setNotifications' || cmd.payload.type === 'setUnsawNotifications') {
 
-        console.log('Command:', cmd.payload.type)
-        console.log('storeState:\n', state.notificationStore)
+        // console.log('Command:', cmd.payload.type)
+        // console.log('storeState:\n', state.notificationStore)
 
     }
 })
-

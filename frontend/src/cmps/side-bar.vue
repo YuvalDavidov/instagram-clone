@@ -42,7 +42,7 @@
             >Home</span
           ></RouterLink
         >
-        <button @click="onToggleSidebarWindow()" class="side-bar-btn">
+        <button @click="onToggleSidebarWindow('search')" class="side-bar-btn">
           <v-icon scale="1.6" name="bi-search" /><span
             v-if="!isTabletMode"
             :class="{ isClosing, isSidebarWindowOpen }"
@@ -59,7 +59,10 @@
         >
         <!-- TODO -->
 
-        <button class="notifications-btn side-bar-btn">
+        <button
+          class="notifications-btn side-bar-btn"
+          @click="onToggleSidebarWindow('notic')"
+        >
           <div class="btn-container">
             <div
               class="dot-notic"
@@ -235,13 +238,16 @@
       </section>
     </article>
 
-    <article v-if="isSidebarWindowOpen">
+    <article v-if="isSidebarWindowOpen" class="side-bar-modal">
       <SideBarSideWindow
+        @onToggleNoticList="onToggleNoticList"
         @onToggleSidebarWindow="onToggleSidebarWindow"
         :isSidebarWindowOpen="isSidebarWindowOpen"
         :isClosingProp="isClosing"
+        :contant="sideWindowContant"
       />
       <div class="bg-container" @click="onToggleSidebarWindow()"></div>
+      <div class="bg-container on-bar" @click="onToggleSidebarWindow()"></div>
     </article>
 
     <article v-if="isCreateOpen" class="create-post-modal">
@@ -257,6 +263,23 @@
         <v-icon v-if="isPost" name="md-keyboardarrowdown-round" />
         <v-icon v-if="!isPost" name="md-keyboardarrowup-round" />
       </button>
+    </article>
+
+    <article class="list-modal" v-if="isNoticListModalOpen">
+      <section class="lists-container">
+        <section class="followers-list">
+          asdasda
+          <!-- <li
+            class="list-info"
+            v-for="followers in sortedNotifics.today.follower"
+            :key="followers._id"
+          >
+            <div>{{ followers.fromUserInfo.username }}</div>
+          </li> -->
+        </section>
+        <section class="likes-list"></section>
+      </section>
+      <div class="bg-container" @click="onToggleNoticList"></div>
     </article>
   </section>
 </template>
@@ -295,6 +318,9 @@ export default {
         likesNotofics: [],
         followersNotifics: [],
       },
+      sideWindowContant: null,
+      isNoticListModalOpen: false, // TODO
+      notificsListForModal: [],
     };
   },
   created() {
@@ -308,6 +334,7 @@ export default {
         type: "setWindowMode",
         windowMode: "isMobileMode",
       });
+      if (this.isSidebarWindowOpen) this.isSidebarWindowOpen = false;
     } else {
       this.$store.dispatch({
         type: "setWindowMode",
@@ -316,9 +343,7 @@ export default {
     }
     window.addEventListener("resize", this.windowSizeHandeler);
     socketService.on("new-notification", (data) => {
-      // this.notifications.unshift(data);
       this.sortNotifics(data);
-      // console.log(this.notifications);
     });
     this.$store.dispatch({ type: "loadUserUnsawNotifications" });
   },
@@ -326,23 +351,46 @@ export default {
     window.removeEventListener("resize", this.windowSizeHandeler);
   },
   methods: {
+    onToggleNoticList(list) {
+      if (list.length) this.notificsListForModal = list;
+      else this.notificsListForModal = [];
+      this.isNoticListModalOpen = !this.isNoticListModalOpen;
+      // console.log("this.notificsListForModal", this.notificsListForModal);
+    },
     onToggleSettings() {
       this.isSettingsModalOpen = !this.isSettingsModalOpen;
     },
-    onToggleSidebarWindow() {
-      if (this.isTabletMode)
-        this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
-      else if (this.isSidebarWindowOpen) {
-        clearTimeout(this.timeoutId);
+    onToggleSidebarWindow(arg) {
+      if (arg === undefined) {
+        console.log("1", this.sideWindowContant, arg);
         this.isClosing = true;
-        console.log("closing");
-
         this.timeoutId = setTimeout(() => {
           this.isClosing = false;
           this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
-          console.log("closed");
+          clearTimeout(this.timeoutId);
         }, 500);
+      } else if (this.isSidebarWindowOpen) {
+        clearTimeout(this.timeoutId);
+        this.isClosing = true;
+        this.timeoutId = setTimeout(() => {
+          this.isClosing = false;
+          this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+          clearTimeout(this.timeoutId);
+
+          if (this.sideWindowContant !== arg) {
+            this.sideWindowContant = arg;
+
+            this.timeoutId = setTimeout(() => {
+              this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+              clearTimeout(this.timeoutId);
+            }, 100);
+          }
+        }, 500);
+      } else if (this.sideWindowContant === arg && this.isSidebarWindowOpen) {
+        this.sideWindowContant = null;
+        this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
       } else {
+        this.sideWindowContant = arg;
         this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
       }
     },
@@ -361,6 +409,8 @@ export default {
       this.isCreateOpen = !this.isCreateOpen;
     },
     windowSizeHandeler(e) {
+      if (this.isSidebarWindowOpen) this.isSidebarWindowOpen = false;
+
       if (
         e.currentTarget.innerWidth < 1260 &&
         e.currentTarget.innerWidth > 770 &&
@@ -378,7 +428,6 @@ export default {
         e.currentTarget.innerWidth < 770 &&
         this.windowMode !== "isMobileMode"
       ) {
-        if (this.isSearchOpen) this.isSearchOpen = false;
         this.$store.dispatch({
           type: "setWindowMode",
           windowMode: "isMobileMode",
@@ -405,7 +454,7 @@ export default {
     },
     sortNotifics(data) {
       switch (data.type) {
-        case "new-follower":
+        case "follower":
           this.notifications.followersNotifics.unshift(data);
           break;
 
@@ -457,7 +506,13 @@ export default {
   watch: {
     "$store.getters.getUnsawNotifications": {
       handler(newValue) {
-        newValue.forEach((value) => this.sortNotifics(value));
+        if (!newValue.length) {
+          this.notifications = {
+            msgsNotifics: [],
+            likesNotofics: [],
+            followersNotifics: [],
+          };
+        } else newValue.forEach((value) => this.sortNotifics(value));
       },
       deep: true,
     },

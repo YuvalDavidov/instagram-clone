@@ -103,7 +103,8 @@ async function removeFromColumn(model, columnName, itemId, entityId) {
 async function queryOne(model, filterBy, attributes) {
 
     if (attributes && (attributes.includes('following') && attributes.includes('followers'))) attributes = [
-        ...attributes.filter(attr => attr !== 'followers' && attr !== 'following'),
+        ...attributes,
+        // .filter(attr => attr !== 'followers' && attr !== 'following')
         [sequelize.fn('array_length', sequelize.col('followers'), 1), 'followersCount'],
         [sequelize.fn('array_length', sequelize.col('following'), 1), 'followingCount']
     ]
@@ -125,7 +126,6 @@ async function queryOne(model, filterBy, attributes) {
                     [Op.and]: whereCondition
                 }
             })
-
         return entity ? entity.dataValues : entity
 
     } catch (error) {
@@ -213,7 +213,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
         }
 
-        else if (model === instegramNotifications) return _noticQuery(numOfDesiredResults)
+        else if (model === instegramNotifications) return _noticQuery(numOfDesiredResults, filterBy)
 
         else if (isLessDetails) {
             whereCondition = []
@@ -304,39 +304,82 @@ module.exports = {
     checkIfChatExist
 }
 
-async function _noticQuery(numOfDesiredResults) {
+async function _noticQuery(numOfDesiredResults, filterBy) {
     let resultToSend = []
+    let notificsToUpdate = []
+    let result
+    console.log('filterBy', filterBy, 'numOfDesiredResults', numOfDesiredResults);
     try {
-        console.log('here111');
-        let result = await instegramNotifications.findAll({
-            include: instegramUsers,
-            where: {
-                status: 'pending'
-            },
-            limit: numOfDesiredResults,
-        })
-        result.forEach((notic) => {
+        switch (filterBy.type) {
+            case 'all':
+                console.log(filterBy.userId);
+                result = await instegramNotifications.findAll({
+                    include: instegramUsers,
+                    where: {
+                        type: ['follower', 'like', 'commend'],
+                        userId: filterBy.userId
+                    },
+                    order: [['createdAt', 'DESC']],
+                    limit: numOfDesiredResults,
+                })
+                break;
+            case 'unsaw':
+                result = await instegramNotifications.findAll({
+                    include: instegramUsers,
+                    where: {
+                        status: 'pending',
+                        userId: filterBy.userId
+                    },
+                    order: [['createdAt', 'DESC']],
+                    limit: numOfDesiredResults,
+                })
+                break;
+
+            default:
+                break;
+        }
+        // console.log('result', result);
+        result.forEach((notic, idx) => {
             const data = notic.dataValues
+            delete data.instegramUser.dataValues.password
             const { createdAt, status, _id, type } = data
-            const { _id: formUserId, username, fullname, imgUrl } = data.instegramUser.dataValues
+            const fromUserInfo = {
+                userId: data.instegramUser.dataValues._id,
+                username: data.instegramUser.dataValues.username,
+                fullname: data.instegramUser.dataValues.fullname,
+                imgUrl: data.instegramUser.dataValues.imgUrl,
+                isFollowing: data.instegramUser.dataValues.followers.includes(filterBy.userId)
+                // TODO
+            }
+
+            if (status === 'pending' && filterBy.type === 'all') notificsToUpdate.push(_id)
             let newNotic = {
                 createdAt,
                 status,
                 _id,
                 type,
-                fromUser: {
-                    formUserId,
-                    username,
-                    fullname,
-                    imgUrl
-                }
+                fromUserInfo
             }
             resultToSend.push(newNotic)
         })
-        console.log(resultToSend);
+
+        if (notificsToUpdate.length) {
+            notificsToUpdate = await instegramNotifications.update(
+                { status: 'approved' },
+                {
+                    where: {
+                        _id: notificsToUpdate
+                    }
+                }
+            )
+            resultToSend = resultToSend.map(notic => {
+                notic.status = 'approved'
+                return notic
+            })
+        }
+
         return resultToSend
     } catch (error) {
         throw new Error('_noticQuery - failed to get record', error)
-
     }
 }

@@ -1,8 +1,8 @@
 const express = require('express')
-const { getUserUnsawNotifications } = require('./notification.controller.js')
+const { getUserUnsawNotifications, getUserNotifications } = require('./notification.controller.js')
 const router = express.Router()
 
-router.get('/', getUserUnsawNotifications)
+router.get('/', getUserNotifications)
 router.get('/unsaw', getUserUnsawNotifications)
 
 module.exports = router
