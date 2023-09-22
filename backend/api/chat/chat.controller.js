@@ -7,6 +7,7 @@ async function getUserChatsIds(req, res) {
     const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
     try {
         const chatIds = await chatService.queryChatIds(loggedinUser._id)
+        console.log('chat Ids ---->', chatIds)
         res.json(chatIds)
     } catch (err) {
         logger.error('Failed to get chatIds' + err)
