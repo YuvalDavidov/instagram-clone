@@ -287,7 +287,6 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
     let resultToSend = []
     let notificsToUpdate = []
     let result
-    console.log('filterBy', filterBy, 'numOfDesiredResults', numOfDesiredResults);
     try {
         switch (filterBy.type) {
             case 'all':

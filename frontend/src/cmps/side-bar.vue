@@ -247,7 +247,18 @@
         :contant="sideWindowContant"
       />
       <div class="bg-container" @click="onToggleSidebarWindow()"></div>
-      <div class="bg-container on-bar" @click="onToggleSidebarWindow()"></div>
+      <div
+        class="bg-container on-bar p1"
+        @click="onToggleSidebarWindow()"
+      ></div>
+      <div
+        class="bg-container on-bar p2"
+        @click="onToggleSidebarWindow()"
+      ></div>
+      <div
+        class="bg-container on-bar p3"
+        @click="onToggleSidebarWindow()"
+      ></div>
     </article>
 
     <article v-if="isCreateOpen" class="create-post-modal">
@@ -305,6 +316,7 @@ export default {
       isSettingsModalOpen: false,
       searchTxt: "",
       isClosing: false,
+      isSwitching: false,
       isSidebarWindowOpen: false,
       timeoutId: null,
       isMobileSearchOpen: false,
@@ -370,10 +382,14 @@ export default {
           clearTimeout(this.timeoutId);
         }, 500);
       } else if (this.isSidebarWindowOpen) {
+        console.log("2");
         clearTimeout(this.timeoutId);
         this.isClosing = true;
+        if (this.sideWindowContant !== arg)
+          this.isSwitching = !this.isSwitching;
         this.timeoutId = setTimeout(() => {
           this.isClosing = false;
+
           this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
           clearTimeout(this.timeoutId);
 
@@ -381,15 +397,20 @@ export default {
             this.sideWindowContant = arg;
 
             this.timeoutId = setTimeout(() => {
+              this.isSwitching = !this.isSwitching;
               this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
               clearTimeout(this.timeoutId);
             }, 100);
           }
         }, 500);
       } else if (this.sideWindowContant === arg && this.isSidebarWindowOpen) {
+        console.log("3");
+
         this.sideWindowContant = null;
         this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
       } else {
+        console.log("4");
+
         this.sideWindowContant = arg;
         this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
       }
@@ -490,7 +511,7 @@ export default {
       else return false;
     },
     isTabletMode() {
-      if (this.windowMode === "isTabletMode") return true;
+      if (this.windowMode === "isTabletMode" || this.isSwitching) return true;
       else return false;
     },
     darkMode() {

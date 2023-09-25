@@ -304,6 +304,7 @@
             transition: 1s;
             width: $nav-medium-width;
 
+
         }
 
         &.isClosing,
@@ -315,6 +316,11 @@
         &.isTabletMode {
             transition: 1s;
             width: $nav-medium-width;
+        }
+
+        &.isSwitching {
+            width: $nav-medium-width;
+            background-color: #0095f6;
         }
 
         &.isTabletMode.isWantToCreate {
@@ -330,11 +336,31 @@
         opacity: 0;
 
         &.on-bar {
-            z-index: 1;
-            top: 0;
-            left: 0;
-            width: $nav-medium-width;
 
+            z-index: 1;
+            left: 0;
+            position: absolute;
+
+            &.p1 {
+                width: $nav-medium-width;
+                top: 0;
+                height: 170px;
+
+            }
+
+            &.p2 {
+                width: $nav-medium-width;
+                top: 235px;
+                height: 64px;
+
+            }
+
+            &.p3 {
+                width: $nav-medium-width;
+                top: 360px;
+                height: calc(100vw - 360px);
+
+            }
         }
     }
 
