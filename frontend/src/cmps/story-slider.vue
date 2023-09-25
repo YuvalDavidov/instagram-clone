@@ -78,6 +78,7 @@ export default {
     };
   },
   async created() {
+    console.log("ss");
     if (!this.$route.path.includes("profile")) this.isAtHome = !this.isAtHome;
     await this.$store.dispatch({
       type: "loadUserStories",

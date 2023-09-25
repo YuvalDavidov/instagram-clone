@@ -40,6 +40,7 @@ export const storyStore = {
             }
         },
         async loadUserStories({ commit }, { userId }) {
+            console.log('1');
             try {
                 const stories = await storiesService.getStoriesIdByUserId(userId)
                 commit({ type: 'setUserStories', stories })
@@ -49,6 +50,8 @@ export const storyStore = {
             }
         },
         async loadStory({ commit }, { storyId }) {
+            console.log('2');
+
             try {
                 const story = await storiesService.getStoryById(storyId)
                 commit({ type: 'setStory', story })

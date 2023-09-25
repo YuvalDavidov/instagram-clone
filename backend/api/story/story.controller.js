@@ -30,6 +30,7 @@ async function getStoriesByUserId(req, res) {
 
 async function getStoryById(req, res) {
     let storyId = req.params._id
+    console.log('sdsdsd');
     const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
     console.log('getStoryById loggedInUser------->', loggedinUser)
 

@@ -6,7 +6,8 @@
 
 .create-modal {
     border-radius: 15px;
-    position: absolute;
+    position: fixed;
+    border: 1px solid black;
     top: calc(100vh - 90%);
     left: 50%;
     transform: translateX(-50%);

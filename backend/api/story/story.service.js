@@ -8,6 +8,7 @@ async function query(entity, condition) {
     if (condition === 'userId') filterBy = { userInfo: { [condition]: entity } }
     else if (condition === 'byFollowing') filterBy = { userInfo: { userId: entity } }
     else filterBy = { _id: entity }
+    filterBy = [{ ...filterBy }, condition]
     try {
         let stories = await dbService.query(instegramStories, filterBy)
         if (condition === 'storyId') {

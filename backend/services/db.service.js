@@ -189,28 +189,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
     try {
         if (!filterBy) result = await model.findAll()
         // constructing the conditions for the sql 
-        if (model === instegramStories) {
-            // dynamic query for stories userIds , storiesIds or specific story._id
-            if (filterBy._id) {
-                return queryOne(instegramStories, filterBy)
-            } else {
-                let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
-                Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } }
-                )
-                return result = await model.findAll({
-                    where: {
-                        [Op.and]: [{
-                            ...whereCondition,
-                            createdAt: {
-                                [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
-                            }
-                        }]
-                    },
-
-                })
-            }
-
-        }
+        if (model === instegramStories) return _storyQuery(filterBy)
 
         else if (model === instegramNotifications) return _noticQuery(numOfDesiredResults, filterBy)
 
@@ -291,6 +270,7 @@ async function checkIfChatExist(model, usersIds) {
         console.log('error', error);
     }
 }
+
 module.exports = {
     addRecord,
     removeRecord,
@@ -381,4 +361,46 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
     } catch (error) {
         throw new Error('_noticQuery - failed to get record', error)
     }
+}
+
+async function _storyQuery(filterBy) {
+    let whereCondition = {}
+    let result
+    let condition = filterBy[1]
+    filterBy = filterBy[0]
+    // console.log('fasfas', filterBy, condition);
+    try {
+        switch (condition) {
+            case 'byFollowing' || 'userId':
+                let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
+                Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } })
+
+                result = await instegramStories.findAll({
+                    where: {
+                        [Op.and]: [{
+                            ...whereCondition,
+                            createdAt: {
+                                [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
+                            }
+                        }]
+                    },
+
+                })
+                return result
+
+                break;
+
+            case 'storyId':
+
+                return queryOne(instegramStories, filterBy)
+                break;
+            default:
+                break;
+        }
+        return ['11', '22']
+    } catch (error) {
+        throw new Error('_storyQuery - failed to get record', error)
+
+    }
+
 }
