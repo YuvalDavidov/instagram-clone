@@ -71,10 +71,10 @@ async function addToViewCount(req, res) {
     // when this function called that means that the loggedin user has visited this user at least 5 times in the time frame that was designated 
     const { userId } = req.params
     try {
-        let loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
-        if (loggedinUser._id === userId) return loggedinUser._id
-        await userService.addToViewCount(userId, loggedinUser, res)
-        return loggedinUser._id
+        let loggedinUserFromCookie = await tokenService.validateToken(req.cookies.loginToken)
+        if (loggedinUserFromCookie._id === userId) return loggedinUserFromCookie._id
+        await userService.addToViewCount(userId, loggedinUserFromCookie, res)
+        return loggedinUserFromCookie._id
     } catch (error) {
         logger.error('Failed to add to view count', err)
     }

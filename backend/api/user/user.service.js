@@ -22,29 +22,25 @@ module.exports = {
 }
 
 
-async function addToViewCount(userId, loggedinUser, res) {
+async function addToViewCount(userId, loggedinUserFromCookie, res) {
     try {
-        let profileIdx = loggedinUser.vipProfiles.findIndex(profile => profile.userId === userId)
-        let { vipProfiles } = await getById(loggedinUser._id, ['vipProfiles'])
+        let profileIdx = loggedinUserFromCookie.vipProfiles.findIndex(profile => profile.userId === userId)
+        let { vipProfiles } = await getById(loggedinUserFromCookie._id, ['vipProfiles'])
         if (vipProfiles.includes(userId)) {
-            loggedinUser.vipProfiles.splice(profileIdx, 1)
-            await tokenService.sendLoginToken(loggedinUser, res)
+            loggedinUserFromCookie.vipProfiles.splice(profileIdx, 1)
+            await tokenService.sendLoginToken(loggedinUserFromCookie, res)
             return
         }
-        console.log('in service before if ======>', profileIdx)
         if (profileIdx >= 0) {
-            loggedinUser.vipProfiles[profileIdx].numOfVisits += 1
-            await tokenService.sendLoginToken(loggedinUser, res)
-            if (loggedinUser.vipProfiles[profileIdx].numOfVisits >= 5) {
-                console.log('in if of adding to column')
-                await dbService.appendToColumn(instegramUsers, userId, 'vipProfiles', loggedinUser._id)
+            loggedinUserFromCookie.vipProfiles[profileIdx].numOfVisits += 1
+            await tokenService.sendLoginToken(loggedinUserFromCookie, res)
+            if (loggedinUserFromCookie.vipProfiles[profileIdx].numOfVisits >= 5) {
+                await dbService.appendToColumn(instegramUsers, userId, 'vipProfiles', loggedinUserFromCookie._id)
             }
-            console.log('in view Count before the return---->', loggedinUser)
             return true
         } else {
-            loggedinUser.vipProfiles.push({ userId: userId, numOfVisits: 1 })
-            await tokenService.sendLoginToken(loggedinUser, res)
-            console.log('in view Count in else (adding user to the cookie only)---->', loggedinUser)
+            loggedinUserFromCookie.vipProfiles.push({ userId: userId, numOfVisits: 1 })
+            await tokenService.sendLoginToken(loggedinUserFromCookie, res)
             return false
         }
 

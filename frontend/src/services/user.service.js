@@ -54,7 +54,6 @@ function getLoggedinUser() {
 async function getUserById(userId) {
     try {
         let user = getVipProfile(userId)
-        console.log('from session storage ====>', user)
         if (user) return user
         else user = await httpService.get(USER_URL + userId)
         return user
