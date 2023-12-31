@@ -1,6 +1,6 @@
 <script setup>
 import SideBar from "./cmps/side-bar.vue";
-import {myStore} from './store/store'
+import { myStore } from './store/store'
 </script>
 
 <template>

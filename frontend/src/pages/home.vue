@@ -13,7 +13,7 @@
       </div>
       <div class="login-div">
         <div class="first-div">
-          <img class="logo" src="../assets/imgs/Instagram_logo.png" />
+          <img class="logo" src="../assets/imgs/instagram_logo.png" />
           <form @submit.prevent="isSignUp ? onSignUp() : onLogin()">
             <input
               v-if="!isSignUp"
