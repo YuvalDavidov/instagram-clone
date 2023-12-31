@@ -1,11 +1,12 @@
 <script setup>
 import SideBar from "./cmps/side-bar.vue";
+import store from './store/store'
 </script>
 
 <template>
   <section class="main-layout">
     <RouterView />
-    <SideBar v-if="this.$store.getters.User" />
+    <SideBar v-if="store.getters.User" />
   </section>
 </template>
 // v-bind:class="{ darkMode: this.$store.getters.GetIsDarkMode }"
