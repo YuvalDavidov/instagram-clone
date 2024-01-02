@@ -127,7 +127,7 @@
         <h5>Thanks for letting us know</h5>
         <small
           >Your feedback is important in helping us keep the <br />
-          Instagram community safe.</small
+          picgram community safe.</small
         >
       </header>
       <nav class="report-nav">

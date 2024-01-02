@@ -304,10 +304,10 @@ import UsersList from "@/cmps/users-list.vue";
 import SearchMobileBar from "@/cmps/search-mobile-bar.vue";
 import PopUpNotic from "./pop-up-notic.vue";
 
-import instagramLogo from "../assets/imgs/instagram_logo.png";
-import instagramLogoWhite from "../assets/imgs/instagram_logo_white.png";
-import instagramLogoLine from "../assets/imgs/instagram_logo_line.png";
-import instagramLogoLineWhite from "../assets/imgs/instagram_logo_line_white.png";
+import picgramLogo from "../assets/imgs/picgram_logo_line.png";
+import picgramLogoWhite from "../assets/imgs/picgram_logo_line_white.png";
+import picgramLogoLine from "../assets/imgs/picgram_logo.png";
+import picgramLogoLineWhite from "../assets/imgs/picgram_logo_white.png";
 import { socketService } from "../services/socket.service";
 
 export default {
@@ -518,10 +518,10 @@ export default {
       return this.$store.getters.GetIsDarkMode;
     },
     logoSrc() {
-      return this.darkMode ? instagramLogoWhite : instagramLogo;
+      return this.darkMode ? picgramLogoWhite : picgramLogo;
     },
     logoTabletSrc() {
-      return this.darkMode ? instagramLogoLineWhite : instagramLogoLine;
+      return this.darkMode ? picgramLogoLineWhite : picgramLogoLine;
     },
   },
   watch: {
