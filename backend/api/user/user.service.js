@@ -2,7 +2,7 @@
 const utilService = require('../../services/util.service')
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
-const { instegramUsers } = require('../../services/models/models')
+const { picgramUsers } = require('../../services/models/models')
 const tokenService = require('../../services/token.service')
 
 
@@ -35,7 +35,7 @@ async function addToViewCount(userId, loggedinUserFromCookie, res) {
             loggedinUserFromCookie.vipProfiles[profileIdx].numOfVisits += 1
             await tokenService.sendLoginToken(loggedinUserFromCookie, res)
             if (loggedinUserFromCookie.vipProfiles[profileIdx].numOfVisits >= 5) {
-                await dbService.appendToColumn(instegramUsers, userId, 'vipProfiles', loggedinUserFromCookie._id)
+                await dbService.appendToColumn(picgramUsers, userId, 'vipProfiles', loggedinUserFromCookie._id)
             }
             return true
         } else {
@@ -52,7 +52,7 @@ async function addToViewCount(userId, loggedinUserFromCookie, res) {
 
 async function query(filterBy = { username: '' }, isLessDetails = false, loggedinUserId) {
     try {
-        let model = (isLessDetails) ? await dbService.query(instegramUsers, filterBy, 10, isLessDetails) : await dbService.query(instegramUsers, filterBy)
+        let model = (isLessDetails) ? await dbService.query(picgramUsers, filterBy, 10, isLessDetails) : await dbService.query(picgramUsers, filterBy)
         let filterdUsers = model.map(user => {
             delete user.password
             return user
@@ -66,7 +66,7 @@ async function query(filterBy = { username: '' }, isLessDetails = false, loggedi
 
 async function getById(userId, attributes) {
     try {
-        let user = await dbService.queryOne(instegramUsers, { _id: userId }, attributes)
+        let user = await dbService.queryOne(picgramUsers, { _id: userId }, attributes)
         return user
     }
     catch (err) {
@@ -76,7 +76,7 @@ async function getById(userId, attributes) {
 }
 async function getByUsername(username, attributes) {
     try {
-        let user = await dbService.queryOne(instegramUsers, { username }, attributes)
+        let user = await dbService.queryOne(picgramUsers, { username }, attributes)
         return user
     } catch (err) {
         logger.error(`user.service - while finding user by username: ${username}`, err)
@@ -87,7 +87,7 @@ async function getByUsername(username, attributes) {
 // remove()
 async function remove(userId) {
     try {
-        await dbService.removeRecord(instegramUsers, userId)
+        await dbService.removeRecord(picgramUsers, userId)
     } catch (err) {
         logger.error(`user.service - cannot remove user ${userId}`, err)
         throw err
@@ -96,7 +96,7 @@ async function remove(userId) {
 
 async function update(user) {
     try {
-        let updatedUser = await dbService.updateRecord(instegramUsers, user, user._id)
+        let updatedUser = await dbService.updateRecord(picgramUsers, user, user._id)
         return updatedUser
     } catch (err) {
         logger.error(`user.service - cannot update user ${user._id}`, err)
@@ -111,7 +111,7 @@ async function add(user) {
         _id
     }
     try {
-        let addedUser = await dbService.addRecord(instegramUsers, user)
+        let addedUser = await dbService.addRecord(picgramUsers, user)
         return addedUser
     } catch (err) {
         logger.error('user.service - cannot add user', err)

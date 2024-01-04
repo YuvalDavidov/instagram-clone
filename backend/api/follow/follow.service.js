@@ -1,7 +1,7 @@
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 
-const { instegramUsers } = require('../../services/models/models')
+const { picgramUsers } = require('../../services/models/models')
 
 module.exports = {
     appendToColumn,
@@ -11,7 +11,7 @@ module.exports = {
 
 async function checkIsFollowing(userId, loggedinUserId) {
     try {
-        let isFollowing = await dbService.queryOne(instegramUsers, { _id: loggedinUserId, following: [userId] }, ['_id'])
+        let isFollowing = await dbService.queryOne(picgramUsers, { _id: loggedinUserId, following: [userId] }, ['_id'])
         if (isFollowing) return true
         else return false
     } catch (error) {
@@ -22,8 +22,8 @@ async function checkIsFollowing(userId, loggedinUserId) {
 
 async function appendToColumn(itemId, logdinUserId) {
     try {
-        await dbService.appendToColumn(instegramUsers, logdinUserId.toString(), 'followers', itemId)
-        await dbService.appendToColumn(instegramUsers, itemId, 'following', logdinUserId.toString())
+        await dbService.appendToColumn(picgramUsers, logdinUserId.toString(), 'followers', itemId)
+        await dbService.appendToColumn(picgramUsers, itemId, 'following', logdinUserId.toString())
 
     } catch (err) {
         logger.error('follow service - cannot append to column' + err)
@@ -33,8 +33,8 @@ async function appendToColumn(itemId, logdinUserId) {
 
 async function removeFromColumn(itemId, logdinUserId) {
     try {
-        await dbService.removeFromColumn(instegramUsers, 'followers', logdinUserId.toString(), itemId)
-        await dbService.removeFromColumn(instegramUsers, 'following', itemId, logdinUserId.toString())
+        await dbService.removeFromColumn(picgramUsers, 'followers', logdinUserId.toString(), itemId)
+        await dbService.removeFromColumn(picgramUsers, 'following', itemId, logdinUserId.toString())
     } catch (err) {
         logger.error('follow service - cannot remove from column' + err)
         throw new Error(`follow service - Failed to remove from column ${err}`)

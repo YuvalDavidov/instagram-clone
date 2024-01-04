@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import postListHome from "./post-list-home.vue";
+import PostListHome from "./post-list-home.vue";
 export default {
-  components: { postListHome },
+  components: { PostListHome },
   data() {
     return {
       maxPageScroll: null,
@@ -52,7 +52,8 @@ export default {
         this.maxPageScroll = maxScroll;
       }
     },
-    watch: {
+  },
+  watch: {
       "$store.getters.followingPosts": {
         deep: true,
         async handler(newValue) {
@@ -60,6 +61,7 @@ export default {
         },
       },
     },
-  },
 };
 </script>
+<style>
+</style>

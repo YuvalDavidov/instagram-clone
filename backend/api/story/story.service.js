@@ -1,6 +1,6 @@
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
-const { instegramStories } = require('../../services/models/models')
+const { picgramStories } = require('../../services/models/models')
 
 
 async function query(entity, condition) {
@@ -10,7 +10,7 @@ async function query(entity, condition) {
     else filterBy = { _id: entity }
     filterBy = [{ ...filterBy }, condition]
     try {
-        let stories = await dbService.query(instegramStories, filterBy)
+        let stories = await dbService.query(picgramStories, filterBy)
         if (condition === 'storyId') {
             return stories
         }
@@ -25,7 +25,7 @@ async function query(entity, condition) {
 
 async function addStory(story) {
     try {
-        const newStory = await dbService.addRecord(instegramStories, story)
+        const newStory = await dbService.addRecord(picgramStories, story)
         return newStory
     } catch (error) {
         logger.error('story.service - cannot add story', error)
@@ -35,7 +35,7 @@ async function addStory(story) {
 
 async function removeStory(storyId) {
     try {
-        await dbService.removeRecord(instegramStories, storyId)
+        await dbService.removeRecord(picgramStories, storyId)
     } catch (error) {
         logger.error('story.service - cannot remove story', error)
         throw new Error('story.service - cannot remove story', error)
@@ -44,7 +44,7 @@ async function removeStory(storyId) {
 
 async function updateStory(sawUser, storyId) {
     try {
-        await dbService.appendToColumn(instegramStories, sawUser, 'sawUsers', storyId)
+        await dbService.appendToColumn(picgramStories, sawUser, 'sawUsers', storyId)
     } catch (error) {
         logger.error('story.service - cannot update story', error)
         throw new Error('story.service - cannot update story', error)

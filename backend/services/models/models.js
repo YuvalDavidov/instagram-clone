@@ -8,7 +8,7 @@ const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
 });
 
 
-const instegramUsers = sequelize.define('instegramUsers', {
+const picgramUsers = sequelize.define('picgramUsers', {
     _id: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -69,7 +69,7 @@ const instegramUsers = sequelize.define('instegramUsers', {
     }
 });
 
-const instegramPosts = sequelize.define('instegramPosts', {
+const picgramPosts = sequelize.define('picgramPosts', {
     _id: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -128,7 +128,7 @@ const instegramPosts = sequelize.define('instegramPosts', {
     }
 );
 
-const instegramStories = sequelize.define('instegramStories', {
+const picgramStories = sequelize.define('picgramStories', {
     _id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -162,7 +162,7 @@ const instegramStories = sequelize.define('instegramStories', {
     }
 )
 
-const instegramChats = sequelize.define('instegramChats', {
+const picgramChats = sequelize.define('picgramChats', {
     _id: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -189,7 +189,7 @@ const instegramChats = sequelize.define('instegramChats', {
     }
 )
 
-const instegramNotifications = sequelize.define('instegramNotifications', {
+const picgramNotifications = sequelize.define('picgramNotifications', {
     _id: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -223,7 +223,7 @@ const instegramNotifications = sequelize.define('instegramNotifications', {
 
     })
 
-instegramNotifications.belongsTo(instegramUsers, { foreignKey: 'fromUser', targetKey: '_id' })
+picgramNotifications.belongsTo(picgramUsers, { foreignKey: 'fromUser', targetKey: '_id' })
 sequelize
     .sync({ force: false }) // Use { force: true } to drop the table and recreate it
     .then(async () => {
@@ -233,5 +233,5 @@ sequelize
         console.error('Error creating user table:', err);
     });
 
-module.exports = { instegramUsers, instegramPosts, instegramStories, instegramChats, instegramNotifications }
+module.exports = { picgramUsers, picgramPosts, picgramStories, picgramChats, picgramNotifications }
 

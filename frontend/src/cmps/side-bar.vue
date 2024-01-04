@@ -13,7 +13,7 @@
       class="side-bar"
       v-if="!this.isMobileMode"
       v-bind:class="{
-        isSearchOpen,
+        // isSearchOpen,
         isSidebarWindowOpen,
         isClosing,
         isTabletMode,
@@ -23,15 +23,16 @@
       <div class="logo">
         <RouterLink to="/">
           <img
+            v-if="isSidebarWindowOpen || isTabletMode || isMobileMode"
+            class="logo-line-img"
+            :src="logoTabletSrc" 
+          />
+          <img
             v-if="!isSidebarWindowOpen && !isTabletMode"
             class="logo-img"
             :src="logoSrc"
           />
-          <img
-            v-if="isSidebarWindowOpen || isTabletMode"
-            class="logo-line-img"
-            :src="logoTabletSrc"
-          />
+          
         </RouterLink>
       </div>
       <nav>
@@ -147,7 +148,7 @@
       <section class="top-bar">
         <div class="logo">
           <RouterLink to="/">
-            <img class="logo-img" :src="logoSrc" />
+            <img class="logo-img" :src="logoTabletSrc" />
           </RouterLink>
         </div>
         <div class="search-bar-n-notification-mobile">
@@ -166,7 +167,9 @@
           >
             x
           </button>
-          <RouterLink to="/notifications">
+          
+        </div>
+        <RouterLink to="/notifications">
             <v-icon name="fa-regular-heart" color="black" scale="1.5" />
             <div
               class="dot-notic"
@@ -184,7 +187,6 @@
               :notifications="notifications"
             />
           </RouterLink>
-        </div>
       </section>
       <section class="bottom-bar">
         <nav>
@@ -298,10 +300,10 @@
 <script>
 import { userService } from "../services/user.service";
 
-import CreateModal from "@/cmps/create-modal.vue";
+import CreateModal from "./create-modal.vue";
 import SideBarSideWindow from "./side-bar-side-window.vue";
-import UsersList from "@/cmps/users-list.vue";
-import SearchMobileBar from "@/cmps/search-mobile-bar.vue";
+import UsersList from "./users-list.vue";
+import SearchMobileBar from "./search-mobile-bar.vue";
 import PopUpNotic from "./pop-up-notic.vue";
 
 import picgramLogo from "../assets/imgs/picgram_logo_line.png";
@@ -335,6 +337,7 @@ export default {
       notificsListForModal: [],
     };
   },
+
   created() {
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
       this.$store.dispatch({
@@ -431,7 +434,6 @@ export default {
     },
     windowSizeHandeler(e) {
       if (this.isSidebarWindowOpen) this.isSidebarWindowOpen = false;
-
       if (
         e.currentTarget.innerWidth < 1260 &&
         e.currentTarget.innerWidth > 770 &&
@@ -452,7 +454,8 @@ export default {
         this.$store.dispatch({
           type: "setWindowMode",
           windowMode: "isMobileMode",
-        });
+        })
+        console.log('-->',this.isMobileMode)
       } else if (
         e.currentTarget.innerWidth > 1260 &&
         this.windowMode !== "isLabtopMode"

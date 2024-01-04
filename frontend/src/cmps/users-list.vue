@@ -1,4 +1,7 @@
 <template>
+  <div class="no-resent" v-if="!searchedUsers.length && !filterdByUsers.length">
+      No recent searches.
+    </div>
   <section class="users-list">
     <li v-for="(user, index) in filterdByUsers" :key="index">
       <div class="list-container" @click="moveTo(user)">
@@ -10,7 +13,7 @@
       </div>
     </li>
     <div class="resent-action" v-if="!filterdByUsers.length">
-      <h3>Resent</h3>
+      <h3 v-if="searchedUsers.length">Resent</h3>
       <button
         v-if="searchedUsers.length"
         class="clear-all-btn"
@@ -33,12 +36,6 @@
         </button>
       </li>
     </div>
-    <div
-      class="no-resent"
-      v-if="!searchedUsers.length && !filterdByUsers.length"
-    >
-      No recent searches.
-    </div>
   </section>
 </template>
 
@@ -51,9 +48,9 @@ export default {
         user,
       });
       this.$router.push(`/profile/${user._id}`);
-      this.$emit("onToggleSearch");
+      this.$emit("onCloseMobileSearch");
       if (window.innerWidth < 770) this.$emit("onCloseMobileSearch");
-      else this.$emit("onToggleSearch");
+      else this.$emit("onCloseMobileSearch");
     },
     onRemoveOneResent(userId) {
       this.$store.dispatch({

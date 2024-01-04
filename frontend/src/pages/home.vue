@@ -3,11 +3,11 @@
     <section v-if="user" class="home-index">
       <div class="top">
         <StoriesList />
-        <post-index-home />
+        <PostIndexHome />
       </div>
     </section>
     <section class="welcome-page" v-if="!user">
-      <div class="iphone-container" v-if="!isSignUp">
+      <div class="iphone-container" v-if="!isSignUp && !isMobileMode">
         <img src="../assets/imgs/example-img-1.png" class="inside-img" />
         <img src="../assets/imgs/iphone-transparent.png" class="iphone" />
       </div>
@@ -66,11 +66,6 @@
             <span class="OR">OR</span>
             <div class="line"></div>
           </div>
-          <a>
-            <v-icon scale="1" color="#385185" name="fa-facebook-square" /> Log
-            in with Facebook</a
-          >
-          <span class="forget-password">Forgot password?</span>
         </div>
         <div class="second-div">
           <span
@@ -86,11 +81,14 @@
 </template>
 
 <script>
-import { userService } from "../services/user.service";
-
-import StoriesList from "@/cmps/stories-list.vue";
-import PostIndexHome from "../cmps/post-index-home.vue";
+import { userService } from "../services/user.service"
+import StoriesList from "../cmps/stories-list.vue"
+import PostIndexHome from "../cmps/post-index-home.vue"
 export default {
+  components: {
+      StoriesList,
+      PostIndexHome,
+    },
   data() {
     return {
       loginCredentials: { username: "", password: "" },
@@ -98,8 +96,21 @@ export default {
       newUser: userService.getEmptyUser(),
     };
   },
-  async created() {
+
+  created() {
+    if (window.innerWidth < 1260 && window.innerWidth > 770) {
+      this.$store.dispatch({type: "setWindowMode", windowMode: "isTabletMode"})
+    } else if (window.innerWidth < 770) {
+      this.$store.dispatch({ type: "setWindowMode", windowMode: "isMobileMode"})
+    } else {
+      this.$store.dispatch({ type: "setWindowMode", windowMode: "isLabtopMode"})
+    }
+    window.addEventListener("resize", this.windowSizeHandeler);
   },
+  destroyed() {
+    window.removeEventListener("resize", this.windowSizeHandeler);
+  },
+
   methods: {
     async onLogin() {
       this.$store.dispatch({
@@ -114,10 +125,33 @@ export default {
       this.isSignUp = !this.isSignUp;
       console.log(this.isSignUp);
     },
+    windowSizeHandeler(e) {
+    if (
+      e.currentTarget.innerWidth < 1260 &&
+      e.currentTarget.innerWidth > 770 &&
+      this.windowMode !== "isTabletMode"
+    ) {
+      this.$store.dispatch({ type: "setWindowMode", windowMode: "isTabletMode"})
+    } else if (
+      e.currentTarget.innerWidth < 770 &&
+      this.windowMode !== "isMobileMode"
+    ) {
+      this.$store.dispatch({ type: "setWindowMode", windowMode: "isMobileMode"})
+    } else if (
+      e.currentTarget.innerWidth > 1260 &&
+      this.windowMode !== "isLabtopMode"
+    ) {
+      this.$store.dispatch({ type: "setWindowMode", windowMode: "isLabtopMode"})
+    }
   },
+  },
+  
   computed: {
     user() {
       return this.$store.getters.GetUser;
+    },
+    windowMode() {
+      return this.$store.getters.GetWindowMode;
     },
     isDisabled() {
       if (
@@ -134,10 +168,21 @@ export default {
         return false;
       else return true;
     },
-  },
-  components: {
-    StoriesList,
-    PostIndexHome,
+    windowMode() {
+      return this.$store.getters.GetWindowMode;
+    },
+    isMobileMode() {
+      if (this.windowMode === "isMobileMode") return true;
+      else return false;
+    },
+    isTabletMode() {
+      if (this.windowMode === "isTabletMode" || this.isSwitching) return true;
+      else return false;
+    },
+    darkMode() {
+      return this.$store.getters.GetIsDarkMode;
+    },
+    
   },
 };
 </script>

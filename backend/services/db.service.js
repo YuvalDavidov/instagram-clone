@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize');
-const { instegramUsers, instegramPosts, instegramStories, instegramNotifications } = require('./models/models');
+const { picgramUsers, picgramPosts, picgramStories, picgramChats, picgramNotifications } = require('./models/models');
 
 
 const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
@@ -165,15 +165,6 @@ async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
     // console.log(sqlRawCode);
     try {
         return await sequelize.query(`${sqlRawCode}`)
-        //         await sequelize.query(`SELECT "instegramChats"."_id",  "instegramChats"."betweenUsers",
-        // "instegramChats"."chatHistory", "instegramChats"."createdAt", 
-        // "instegramChats"."updatedAt", "instegramUsers"."_id" AS "userId", 
-        // "instegramUsers"."fullname" AS "fullname", "instegramUsers"."username"
-        // AS "username", "instegramUsers"."imgUrl" AS "imgUrl" 
-        // FROM "instegramChats" AS "instegramChats" 
-        // INNER JOIN "instegramUsers" ON "instegramUsers"."_id" = ANY("instegramChats"."betweenUsers")
-        // WHERE '9493004838' = ANY ("instegramChats"."betweenUsers")
-        // AND "instegramUsers"."_id" <> '9493004838';`)
     } catch (error) {
         console.log(error);
     }
@@ -189,9 +180,9 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
     try {
         if (!filterBy) result = await model.findAll()
         // constructing the conditions for the sql 
-        if (model === instegramStories) return _storyQuery(filterBy)
+        if (model === picgramStories) return _storyQuery(filterBy)
 
-        else if (model === instegramNotifications) return _noticQuery(numOfDesiredResults, filterBy)
+        else if (model === picgramNotifications) return _noticQuery(numOfDesiredResults, filterBy)
 
         else if (isLessDetails) {
             whereCondition = []
@@ -222,7 +213,7 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
         }
 
 
-        else if (model === instegramPosts) {
+        else if (model === picgramPosts) {
             result = await model.findAll({
                 where: {
                     [Op.or]: whereCondition
@@ -255,7 +246,7 @@ async function checkIfChatExist(model, usersIds) {
     console.log('usersIds', usersIds);
     sqlRawCode = `
   SELECT chat."betweenUsers" , chat."_id"
-  FROM "instegramChats" as chat
+  FROM "picgramChats" as chat
   WHERE 
 `;
 
@@ -291,8 +282,8 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
         switch (filterBy.type) {
             case 'all':
                 console.log(filterBy.userId);
-                result = await instegramNotifications.findAll({
-                    include: instegramUsers,
+                result = await picgramNotifications.findAll({
+                    include: picgramUsers,
                     where: {
                         type: ['follower', 'like', 'commend'],
                         userId: filterBy.userId
@@ -302,8 +293,8 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
                 })
                 break;
             case 'unsaw':
-                result = await instegramNotifications.findAll({
-                    include: instegramUsers,
+                result = await picgramNotifications.findAll({
+                    include: picgramUsers,
                     where: {
                         status: 'pending',
                         userId: filterBy.userId
@@ -319,14 +310,14 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
         // console.log('result', result);
         result.forEach((notic, idx) => {
             const data = notic.dataValues
-            delete data.instegramUser.dataValues.password
+            delete data.picgramUser.dataValues.password
             const { createdAt, status, _id, type } = data
             const fromUserInfo = {
-                userId: data.instegramUser.dataValues._id,
-                username: data.instegramUser.dataValues.username,
-                fullname: data.instegramUser.dataValues.fullname,
-                imgUrl: data.instegramUser.dataValues.imgUrl,
-                isFollowing: data.instegramUser.dataValues.followers.includes(filterBy.userId)
+                userId: data.picgramUser.dataValues._id,
+                username: data.picgramUser.dataValues.username,
+                fullname: data.picgramUser.dataValues.fullname,
+                imgUrl: data.picgramUser.dataValues.imgUrl,
+                isFollowing: data.picgramUser.dataValues.followers.includes(filterBy.userId)
                 // TODO
             }
 
@@ -342,7 +333,7 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
         })
 
         if (notificsToUpdate.length) {
-            notificsToUpdate = await instegramNotifications.update(
+            notificsToUpdate = await picgramNotifications.update(
                 { status: 'approved' },
                 {
                     where: {
@@ -367,14 +358,13 @@ async function _storyQuery(filterBy) {
     let result
     let condition = filterBy[1]
     filterBy = filterBy[0]
-    // console.log('fasfas', filterBy, condition);
     try {
         switch (condition) {
             case 'byFollowing' || 'userId':
                 let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
                 Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } })
 
-                result = await instegramStories.findAll({
+                result = await picgramStories.findAll({
                     where: {
                         [Op.and]: [{
                             ...whereCondition,
@@ -387,12 +377,9 @@ async function _storyQuery(filterBy) {
                 })
                 return result
 
-                break;
-
             case 'storyId':
 
-                return queryOne(instegramStories, filterBy)
-                break;
+                return queryOne(picgramStories, filterBy)
             default:
                 break;
         }

@@ -1,18 +1,18 @@
 const utilService = require('./util.service');
 const logger = require('./logger.service')
 const dbService = require('./db.service')
-const { instegramChats } = require('./models/models')
+const { picgramChats } = require('./models/models')
 
 async function queryChatIds(userId) {
-    let model1 = { model1Name: 'instegramChats', attributes1: ['_id', , 'betweenUsers', 'chatHistory', 'createdAt', 'updatedAt'] }
+    let model1 = { model1Name: 'picgramChats', attributes1: ['_id', , 'betweenUsers', 'chatHistory', 'createdAt', 'updatedAt'] }
     let model2 = {
-        model2Name: 'instegramUsers', attributes2: [{ attributeName: '_id', as: 'userId' }, { attributeName: 'fullname', as: 'fullname' },
+        model2Name: 'picgramUsers', attributes2: [{ attributeName: '_id', as: 'userId' }, { attributeName: 'fullname', as: 'fullname' },
         { attributeName: 'username', as: 'username' }, { attributeName: 'imgUrl', as: 'imgUrl' }]
     }
-    let aggregateCondition = [{ modelName: 'instegramUsers', modelKey: '_id' }, { condition: '=' },
-    { modelName: 'instegramChats', modelKey: 'betweenUsers', isArray: true }]
-    let filterBy = [{ condition1: userId, conditionSymbol: '=', condition2: { modelName: 'instegramChats', modelKey: 'betweenUsers', isArray: true } },
-    { condition1: userId, conditionSymbol: '<>', condition2: { modelName: 'instegramUsers', modelKey: '_id' } }]
+    let aggregateCondition = [{ modelName: 'picgramUsers', modelKey: '_id' }, { condition: '=' },
+    { modelName: 'picgramChats', modelKey: 'betweenUsers', isArray: true }]
+    let filterBy = [{ condition1: userId, conditionSymbol: '=', condition2: { modelName: 'picgramChats', modelKey: 'betweenUsers', isArray: true } },
+    { condition1: userId, conditionSymbol: '<>', condition2: { modelName: 'picgramUsers', modelKey: '_id' } }]
     try {
         const chatIds = await dbService.queryAggregate(model1, model2, filterBy, aggregateCondition)
         return chatIds
@@ -24,7 +24,7 @@ async function queryChatIds(userId) {
 async function addMsgToChat(msg, topic) {
     try {
         const existingChat = await getChatById(topic)
-        if (existingChat) await dbService.appendToColumn(instegramChats, JSON.stringify(msg), 'chatHistory', topic)
+        if (existingChat) await dbService.appendToColumn(picgramChats, JSON.stringify(msg), 'chatHistory', topic)
         else return false
 
     } catch (error) {
@@ -34,7 +34,7 @@ async function addMsgToChat(msg, topic) {
 
 async function getChatById(topic) {
     try {
-        const chat = await dbService.queryOne(instegramChats, { _id: topic })
+        const chat = await dbService.queryOne(picgramChats, { _id: topic })
         return chat.chatHistory
     } catch (error) {
         logger.error('chat service - can not get chat history' + error)
@@ -43,7 +43,7 @@ async function getChatById(topic) {
 
 async function checkIfChatExist(users) {
     try {
-        const chat = await dbService.checkIfChatExist(instegramChats, users)
+        const chat = await dbService.checkIfChatExist(picgramChats, users)
         return chat[0]._id
     } catch (error) {
 
@@ -57,7 +57,7 @@ async function createNewChat(betweenUsers) {
         betweenUsers
     }
     try {
-        await dbService.addRecord(instegramChats, data)
+        await dbService.addRecord(picgramChats, data)
         return topicId
     } catch (err) {
         logger.error('chat.service - cannot add new chat', err)
