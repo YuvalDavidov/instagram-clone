@@ -10,6 +10,7 @@
     border: 1px solid black;
     top: calc(100vh - 90%);
     left: 50%;
+    width: 75vw;
     transform: translateX(-50%);
     z-index: 10;
     background-color: white;
@@ -27,7 +28,7 @@
     }
 
     .uploader {
-        height: calc(710px - 41px);
+        height: calc(75vh - 41px);
         position: relative;
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
@@ -38,6 +39,7 @@
             position: relative;
             top: 280px;
             font-size: 16px;
+            cursor: pointer;
         }
 
         & .file {
@@ -54,12 +56,12 @@
         }
     }
 
-    .first-step {
-        width: 710px;
-    }
+    // .first-step {
+    //     width: 100%;
+    // }
 
     .second-step {
-        max-height: 710px;
+        max-height: 75vh;
 
         .top {
             display: flex;
@@ -84,17 +86,20 @@
 
             .mySwiper {
                 border-right: 1px solid $nav-border-color;
+                margin-right: 0; // Using margin 0 to disable the root rules of the swiper library css style
+                margin-left: 0; // Using margin 0 to disable the root rules of the swiper library css style
+                width: 100%;
 
                 .swiper-wrapper {
-                    max-height: calc(710px - 57px);
-                    width: 710px;
+                    max-height: calc(75vh - 57px);
+                    width: 100%;
                     border-bottom-left-radius: 15px;
 
                     .swiper-slide {
 
                         img {
-                            width: 710px;
-                            height: calc(710px - 57px);
+                            width: 100%;
+                            height: calc(75vh - 57px);
                             object-fit: contain;
                             border-bottom-left-radius: 15px;
                         }
@@ -104,8 +109,8 @@
             }
 
             .story-img-create {
-                max-height: calc(710px - 42px);
-                width: 710px;
+                max-height: calc(75vh - 42px);
+                width: 100%;
                 object-fit: contain;
             }
         }
@@ -124,7 +129,7 @@
                     width: 28px;
                     border-radius: 50%;
                     aspect-ratio: 1/1;
-                    object-fit: cover;
+                    object-fit: contain;
                 }
 
                 &-name {
@@ -147,19 +152,18 @@
 
 @media (max-width:1260px) {
     .create-modal {
-        .first-step {
-            width: 600px;
-        }
+
+        // .first-step {
+        //     width: 100%;
+        //     height: 100%;
+        // }
 
         .second-step {
             .bottom {
                 .post-details {
                     width: 240px;
 
-                    .textarea-summery {
-                        width: 220px;
 
-                    }
                 }
 
                 .mySwiper {
@@ -169,7 +173,7 @@
 
                         .swiper-slide {
                             img {
-                                width: calc(230px + 20vw);
+                                width: 100%;
                                 height: calc(550px - 42px);
                             }
                         }
@@ -187,6 +191,41 @@
 
         .uploader {
             height: calc(600px - 70px);
+        }
+    }
+}
+
+@media (max-width: 780px) {
+    .create-modal {
+        .second-step {
+            .post-details {
+                .textarea-summery {
+                    max-height: 100px;
+                    width: 190px;
+                }
+            }
+
+            .bottom {
+                max-height: 68vh;
+                display: flex;
+                flex-direction: column;
+
+
+                .mySwiper {
+                    .swiper-wrapper {
+                        max-height: calc(550px - 42px);
+                        width: calc(230px + 20vw);
+
+                        .swiper-slide {
+                            img {
+                                width: 100%;
+                                height: 308px;
+                            }
+                        }
+
+                    }
+                }
+            }
         }
     }
 }

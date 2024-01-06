@@ -3,7 +3,7 @@
     <section class="first-step" v-if="step === 'first'">
       <h1 class="top">Create new {{ isPost ? "post" : "story" }}</h1>
       <div v-if="isPost" class="uploader">
-        <small>Drag pictures of click to upload</small>
+        <small>Click to upload</small>
         <input
           type="file"
           className="file"
@@ -13,7 +13,7 @@
         />
       </div>
       <div v-if="!isPost" class="uploader">
-        <small>Drag pictures of click to upload</small>
+        <small>Click to upload</small>
         <input
           type="file"
           className="file"
