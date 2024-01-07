@@ -1,8 +1,5 @@
 .post-modal {
-    position: fixed;
-    z-index: 5;
-    top: 0;
-    left: 0;
+
 
     .black-screen-settings {
         background-color: black;
@@ -49,7 +46,7 @@
         top: calc(20% - 3vw);
         left: 50%;
         transform: translateX(-50%);
-        z-index: 4;
+        z-index: 10;
         background-color: rgb(255, 255, 255);
 
         .post-images {
@@ -362,7 +359,7 @@
 
     .post-modal {
         .post {
-            width: 350px;
+            max-width: 350px;
             display: block;
             // left: calc(35vw * 0.7);
 

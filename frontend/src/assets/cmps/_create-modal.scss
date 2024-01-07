@@ -88,7 +88,7 @@
                 border-right: 1px solid $nav-border-color;
                 margin-right: 0; // Using margin 0 to disable the root rules of the swiper library css style
                 margin-left: 0; // Using margin 0 to disable the root rules of the swiper library css style
-                width: 100%;
+                width: 77%;
 
                 .swiper-wrapper {
                     max-height: calc(75vh - 57px);
@@ -102,6 +102,7 @@
                             height: calc(75vh - 57px);
                             object-fit: contain;
                             border-bottom-left-radius: 15px;
+                            background-color: black;
                         }
                     }
 
@@ -117,7 +118,7 @@
 
         .post-details {
             padding: 0 16px;
-            width: 340px;
+            width: 33%;
 
             .user {
                 padding: 30px 0 10px 0;
@@ -141,7 +142,7 @@
 
                 font-family: blinker;
                 border: none;
-                width: 310px;
+                width: 100%;
                 resize: none;
                 font-size: 17px;
             }
@@ -160,11 +161,7 @@
 
         .second-step {
             .bottom {
-                .post-details {
-                    width: 240px;
 
-
-                }
 
                 .mySwiper {
                     .swiper-wrapper {
@@ -175,6 +172,7 @@
                             img {
                                 width: 100%;
                                 height: calc(550px - 42px);
+                                background-color: black;
                             }
                         }
 
@@ -198,20 +196,26 @@
 @media (max-width: 780px) {
     .create-modal {
         .second-step {
-            .post-details {
-                .textarea-summery {
-                    max-height: 100px;
-                    width: 190px;
-                }
-            }
-
             .bottom {
                 max-height: 68vh;
                 display: flex;
                 flex-direction: column;
 
+                .post-details {
+                    width: 100%;
+
+                    .textarea-summery {
+                        max-height: 100px;
+                        width: 100%;
+                    }
+                }
+
+
+
 
                 .mySwiper {
+                    width: 100%;
+
                     .swiper-wrapper {
                         max-height: calc(550px - 42px);
                         width: calc(230px + 20vw);

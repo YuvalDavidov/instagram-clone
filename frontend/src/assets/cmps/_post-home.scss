@@ -1,10 +1,24 @@
+@media (max-width: 770px) {
+    .post-preview-home {
+        min-width: 50vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-preview-home {
+        min-width: 85vw;
+    }
+}
+
 .post-preview-home {
     margin: 10px auto;
-    max-width: fit-content;
+    max-width: 30vw;
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(219, 219, 219);
     border-radius: 10px;
 }
+
+
 
 .post-actions {
     margin-left: 12px;
@@ -109,8 +123,7 @@
     }
 
     .post-img {
-        min-width: 468px;
-        max-width: 468px;
+        width: 100%;
 
         &.swiper {
             height: 100%;

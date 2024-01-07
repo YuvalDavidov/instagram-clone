@@ -1,11 +1,11 @@
 <template>
-  <section>
+  <section class="posts-container">
     <section 
       class="post-preview-home"
       v-for="(post, index) in posts"
       :key="post._id"
     >
-      <post-preview-home
+      <PostPreviewHome
         :post="post"
         @onOpenPostModal="onOpenPostModal(index)"
       />
@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import postPreviewHome from "./post-preview-home.vue";
+import PostPreviewHome from "./post-preview-home.vue";
 import PostModal from "../pages/post-modal.vue";
 export default {
-  components: { postPreviewHome, PostModal },
+  components: { PostPreviewHome, PostModal },
   data() {
     return {
       postIndex: null,

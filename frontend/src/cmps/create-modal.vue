@@ -1,5 +1,7 @@
 <template>
+  
   <section class="create-modal" :class="{ second: step === 'second' }">
+    <Loader v-if="isLodaing" />
     <section class="first-step" v-if="step === 'first'">
       <h1 class="top">Create new {{ isPost ? "post" : "story" }}</h1>
       <div v-if="isPost" class="uploader">
@@ -42,13 +44,14 @@
         </button>
       </div>
       <section class="bottom">
-        <ImgSlider v-if="isPost" :imgsUrl="postToEdit.imgsUrl" />
+        
+        <ImgSlider v-if="isPost" :imgsUrl="postToEdit.imgsUrl" style="{visibility: !isLoading ? 'visible' : 'hidden'}" />
         <img
           class="story-img-create"
-          v-if="!isPost"
+          v-if="!isPost && !isLodaing"
           :src="postToEdit.imgsUrl"
         />
-        <div class="post-details">
+        <div style="{visibility: !isLoading ? 'visible' : 'hidden'}" class="post-details">
           <section class="user">
             <span><img :src="user.imgUrl" /></span>
             <span class="user-name"> {{ user.username }} </span>
@@ -70,8 +73,8 @@
 
 <script>
 import { uploadService } from "../services/upload.service";
-
-import ImgSlider from "@/cmps/img-slider.vue";
+import Loader from "../components/loader.vue";
+import ImgSlider from "./img-slider.vue";
 import { postService } from "../services/post.service";
 import { storiesService } from "../services/stories.service";
 export default {
@@ -80,6 +83,7 @@ export default {
       postToEdit: null,
       step: "first",
       user: this.$store.getters.GetUser,
+      isLodaing: false
     };
   },
   props: {
@@ -100,19 +104,23 @@ export default {
     } else this.postToEdit = postService.getEmptyPost();
   },
   methods: {
-    onUploadImg(ev) {
+     onUploadImg(ev) {
+      this.isLodaing = true
       console.log(ev);
 
       if (this.isPost) {
-        uploadService.uploadMany(ev).then((imgsUrl) => {
+      uploadService.uploadMany(ev).then((imgsUrl) => {
           this.postToEdit.imgsUrl = imgsUrl.map((img) => img.url);
+          this.isLodaing = false
         });
       } else {
-        uploadService.uploadImg(ev).then((imgsUrl) => {
-          this.postToEdit.imgsUrl = imgsUrl.url;
+       uploadService.uploadImg(ev).then((imgsUrl) => {
+         this.postToEdit.imgsUrl = imgsUrl.url;
+         this.isLodaing = false
         });
       }
       this.step = "second";
+
     },
     onBack() {
       if (this.postToEdit._id) this.$emit("onToggleCreate");
@@ -146,6 +154,7 @@ export default {
   },
   components: {
     ImgSlider,
+    Loader
   },
 };
 </script>
