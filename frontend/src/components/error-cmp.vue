@@ -1,10 +1,19 @@
 <template>
-      <p class="error-message">Wrong username or password. Try again.</p>
+      <p class="error-message">{{ message }}</p>
   </template>
   
   <script>
   export default {
-    
+    props: {
+        message: {
+            type: String,
+            required: true
+        }
+    },
+    created() {
+        console.log('sssssssssssssssssss',this.props)
+
+    }
   }
   </script>
   

@@ -1,7 +1,6 @@
 <template>
   
   <section class="create-modal" :class="{ second: step === 'second' }">
-    <Loader v-if="isLodaing" />
     <section class="first-step" v-if="step === 'first'">
       <h1 class="top">Create new {{ isPost ? "post" : "story" }}</h1>
       <div v-if="isPost" class="uploader">
@@ -45,13 +44,13 @@
       </div>
       <section class="bottom">
         
-        <ImgSlider v-if="isPost" :imgsUrl="postToEdit.imgsUrl" style="{visibility: !isLoading ? 'visible' : 'hidden'}" />
+        <ImgSlider v-if="isPost" :imgsUrl="postToEdit.imgsUrl" style="{visibility: !$store.getters.IsLoading ? 'visible' : 'hidden'}" />
         <img
           class="story-img-create"
-          v-if="!isPost && !isLodaing"
+          v-if="!isPost && !$store.getters.IsLoading"
           :src="postToEdit.imgsUrl"
         />
-        <div style="{visibility: !isLoading ? 'visible' : 'hidden'}" class="post-details">
+        <div style="{visibility: !$store.getters.IsLoading ? 'visible' : 'hidden'}" class="post-details">
           <section class="user">
             <span><img :src="user.imgUrl" /></span>
             <span class="user-name"> {{ user.username }} </span>
@@ -73,7 +72,6 @@
 
 <script>
 import { uploadService } from "../services/upload.service";
-import Loader from "../components/loader.vue";
 import ImgSlider from "./img-slider.vue";
 import { postService } from "../services/post.service";
 import { storiesService } from "../services/stories.service";
@@ -83,7 +81,6 @@ export default {
       postToEdit: null,
       step: "first",
       user: this.$store.getters.GetUser,
-      isLodaing: false
     };
   },
   props: {
@@ -104,19 +101,19 @@ export default {
     } else this.postToEdit = postService.getEmptyPost();
   },
   methods: {
-     onUploadImg(ev) {
-      this.isLodaing = true
+     async onUploadImg(ev) {
+      await this.$store.dispatch({type: 'toggleLoader'})
       console.log(ev);
 
       if (this.isPost) {
       uploadService.uploadMany(ev).then((imgsUrl) => {
           this.postToEdit.imgsUrl = imgsUrl.map((img) => img.url);
-          this.isLodaing = false
+          this.$store.dispatch({type: 'toggleLoader'})
         });
       } else {
        uploadService.uploadImg(ev).then((imgsUrl) => {
          this.postToEdit.imgsUrl = imgsUrl.url;
-         this.isLodaing = false
+         this.$store.dispatch({type: 'toggleLoader'})
         });
       }
       this.step = "second";
@@ -154,7 +151,7 @@ export default {
   },
   components: {
     ImgSlider,
-    Loader
+    
   },
 };
 </script>

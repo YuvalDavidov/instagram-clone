@@ -16,6 +16,7 @@
   
   <style scoped>
   .loader {
+    z-index: 100;
     border: 16px solid #f3f3f3;
     border-radius: 50%;
     border-top: 16px solid blue;
@@ -25,7 +26,7 @@
     height: 80px;
     animation: spin 2s linear infinite;
     position: absolute;
-    left: 25vw;
+    left: 50vw;
     top: 25%;
     transform: translate(-50%, -50%);
   }

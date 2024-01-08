@@ -76,7 +76,6 @@ export default {
 .loader-container-post-index {
   position: relative;
   bottom: 75vh;
-  left: 10vw;
   /* transform: translate(-50%, -50%);  */
 }
 </style>

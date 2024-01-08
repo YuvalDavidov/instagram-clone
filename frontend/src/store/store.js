@@ -14,7 +14,8 @@ export const myStore = createStore({
         return {
             user: userService.getLoggedinUser(),
             windowMode: 'isLaptopMode',
-            isDarkMode: false
+            isDarkMode: false,
+            isLoading: false
         }
     },
     getters: {
@@ -30,6 +31,10 @@ export const myStore = createStore({
         },
         GetIsDarkMode({ isDarkMode }) {
             return false
+        },
+        IsLoading({ isLoading }) {
+            if (isLoading) return true
+            else return false
         }
     },
     mutations: {
@@ -39,6 +44,9 @@ export const myStore = createStore({
         },
         setWindowMode(state, { windowMode }) {
             state.windowMode = windowMode
+        },
+        setLoading(state) {
+            state.isLoading = !state.isLoading
         }
     },
     actions: {
@@ -65,6 +73,9 @@ export const myStore = createStore({
         },
         setWindowMode({ commit }, { windowMode }) {
             commit({ type: 'setWindowMode', windowMode })
+        },
+        toggleLoader({ commit }) {
+            commit({ type: 'setLoading' })
         }
     },
     modules: {

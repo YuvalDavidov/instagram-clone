@@ -96,7 +96,6 @@ export default {
   },
   async created() {
     this.loggedInUser = await this.$store.getters.GetUser
-    
   },
   methods: {
     timeAgo(timestamp) {

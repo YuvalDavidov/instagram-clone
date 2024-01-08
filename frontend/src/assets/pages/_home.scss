@@ -134,14 +134,14 @@
                 cursor: pointer;
                 color: white;
                 margin-top: 8px;
-
+                
                 margin-bottom: 8px;
                 width: 268px;
-
-                &:not([disabled]):hover {
-                    background-color: rgb(24, 119, 242);
-
+                &.disabled:hover {
+                    background-color: rgb(17, 99, 206);
+                    cursor: not-allowed;
                 }
+
             }
 
             .or-div {

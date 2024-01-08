@@ -14,7 +14,7 @@
       <div class="login-div">
         <div class="first-div">
           <img class="logo" src="../assets/imgs/picgram_logo_line.png" />
-          <form @submit.prevent="isSignUp ? onSignUp() : onLogin()">
+          <form>
             <input
               v-if="!isSignUp"
               v-model="loginCredentials.username"
@@ -47,7 +47,6 @@
               placeholder="Username"
               name="username"
             />
-            <span v-if="user === false">username is allready taken</span>
             <input
               v-if="isSignUp"
               v-model="newUser.password"
@@ -56,8 +55,8 @@
               name="password"
               placeholder="Password"
             />
-            <WrongCredentials v-if="isError"/>
-            <button v-bind:disabled="isDisabled" class="login-btn">
+            <ErrorCmp v-if="error" :message="error"/>
+            <button @click.prevent="isSignUp ? onSignUp() : onLogin()" v-bind:class="(isDisabled) ? 'login-btn disabled'  : 'login-btn'">
               {{ !isSignUp ? "Log in" : "Sign up" }}
             </button>
           </form>
@@ -87,19 +86,21 @@
 import { userService } from "../services/user.service";
 import StoriesList from "../cmps/stories-list.vue";
 import PostIndexHome from "../cmps/post-index-home.vue";
-import WrongCredentials from "../components/WrongCredentials.vue"
+import ErrorCmp from "../components/error-cmp.vue"
+import Loader from "../components/loader.vue";
 export default {
   components: {
     StoriesList,
     PostIndexHome,
-    WrongCredentials
+    ErrorCmp,
+    Loader
   },
   data() {
     return {
       loginCredentials: { username: "", password: "" },
       isSignUp: false,
       newUser: userService.getEmptyUser(),
-      isError: false
+      error: '',
     };
   },
 
@@ -127,20 +128,34 @@ export default {
   },
   methods: {
     async onLogin(credentials = null) {
+      if (this.isDisabled) {
+        if (credentials) '' // do nothing 
+        else {
+          this.error = `Username or password doesnt meet the right requirments, Try again plaese`
+        setTimeout(()=> this.error = false ,2500)
+        return} 
+         
+      }  
+      await this.$store.dispatch({type: 'toggleLoader'})
       const loginRes = await this.$store.dispatch({
         type: "login",
         credentials: !credentials ? this.loginCredentials : credentials,
       })
-      if (!loginRes) this.isError = true
-      else this.isError = false 
-      setTimeout(()=> this.isError = false ,2500)
+      if (!loginRes) this.error = `Wrong username or password. Try again.`
+      else this.error = false 
+      if (this.error) setTimeout(()=> this.error = false ,2500)
+      await this.$store.dispatch({type: 'toggleLoader'})
     },
     async onSignUp() {
-      this.$store.dispatch({ type: "signUp", user: this.newUser });
+      await this.$store.dispatch({type: 'toggleLoader'})
+      const signRes = await this.$store.dispatch({ type: "signUp", user: this.newUser });
+      if (!signRes) this.error = `Username or password doesnt meet the right requirments, or that username is taken`
+      else this.error = false 
+      if (this.error) setTimeout(()=> this.error = false ,2500)
+      await this.$store.dispatch({type: 'toggleLoader'})
     },
     toSignUp() {
       this.isSignUp = !this.isSignUp;
-      console.log(this.isSignUp);
     },
     windowSizeHandeler(e) {
       if (
