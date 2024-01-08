@@ -56,7 +56,7 @@
               name="password"
               placeholder="Password"
             />
-
+            <WrongCredentials v-if="isError"/>
             <button v-bind:disabled="isDisabled" class="login-btn">
               {{ !isSignUp ? "Log in" : "Sign up" }}
             </button>
@@ -66,6 +66,9 @@
             <span class="OR">OR</span>
             <div class="line"></div>
           </div>
+          <button @click="onLogin({username: 'dummy', password: 'A1B2C3D4'})" v-if="!isSignUp" class="login-btn">
+            Try with dummy user!
+          </button>
         </div>
         <div class="second-div">
           <span
@@ -81,42 +84,56 @@
 </template>
 
 <script>
-import { userService } from "../services/user.service"
-import StoriesList from "../cmps/stories-list.vue"
-import PostIndexHome from "../cmps/post-index-home.vue"
+import { userService } from "../services/user.service";
+import StoriesList from "../cmps/stories-list.vue";
+import PostIndexHome from "../cmps/post-index-home.vue";
+import WrongCredentials from "../components/WrongCredentials.vue"
 export default {
   components: {
-      StoriesList,
-      PostIndexHome,
-    },
+    StoriesList,
+    PostIndexHome,
+    WrongCredentials
+  },
   data() {
     return {
       loginCredentials: { username: "", password: "" },
       isSignUp: false,
       newUser: userService.getEmptyUser(),
+      isError: false
     };
   },
 
   created() {
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
-      this.$store.dispatch({type: "setWindowMode", windowMode: "isTabletMode"})
+      this.$store.dispatch({
+        type: "setWindowMode",
+        windowMode: "isTabletMode",
+      });
     } else if (window.innerWidth < 770) {
-      this.$store.dispatch({ type: "setWindowMode", windowMode: "isMobileMode"})
+      this.$store.dispatch({
+        type: "setWindowMode",
+        windowMode: "isMobileMode",
+      });
     } else {
-      this.$store.dispatch({ type: "setWindowMode", windowMode: "isLabtopMode"})
+      this.$store.dispatch({
+        type: "setWindowMode",
+        windowMode: "isLabtopMode",
+      });
     }
     window.addEventListener("resize", this.windowSizeHandeler);
   },
   destroyed() {
     window.removeEventListener("resize", this.windowSizeHandeler);
   },
-
   methods: {
-    async onLogin() {
-      this.$store.dispatch({
+    async onLogin(credentials = null) {
+      const loginRes = await this.$store.dispatch({
         type: "login",
-        credentials: this.loginCredentials,
-      });
+        credentials: !credentials ? this.loginCredentials : credentials,
+      })
+      if (!loginRes) this.isError = true
+      else this.isError = false 
+      setTimeout(()=> this.isError = false ,2500)
     },
     async onSignUp() {
       this.$store.dispatch({ type: "signUp", user: this.newUser });
@@ -126,26 +143,35 @@ export default {
       console.log(this.isSignUp);
     },
     windowSizeHandeler(e) {
-    if (
-      e.currentTarget.innerWidth < 1260 &&
-      e.currentTarget.innerWidth > 770 &&
-      this.windowMode !== "isTabletMode"
-    ) {
-      this.$store.dispatch({ type: "setWindowMode", windowMode: "isTabletMode"})
-    } else if (
-      e.currentTarget.innerWidth < 770 &&
-      this.windowMode !== "isMobileMode"
-    ) {
-      this.$store.dispatch({ type: "setWindowMode", windowMode: "isMobileMode"})
-    } else if (
-      e.currentTarget.innerWidth > 1260 &&
-      this.windowMode !== "isLabtopMode"
-    ) {
-      this.$store.dispatch({ type: "setWindowMode", windowMode: "isLabtopMode"})
-    }
+      if (
+        e.currentTarget.innerWidth < 1260 &&
+        e.currentTarget.innerWidth > 770 &&
+        this.windowMode !== "isTabletMode"
+      ) {
+        this.$store.dispatch({
+          type: "setWindowMode",
+          windowMode: "isTabletMode",
+        });
+      } else if (
+        e.currentTarget.innerWidth < 770 &&
+        this.windowMode !== "isMobileMode"
+      ) {
+        this.$store.dispatch({
+          type: "setWindowMode",
+          windowMode: "isMobileMode",
+        });
+      } else if (
+        e.currentTarget.innerWidth > 1260 &&
+        this.windowMode !== "isLabtopMode"
+      ) {
+        this.$store.dispatch({
+          type: "setWindowMode",
+          windowMode: "isLabtopMode",
+        });
+      }
+    },
   },
-  },
-  
+
   computed: {
     user() {
       return this.$store.getters.GetUser;
@@ -182,10 +208,8 @@ export default {
     darkMode() {
       return this.$store.getters.GetIsDarkMode;
     },
-    
   },
-};
+  }
 </script>
 
-<style>
-</style>
+<style></style>
