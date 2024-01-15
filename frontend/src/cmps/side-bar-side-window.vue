@@ -22,14 +22,11 @@
           x
         </button>
       </article>
-      <UsersList @onToggleSearch="onToggleWindow" />
+      <UsersList @onToggleWindow="onToggleWindow" />
     </section>
 
-    <section
-      v-if="contant === 'notic'"
-      class="side-bar-side-window-notifications"
-    >
-      <h1>Notifications</h1>
+    <section v-if="(contant === 'notic')" class="side-bar-side-window-notifications">
+      <span>Notifications</span>
       <NotificationsList @onToggleNoticList="onToggleNoticList" />
     </section>
   </section>
@@ -48,6 +45,9 @@ export default {
   },
   created() {
     // console.log("side", this.contant);
+  },
+  emits: {
+    
   },
   props: {
     contant: {

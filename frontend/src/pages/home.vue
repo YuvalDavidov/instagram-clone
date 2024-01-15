@@ -65,7 +65,7 @@
             <span class="OR">OR</span>
             <div class="line"></div>
           </div>
-          <button @click="onLogin({username: 'dummy', password: 'A1B2C3D4'})" v-if="!isSignUp" class="login-btn">
+          <button @click="onLogin({username: 'dummy1', password: 'A1B2C3D4'})" v-if="!isSignUp" class="login-btn">
             Try with dummy user!
           </button>
         </div>

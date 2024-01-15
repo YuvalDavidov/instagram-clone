@@ -28,7 +28,6 @@ async function unFollow(userId) {
 }
 
 async function addFollow(userId) {
-    console.log('s');
     try {
         await httpService.put(FOLLOW_URL + `add/${userId}`)
         const loggedInuser = userService.getLoggedinUser()

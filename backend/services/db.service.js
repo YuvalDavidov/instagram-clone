@@ -56,11 +56,11 @@ async function removeRecord(model, itemId) {
 
 }
 
-async function updateRecord(model, data, itemId) {
+async function updateRecord(model, data, itemId, idName = '_id') {
     try {
-        await model.update(data, { where: { _id: itemId } })
+        await model.update(data, { where: { [idName]: itemId } })
         await model.sync()
-        return await model.findOne({ where: { _id: itemId } })
+        return await model.findOne({ where: { [idName]: itemId } })
     } catch (error) {
         throw new Error('db.service - failed to update record', error)
     }

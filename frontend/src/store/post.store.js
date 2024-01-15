@@ -1,4 +1,5 @@
 import { postService } from '../services/post.service'
+import { userService } from '../services/user.service'
 // let postsIdsOld = [...new Set([...state.userPosts].map(post => post._id))]
 //             let newPosts = [...userPosts].reduce((acc, post) => {
 //                 if (!postsIdsOld.includes(post._id)) acc.push(post)
@@ -64,10 +65,13 @@ export const postStore = {
     actions: {
         async loadUserPosts({ commit }, { userId, numOfPostsToQuerry }) {
             try {
+                let userPosts
                 if (numOfPostsToQuerry) {
                     commit({ type: 'setCurrNumOfPosts', num: numOfPostsToQuerry })
+                    userPosts = await postService.getUserPostsById(userId, numOfPostsToQuerry)
                 }
-                const userPosts = await postService.getUserPostsById(userId, numOfPostsToQuerry)
+                else
+                    userPosts = await postService.getUserPostsById(userId, numOfPostsToQuerry)
                 commit({ type: 'setUserPosts', userPosts })
             } catch (error) {
                 throw new Error('coudl\'nt get posts from user', error)
@@ -85,9 +89,10 @@ export const postStore = {
         },
 
         async addPost({ commit }, { post, isAtProfile }) {
-
             try {
                 await commit({ type: 'addPost', post, isAtProfile })
+                const updatedUser = userService.getLoggedinUser()
+                await commit({ type: 'setUser', user: updatedUser })
             } catch (error) {
                 throw new Error('coudl\'nt add post', error)
 
@@ -98,6 +103,8 @@ export const postStore = {
             try {
                 await postService.removePost(postId)
                 commit({ type: 'removePost', postId })
+                const updatedUser = userService.getLoggedinUser()
+                await commit({ type: 'setUser', user: updatedUser })
             } catch (error) {
                 throw new Error('coudl\'nt remove post', error)
 

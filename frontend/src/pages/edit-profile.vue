@@ -190,13 +190,9 @@ export default {
     console.log(this.user);
   },
   methods: {
-    submit() {
-      userService.updateUser({
-        _id: this.user._id,
-        bio: this.user.bio,
-        website: this.user.website,
-        gender: this.user.gender,
-      });
+    async submit() {
+      const updatedUser = await userService.updateUser({ _id: this.user._id, bio: this.user.bio, website: this.user.website, gender: this.user.gender});
+      this.$store.dispatch({type: 'updateUser', user: updatedUser})
     },
     async submitPassword() {
       if (this.password.newPassword !== this.password.confirmNewPassword) {
@@ -205,14 +201,24 @@ export default {
       }
       if (this.password.newPassword !== this.password.confirmNewPassword)
         this.error.password = false;
-      // userService.changePassword(this.password.currPassword, this.password.newPassword, this.user._id)
+        const res = await userService.updatePassword(this.password.currPassword, this.password.newPassword, this.user._id)
+        if (!res) this.error.password = true;
+        // hadnle error modal
     },
     selectFile() {
       this.$refs.fileInput.click();
     },
     async onUploadImg(ev) {
-      let newImg = await uploadService.uploadImg(ev);
-      userService.updateUser({ _id: this.user._id, imgUrl: newImg.url });
+      this.$store.dispatch({type: "toggleLoader"})
+      try {
+        let newImg = await uploadService.uploadImg(ev);
+        await userService.updateUser({ _id: this.user._id, imgUrl: newImg.url });
+        this.user = {...this.user, imgUrl: newImg.url}
+      } catch (error) {
+        // console.log(error)
+        // error handling also making error in store
+      }
+      this.$store.dispatch({type: "toggleLoader"})
     },
     toggleEditSection(section) {
       this.editSection.editPass = section === "pass";

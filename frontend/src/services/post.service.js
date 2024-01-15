@@ -195,7 +195,12 @@ async function savePost(user, post) {
                 isCommentingAllowed: true,
                 comments: [],
             }
-            return await httpService.post(POST_URL, post)
+            const postToSave = await httpService.post(POST_URL, post)
+            let updatedUser = userService.getLoggedinUser()
+            updatedUser.numOfPosts++
+            userService.updateSessionStorage(updatedUser)
+            return postToSave
+            // Todo: add to user numOfPosts in session storage *update user
         }
 
     } catch (error) {
@@ -206,7 +211,11 @@ async function savePost(user, post) {
 
 async function removePost(postId) {
     try {
+        let updatedUser = userService.getLoggedinUser()
+        updatedUser.numOfPosts--
+        userService.updateSessionStorage(updatedUser)
         await httpService.delete(`${POST_URL + postId}`)
+        // Todo: remove from user numOfPosts in session storage *update user
         // await storageService.remove(POST_KEY, postId)
     } catch (error) {
 

@@ -37,13 +37,20 @@ async function query(filterBy) {
 
 async function updateUser(updatedDetails) {
     const updatedUser = await httpService.put(`${USER_URL}${updatedDetails._id}`, updatedDetails)
-    // await storageService.put(USER_KEY, updatedUser)
     saveLocalUser(updatedUser)
+    return updatedUser
+    // await storageService.put(USER_KEY, updatedUser)
 }
 
 async function updatePassword(userId, currPassword, newPassword) {
-    // const newCredentials = {userId, currPassword, newPassword}
-    await httpService.put(`${USER_URL}password`, newCredentials)
+    try {
+        const newCredentials = { userId, currPassword, newPassword }
+        await httpService.put(`${USER_URL}password`, newCredentials)
+        return true
+    } catch (error) {
+        throw new Error(error)
+        return false
+    }
 
 }
 

@@ -48,9 +48,9 @@ async function updateUser(req, res) {
         const user = req.body
         const savedUser = await userService.update(user)
         res.send(savedUser)
-    } catch (err) {
-        logger.error('Failed to update user', err)
-        res.status(500).send({ err: 'Failed to update user' })
+    } catch (error) {
+        logger.error('Failed to update user', error)
+        res.status(500).send({ error: 'Failed to update user' + error })
     }
 }
 
@@ -62,8 +62,8 @@ async function updatePassword(req, res) {
         await userService.update({ _id: userId, password: encryptedPassword })
         res.status(200).send(true)
     } catch (error) {
-        logger.error('Failed to update password', err)
-        res.status(500).send({ err: 'Failed to update password' })
+        logger.error('Failed to update password', error)
+        res.status(500).send({ error: 'Failed to update password' })
     }
 }
 

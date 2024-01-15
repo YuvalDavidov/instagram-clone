@@ -1,5 +1,5 @@
 <template>
-  <section class="notifications">notification</section>
+  <!-- <section class="notifications">notification</section> -->
 </template>
 
 <script>

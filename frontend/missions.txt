@@ -1,0 +1,10 @@
+Todo list: 
+    1. Fix the pic of user above the post at post index - Done!
+    2. Make the front page and user page pixel perfect 
+    3. Fix the warning I get when entring the settings - Now!, fuck it I cant find a solution And a lot of other fucks in emit functions across the app
+    4. Add - when changing the userphotos at all the posts - Done! 
+    5. Fix the notifications to work + make it pixel perfect - Now
+    6. Fix the loading at the post index, use calc() 
+    7. Make dummies users
+    *posts length  - Done!
+    That's it! Everything above that is plus

@@ -9,8 +9,8 @@ const router = express.Router()
 router.get('/', getUsers)
 router.get('/:userId', getUser)
 router.post('/:userId', addToViewCount)
-router.put('/password', requireAuth, updatePassword)
-router.put('/:userId', requireAuth, updateUser)
+router.put('/password', updatePassword)
+router.put('/:userId', updateUser)
 router.delete('/:userId', requireAuth, requireAdmin, deleteUser)
 
 module.exports = router

@@ -133,11 +133,7 @@ export default {
       try {
         if (this.isPost) {
           const postToSave = await postService.savePost(this.user, this.postToEdit);
-          this.$store.dispatch({
-            type: "addPost",
-            post: postToSave,
-            isAtProfile: (this.$route.params._id) ? true : false
-          });
+          this.$store.dispatch({ type: "addPost", post: postToSave, isAtProfile: (this.$route.params._id && this.$route.params._id === this.user._id) ? true : false})
         } else {
           const storyToSave = await storiesService.createStory(
             this.postToEdit.imgsUrl

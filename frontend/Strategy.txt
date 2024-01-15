@@ -46,3 +46,9 @@ cmps:
 6b. user-posts-preview
 7. user-post-details
 7a. user-post-index-comments
+
+
+
+Dummy users : 
+    1. Dor_t A1B2C3D4
+    2. Dany.r

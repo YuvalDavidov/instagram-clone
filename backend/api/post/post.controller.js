@@ -1,5 +1,5 @@
 const logger = require('../../services/logger.service')
-const { validateToken } = require('../auth/auth.service')
+const { validateToken } = require('../../services/token.service')
 const postService = require('./post.service')
 
 async function getPosts(req, res) {

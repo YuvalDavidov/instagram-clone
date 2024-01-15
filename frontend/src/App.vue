@@ -8,7 +8,7 @@ import { myStore } from './store/store'
   <section class="main-layout">
     <Loader v-if="myStore.getters.IsLoading"/>
     <RouterView />
-    <SideBar v-if="myStore.getters.User" />
+    <SideBar v-if="myStore.getters.GetUser" />
   </section>
 </template>
 // v-bind:class="{ darkMode: this.$store.getters.GetIsDarkMode }"

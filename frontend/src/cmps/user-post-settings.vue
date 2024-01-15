@@ -34,15 +34,18 @@ export default {
       type: Boolean,
       required: false,
     },
+    // closePost: {
+    //   type: Function,
+    //   required: true
+    // }
   },
   methods: {
     async removePost() {
       try {
-        this.$store.dispatch({
-          type: "removePost",
-          postId: this.post._id,
-        });
+        this.$store.dispatch({type: 'toggleLoader'})
+        await this.$store.dispatch({ type: "removePost", postId: this.post._id})
         this.$emit("closePost");
+        setTimeout(()=>this.$store.dispatch({type: 'toggleLoader'}), 500)
       } catch (error) {
         new Error("coudl'nt remove this post", error);
       }

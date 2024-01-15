@@ -62,7 +62,6 @@ export const myStore = createStore({
         },
         async signUp({ commit }, { user }) {
             try {
-                console.log('in store actions ---------->', user)
                 user = await userService.signup(user)
                 commit({ type: 'setUser', user })
             } catch (err) {
@@ -76,6 +75,10 @@ export const myStore = createStore({
         },
         toggleLoader({ commit }) {
             commit({ type: 'setLoading' })
+            // setTimeout(commit({ type: 'setLoading' }), 750)
+        },
+        updateUser({ commit }, { user }) {
+            commit({ type: 'setUser', user })
         }
     },
     modules: {

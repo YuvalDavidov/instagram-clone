@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="no-resent" v-if="!searchedUsers.length && !filterdByUsers.length">
       No recent searches.
     </div>
@@ -37,20 +38,19 @@
       </li>
     </div>
   </section>
+</div>
 </template>
 
 <script>
 export default {
   methods: {
-    moveTo(user) {
-      this.$store.dispatch({
-        type: "addSearchedUser",
-        user,
-      });
-      this.$router.push(`/profile/${user._id}`);
-      this.$emit("onCloseMobileSearch");
+    async moveTo(user) {
+      await this.$store.dispatch({type: 'toggleLoader'})
+      this.$store.dispatch({ type: "addSearchedUser", user})
       if (window.innerWidth < 770) this.$emit("onCloseMobileSearch");
-      else this.$emit("onCloseMobileSearch");
+      else this.$emit("onToggleWindow");
+      this.$router.push(`/profile/${user._id}`);
+      setTimeout(() => this.$store.dispatch({type: 'toggleLoader'}), 1000)
     },
     onRemoveOneResent(userId) {
       this.$store.dispatch({

@@ -16,14 +16,10 @@
       <div class="right-container">
         <div class="user-details">
           <span>{{ user.username }}</span>
-          <button
-            class="edit-profile-btn"
-            v-if="isOwnProfile"
-            @click="onEditProfile"
-          >
+          <button class="edit-profile-btn" v-if="isOwnProfile" @click="onEditProfile">
             Edit profile
           </button>
-          <button @click="onFollow" v-if="!isOwnProfile">
+          <button class="follow-btn" @click="onFollow" v-if="!isOwnProfile">
             {{ isFollowing ? "Following" : "Follow" }}
           </button>
           <button v-if="!isOwnProfile">Message</button>
@@ -34,10 +30,10 @@
             <span>{{ user.numOfPosts }}</span> posts
           </div>
           <div>
-            <span>{{ user.followersCount }}</span> followers
+            <span>{{ (user.followersCount) ? user.followersCount : 0 }}</span> followers
           </div>
           <div>
-            <span>{{ user.followingCount }}</span> following
+            <span>{{ (user.followingCount) ? user.followingCount : 0 }}</span> following
           </div>
         </div>
         <div class="user-summery">{{ user.fullname }}</div>
@@ -75,7 +71,7 @@
     </article>
     <div v-if="this.isMobileMode" class="user-amount mobile">
       <div>
-        <span>{{ posts.length }}</span> posts
+        <span>{{ user.numOfPosts }}</span> posts
       </div>
       <div>
         <span>{{ user.followersCount ? user.followersCount : 0 }}</span>
@@ -85,12 +81,6 @@
         <span>{{ user.followingCount }}</span> following
       </div>
     </div>
-    <section class="actions">
-      <button>posts</button>
-      <button>saved</button>
-      <button>tagged</button>
-    </section>
-
     <section class="posts">
       <PostListProfile
         :posts="posts"
@@ -113,7 +103,6 @@ export default {
     return {
       user: null,
       isFollowing: null,
-      posts: [],
       maxPageScroll: null,
       currNumOfPostsToQuerry: 9,
       isLoadingPosts: false,
@@ -123,11 +112,12 @@ export default {
     window.removeEventListener("scroll", this.onWindowScroll);
   },
   async created() {
+    if (this.$route.params._id === this.$store.getters.GetUser._id) this.$store.dispatch({type: 'updateUser', user: userService.getLoggedinUser()})
+    this.$store.dispatch({type: 'toggleLoader'})
     window.addEventListener("scroll", this.onWindowScroll);
     this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
-    this.isFollowing = await followService.checkIfFollowing(
-      this.$route.params._id
-    );
+    this.isFollowing = await followService.checkIfFollowing(this.$route.params._id)
+    setTimeout(()=> this.$store.dispatch({type: 'toggleLoader'}), 600)
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.onWindowScroll);
@@ -179,6 +169,9 @@ export default {
       if (userService.checkIfOwnByUser(this.$route.params._id)) return true;
       else return false;
     },
+    posts() {
+      return this.$store.getters.userPosts
+    },
     userStories() {
       if (this.$store.getters.getUserStories)
         return this.$store.getters.getUserStories[0];
@@ -193,29 +186,21 @@ export default {
   },
 
   watch: {
-    "$route.params": {
+    "$route.params": { // Handle changes in case params is changing but the component doesnt rerender (in case of transfer from one profile to another)
       immediate: true,
       async handler(params) {
         // Fetch data for the new route
-
-        if (this.$route.params._id === (await this.$store.getters.GetUser._id))
-          this.user = this.$store.getters.GetUser;
-        else this.user = await userService.getUserById(params._id);
-        this.$store.dispatch({
-          type: "loadUserPosts",
-          userId: this.$route.params._id,
-          numOfPostsToQuerry: this.currNumOfPostsToQuerry,
-        });
-        this.$store.dispatch({
-          type: "loadUserStories",
-          userId: this.$route.params._id,
-        });
+        if (this.$route.params._id === (await this.$store.getters.GetUser._id)) this.user = this.$store.getters.GetUser;
+        else this.user = await userService.getUserById(params._id)
+        await this.$store.dispatch({type: "loadUserPosts", userId: this.$route.params._id, numOfPostsToQuerry: this.currNumOfPostsToQuerry})
+        await this.$store.dispatch({ type: "loadUserStories", userId: this.$route.params._id})
+        this.isFollowing = await followService.checkIfFollowing(this.$route.params._id)
       },
     },
-    "$store.getters.userPosts": {
+    "$store.getters.GetUser": { // Handle changes in user is changing but the component doesnt rerender (in case of follow, unfollow, delete/add post)
       deep: true,
       async handler(newValue) {
-        this.posts = newValue;
+        this.user = newValue
       },
     },
   },

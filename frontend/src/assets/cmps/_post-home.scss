@@ -1,6 +1,6 @@
 @media (max-width: 770px) {
     .post-preview-home {
-        min-width: 50vw;
+        max-width: 470px;
     }
 }
 
@@ -12,7 +12,7 @@
 
 .post-preview-home {
     margin: 10px auto;
-    max-width: 30vw;
+    max-width: 470px;
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(219, 219, 219);
     border-radius: 10px;

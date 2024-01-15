@@ -1,25 +1,13 @@
-<template>
-  <section
-    class="side-bar-container"
-    v-bind:class="{ darkMode }"
-    v-if="!isInStory"
-  >
-    <div
+<!--    <div
       class="close-bg"
       v-if="isWantToCreate || isSettingsModalOpen"
       @click="isWantToCreate ? wantToCreate() : onToggleSettings()"
-    ></div>
-    <section
-      class="side-bar"
-      v-if="!this.isMobileMode"
-      v-bind:class="{
+    ></div> -->
+<template>
+  <section class="side-bar-container" v-bind:class="{ darkMode }" v-if="!isInStory">
+    <section class="side-bar" v-if="!this.isMobileMode" v-bind:class="{ isSidebarWindowOpen, isClosing, isTabletMode, isWantToCreate
         // isSearchOpen,
-        isSidebarWindowOpen,
-        isClosing,
-        isTabletMode,
-        isWantToCreate,
-      }"
-    >
+}">
       <div class="logo">
         <RouterLink to="/">
           <img
@@ -60,10 +48,7 @@
         >
         <!-- TODO -->
 
-        <button
-          class="notifications-btn side-bar-btn"
-          @click="onToggleSidebarWindow('notic')"
-        >
+        <button class="notifications-btn side-bar-btn" @click="onToggleSidebarWindow('notic')">
           <div class="btn-container">
             <div
               class="dot-notic"
@@ -92,11 +77,7 @@
           />
         </button>
 
-        <button
-          v-if="!isWantToCreate"
-          @click="wantToCreate()"
-          class="side-bar-btn"
-        >
+        <button v-if="!isWantToCreate" @click="wantToCreate()" class="side-bar-btn">
           <v-icon scale="1.6" name="bi-plus-square" />
           <span v-if="!isTabletMode" :class="{ isClosing, isSidebarWindowOpen }"
             >create</span
@@ -132,15 +113,9 @@
           ></RouterLink
         >
       </nav>
-      <button
-        @click="onToggleSettings()"
-        class="settings-btn"
-        v-bind:class="{ isSettingsModalOpen }"
-      >
+      <button @click="onToggleSettings()" class="settings-btn" v-bind:class="((modal==='settings') ? 'settings' : '')">
         <v-icon scale="1.6" name="co-hamburger-menu" />
-        <span :class="{ isClosing, isSidebarWindowOpen }" v-if="!isTabletMode"
-          >More</span
-        >
+        <span :class="{ isClosing, isSidebarWindowOpen }" v-if="!isTabletMode">More</span>
       </button>
     </section>
 
@@ -208,14 +183,14 @@
       </section>
     </section>
 
-    <article v-if="isMobileSearchOpen" class="search-mobile">
+    <article v-if="(modal === 'mobileSearch')" class="search-mobile">
       <div class="bg-container" @click="onCloseMobileSearch()"></div>
 
       <SearchMobileBar @onCloseMobileSearch="onCloseMobileSearch" />
     </article>
 
-    <article v-if="isSettingsModalOpen" class="settings-modal">
-      <section class="genetal-settings">
+    <article v-if="(modal === 'settings')" class="settings-modal">
+      <section class="general-settings">
         <a href=""
           ><span>Settings</span>
           <v-icon scale="1.2" name="ri-settings-5-line" />
@@ -263,12 +238,12 @@
       ></div>
     </article>
 
-    <article v-if="isCreateOpen" class="create-post-modal">
+    <article v-if="(modal === 'create')" class="create-post-modal">
       <section class="bg-container" @click="onToggleCreate()"></section>
       <CreateModal @onToggleCreate="onToggleCreate" :isPost="isPost" />
     </article>
 
-    <article class="want-to-create-modal" v-if="isMoblieWantToCreate">
+    <article v-if="(modal === 'createMobile')" class="want-to-create-modal" >
       <button @click="onToggleCreate()" v-if="isPost">post</button>
       <button @click="onToggleCreate()" v-if="!isPost">story</button>
 
@@ -278,10 +253,9 @@
       </button>
     </article>
 
-    <article class="list-modal" v-if="isNoticListModalOpen">
+    <article v-if="(modal === 'notification')" class="list-modal">
       <section class="lists-container">
         <section class="followers-list">
-          asdasda
           <!-- <li
             class="list-info"
             v-for="followers in sortedNotifics.today.follower"
@@ -313,19 +287,17 @@ import picgramLogoLineWhite from "../assets/imgs/picgram_logo_white.png";
 import { socketService } from "../services/socket.service";
 
 export default {
+
   data() {
     return {
-      isSettingsModalOpen: false,
+      modal: '',
       searchTxt: "",
       isClosing: false,
       isSwitching: false,
       isSidebarWindowOpen: false,
       timeoutId: null,
-      isMobileSearchOpen: false,
-      isCreateOpen: false,
       usersBySearch: [],
       isWantToCreate: false,
-      isMoblieWantToCreate: false,
       isPost: true,
       notifications: {
         msgsNotifics: [],
@@ -333,11 +305,10 @@ export default {
         followersNotifics: [],
       },
       sideWindowContant: null,
-      isNoticListModalOpen: false, // TODO
       notificsListForModal: [],
     };
   },
-
+  
   created() {
     if (window.innerWidth < 1260 && window.innerWidth > 770) {
       this.$store.dispatch({
@@ -367,33 +338,32 @@ export default {
   },
   methods: {
     onToggleNoticList(list) {
+      this.isWantToCreate = false
       if (list.length) this.notificsListForModal = list;
       else this.notificsListForModal = [];
-      this.isNoticListModalOpen = !this.isNoticListModalOpen;
-      // console.log("this.notificsListForModal", this.notificsListForModal);
+      (this.modal !== 'notification') ? this.modal = 'notification' : this.modal = ''
     },
     onToggleSettings() {
-      this.isSettingsModalOpen = !this.isSettingsModalOpen;
+      this.isWantToCreate = false;
+      (this.modal !== 'settings') ? this.modal = 'settings' : this.modal = '';
+      this.isSidebarWindowOpen = false;
     },
     onToggleSidebarWindow(arg) {
+      this.isWantToCreate = false;
       if (arg === undefined) {
-        console.log("1", this.sideWindowContant, arg);
         this.isClosing = true;
-        this.timeoutId = setTimeout(() => {
-          this.isClosing = false;
-          this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
-          clearTimeout(this.timeoutId);
-        }, 500);
+        this.timeoutId = setTimeout(() => { 
+          this.isClosing = false; 
+          this.isSidebarWindowOpen = false 
+          clearTimeout(this.timeoutId)}, 500);
       } else if (this.isSidebarWindowOpen) {
-        console.log("2");
-        clearTimeout(this.timeoutId);
-        this.isClosing = true;
+        clearTimeout(this.timeoutId)
+        this.isClosing = true
         if (this.sideWindowContant !== arg)
-          this.isSwitching = !this.isSwitching;
+          this.isSwitching = !this.isSwitching
         this.timeoutId = setTimeout(() => {
           this.isClosing = false;
-
-          this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+          this.isSidebarWindowOpen = false;
           clearTimeout(this.timeoutId);
 
           if (this.sideWindowContant !== arg) {
@@ -401,74 +371,51 @@ export default {
 
             this.timeoutId = setTimeout(() => {
               this.isSwitching = !this.isSwitching;
-              this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+              this.isSidebarWindowOpen = true
               clearTimeout(this.timeoutId);
             }, 100);
           }
         }, 500);
       } else if (this.sideWindowContant === arg && this.isSidebarWindowOpen) {
-        console.log("3");
 
         this.sideWindowContant = null;
-        this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+        this.isSidebarWindowOpen = true;
       } else {
-        console.log("4");
 
         this.sideWindowContant = arg;
-        this.isSidebarWindowOpen = !this.isSidebarWindowOpen;
+        this.isSidebarWindowOpen = true
       }
     },
     onOpenMobileSearch() {
-      this.isMobileSearchOpen = true;
+      this.isWantToCreate = false
+      this.modal = 'mobileSearch'
     },
     onCloseMobileSearch() {
-      this.isMobileSearchOpen = false;
+      this.isSidebarWindowOpen = false
+      this.modal = ''
     },
     onLogout() {
       userService.logout();
     },
     onToggleCreate() {
-      if (this.isWantToCreate) this.isWantToCreate = false;
-      if (this.isMoblieWantToCreate) this.isMoblieWantToCreate = false;
-      this.isCreateOpen = !this.isCreateOpen;
+      (this.modal !== 'create') ? this.modal = 'create' : this.modal = ''
+      if (this.isWantToCreate) this.isWantToCreate = false
+      this.isSidebarWindowOpen = false
+      // (this.modal === 'createMobile') ? this.modal = 'createMobile' : this.modal = ''
     },
     windowSizeHandeler(e) {
+      this.modal = ''
       if (this.isSidebarWindowOpen) this.isSidebarWindowOpen = false;
-      if (
-        e.currentTarget.innerWidth < 1260 &&
-        e.currentTarget.innerWidth > 770 &&
-        this.windowMode !== "isTabletMode"
-      ) {
-        if (this.isMobileSearchOpen) this.isMobileSearchOpen = false;
-        if (this.isMoblieWantToCreate) this.isMoblieWantToCreate = false;
-        this.$store.dispatch({
-          type: "setWindowMode",
-          windowMode: "isTabletMode",
-        });
-        this.isSettingsModalOpen = false;
-        this.isMobileSearchOpen = false;
-      } else if (
-        e.currentTarget.innerWidth < 770 &&
-        this.windowMode !== "isMobileMode"
-      ) {
-        this.$store.dispatch({
-          type: "setWindowMode",
-          windowMode: "isMobileMode",
-        })
-        console.log('-->',this.isMobileMode)
-      } else if (
-        e.currentTarget.innerWidth > 1260 &&
-        this.windowMode !== "isLabtopMode"
-      ) {
-        this.$store.dispatch({
-          type: "setWindowMode",
-          windowMode: "isLabtopMode",
-        });
+      if (e.currentTarget.innerWidth < 1260 &&e.currentTarget.innerWidth > 770 && this.windowMode !== "isTabletMode") this.$store.dispatch({ type: "setWindowMode", windowMode: "isTabletMode"})
+      else if (e.currentTarget.innerWidth < 770 && this.windowMode !== "isMobileMode") this.$store.dispatch({type: "setWindowMode", windowMode: "isMobileMode"})
+      else if (e.currentTarget.innerWidth > 1260 && this.windowMode !== "isLabtopMode") {
+        this.$store.dispatch({ type: "setWindowMode", windowMode: "isLabtopMode"})
       }
     },
     wantToCreate() {
+      this.isSidebarWindowOpen = false
       if (this.isMobileMode) {
-        this.isMoblieWantToCreate = !this.isMoblieWantToCreate;
+      (this.modal !== 'createMobile') ? this.modal = 'createMobile' : this.modal = ''
       } else {
         this.isWantToCreate = !this.isWantToCreate;
       }
@@ -540,7 +487,16 @@ export default {
       },
       deep: true,
     },
+    "$route.path": {
+    async handler(newValue) {
+      this.isSidebarWindowOpen = false
+      this.modal = ''
+      this.isWantToCreate = false
+      },
+      deep: true,
   },
+  },
+  
   components: {
     CreateModal,
     UsersList,

@@ -7,7 +7,6 @@
       :post="post"
       :isAtPostPage="isAtPostPage"
       @onToggleSettings="onClose"
-      @closePost="closePost"
       @toggleLikes="toggleLikes"
       @toggleCommenting="toggleCommenting"
       @onToggleCreate="onToggleCreate"
@@ -75,8 +74,6 @@ export default {
       isOnReport: false,
       isOnAbout: false,
     };
-  },
-  created() {
   },
   methods: {
     onClose() {

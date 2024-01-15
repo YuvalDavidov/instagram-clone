@@ -2,7 +2,7 @@
 const utilService = require('../../services/util.service')
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
-const { picgramUsers } = require('../../services/models/models')
+const { picgramUsers, picgramPosts } = require('../../services/models/models')
 const tokenService = require('../../services/token.service')
 
 
@@ -97,6 +97,12 @@ async function remove(userId) {
 async function update(user) {
     try {
         let updatedUser = await dbService.updateRecord(picgramUsers, user, user._id)
+        console.log('------------>', updatedUser)
+        if (user.imgUrl) {
+            for (let index = 0; index < updatedUser.dataValues.numOfPosts; index++) {
+                await dbService.updateRecord(picgramPosts, { userImg: user.imgUrl }, user._id, 'userId')
+            }
+        }
         return updatedUser
     } catch (err) {
         logger.error(`user.service - cannot update user ${user._id}`, err)

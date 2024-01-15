@@ -15,7 +15,6 @@ export default {
   components: { PostListHome, Loader, Fragment },
   data() {
     return {
-      finishedLoading: false,
       maxPageScroll: null,
       currNumOfPostsToQuerry: 4,
       isLoadingPosts: false,
@@ -23,20 +22,13 @@ export default {
   },
   async created() {
     window.addEventListener("scroll", this.onWindowScroll);
-    await this.$store.dispatch({
-      type: "loadPosts",
-      userId: this.$store.getters.GetUser._id,
-      numOfPostsToQuerry: this.currNumOfPostsToQuerry,
-    });
-
+    await this.$store.dispatch({ type: "loadPosts", userId: this.$store.getters.GetUser._id, numOfPostsToQuerry: this.currNumOfPostsToQuerry})
   },
-
   computed: {
     posts() {
       return this.$store.getters.followingPosts
     },
   },
-
   beforeUnmount() {
     window.removeEventListener("scroll", this.onWindowScroll);
   },
@@ -49,13 +41,8 @@ export default {
       if (scrollPosition >= targetHeight) {
         this.isLoadingPosts = true;
         this.currNumOfPostsToQuerry += 4;
-        this.$store.dispatch({
-          type: "loadPosts",
-          userId: this.$store.getters.GetUser._id,
-          numOfPostsToQuerry: this.currNumOfPostsToQuerry,
-        });
+        this.$store.dispatch({ type: "loadPosts", userId: this.$store.getters.GetUser._id, numOfPostsToQuerry: this.currNumOfPostsToQuerry})
       }
-
       // This timeout is desgneited to remove listener if there are no new posts
       if (scrollPosition === maxScroll || scrollPosition > maxScroll * 0.95) {
         setTimeout(() => {
@@ -65,11 +52,19 @@ export default {
             this.isLoadingPosts = false
             window.removeEventListener("scroll", this.onWindowScroll)
           }
-        }, 1000);
+        }, 300);
       }
 
     },
   },
+  watch: {
+  "$store.getters.followingPosts": {
+    deep: true,
+    async handler(newValue) {
+      this.isLoadingPosts = false
+    },
+  },
+},
 };
 </script>
 <style scoped>
@@ -82,21 +77,3 @@ export default {
 
 
 
-<!-- watch: {
-  "$store.getters.followingPosts": {
-    deep: true,
-    async handler(newValue) {
-      console.log('document.body.scrollHeight', document.body.scrollHeight)
-      // console.log('in hooooooooooooo', document.body.scrollHeight, window.innerHeight)
-      // console.log('in hereeeeeeeeee', maxScroll)
-      // setTimeout(() => {
-      //   let maxScroll = document.body.scrollHeight - window.innerHeight;
-      //   console.log('checking!', maxScroll, this.maxPageScroll)
-      //   if (this.maxPageScroll && maxScroll > this.maxPageScroll) {
-      //     this.finishedLoading = true
-      //     window.removeEventListener("scroll", this.onWindowScroll)
-      //   }
-      // }, 700)
-    },
-  },
-}, -->
