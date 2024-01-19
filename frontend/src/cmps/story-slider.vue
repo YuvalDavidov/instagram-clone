@@ -1,7 +1,7 @@
 <template>
   <section v-if="story" class="story-slider">
     <section @click="onBack" class="bg-container"></section>
-    <section class="story-slider-contaienr">
+    <section class="story-slider-container">
       <section v-if="isOnInput" @click="onCloseInput" class="onInput"></section>
       <div class="story-slider-num">
         <li v-for="(story, index) in stories" :key="story">
@@ -48,7 +48,7 @@
         </button>
       </section>
       <img class="img-container" :src="story.imgUrl" />
-      <section class="comment-likes">
+      <!-- <section class="comment-likes">
         <input
           @click="onOpenInput"
           type="text"
@@ -57,7 +57,7 @@
         />
         <button class="send" v-if="canComment">send</button>
         <button><v-icon name="bi-heart" scale="1.5" /></button>
-      </section>
+      </section> -->
     </section>
   </section>
 </template>
@@ -78,16 +78,9 @@ export default {
     };
   },
   async created() {
-    console.log("ss");
-    if (!this.$route.path.includes("profile")) this.isAtHome = !this.isAtHome;
-    await this.$store.dispatch({
-      type: "loadUserStories",
-      userId: this.$route.params._id,
-    });
-    await this.$store.dispatch({
-      type: "loadStory",
-      storyId: this.$route.params.storyId,
-    });
+    if (!this.$route.path.includes("profile")) this.isAtHome = true;
+    await this.$store.dispatch({ type: "loadUserStories",userId: this.$route.params._id})
+    await this.$store.dispatch({ type: "loadStory", storyId: this.$route.params.storyId})
     this.startInterval();
   },
   methods: {
@@ -105,35 +98,20 @@ export default {
         if (this.storyIndex + 1 === this.stories.length) {
           this.$router.push(`/profile/${this.$route.params._id}`);
         } else {
-          this.$router.push(
-            `/stories/profile/${this.$route.params._id}/${
-              this.stories[this.storyIndex + 1]
-            }`
-          );
+          this.$router.push(`/stories/profile/${this.$route.params._id}/${this.stories[this.storyIndex + 1]}`)
         }
       } else {
         if (this.storyIndex + 1 === this.stories.length) {
-          const idx = this.usersStory.findIndex(
-            (userId) => userId === this.$route.params._id
-          );
-          if (idx + 2 === this.usersStory.length) {
-            this.$router.push("/");
-          } else {
-            await this.$store.dispatch({
-              type: "loadUserStories",
-              userId: this.usersStory[idx + 1],
-            });
-            this.$router.push(
-              `/stories/${this.usersStory[idx + 1]}/${this.stories[0]}`
-            );
-          }
-        } else {
-          this.$router.push(
-            `/stories/${this.$route.params._id}/${
-              this.stories[this.storyIndex + 1]
-            }`
-          );
-        }
+          const idx = this.usersStory.findIndex((userId) => userId === this.$route.params._id)
+          // if (idx + 2 === this.usersStory) this.$router.push("/")
+          // else {
+            if (!this.usersStory[idx+1]) return this.$router.push("/")
+            await this.$store.dispatch({type: "loadUserStories", userId: this.usersStory[idx + 1]})
+            this.$router.push(`/stories/${this.usersStory[idx + 1]}/${this.stories[0]}`)
+          // }
+        } 
+      else this.$router.push(`/stories/${this.$route.params._id}/${this.stories[this.storyIndex + 1]}`)
+        
       }
       this.intervalTime = 6;
       this.timeLeft = 0;
@@ -235,11 +213,7 @@ export default {
   watch: {
     "$route.params": {
       async handler(params) {
-        this.$store.dispatch({
-          type: "loadStory",
-          storyId: params.storyId,
-        });
-        // console.log(this.story);
+        this.$store.dispatch({ type: "loadStory", storyId: params.storyId});
       },
     },
     "$store.getters.getUserStories": {
@@ -258,5 +232,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>

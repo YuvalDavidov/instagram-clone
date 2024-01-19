@@ -2,7 +2,7 @@ import { userService } from '../services/user.service'
 import { httpService } from './http.service';
 
 const STORIES_KEY = 'StoriesDB'
-const SROTY_URL = 'story/'
+const BASE_URL = 'story/'
 
 export const storiesService = {
     getStoriesByFollowings,
@@ -17,7 +17,7 @@ async function getStoriesByFollowings() {
     const currUser = userService.getLoggedinUser()
     const queryParams = `?userId=${currUser._id}`
     try {
-        const story = await httpService.get(SROTY_URL + queryParams)
+        const story = await httpService.get(BASE_URL + queryParams)
         return story
         // let storeis = await storageService.query(STORIES_KEY)
         // storeis = _filetrOver24H(storeis)
@@ -34,7 +34,7 @@ async function getStoriesByFollowings() {
 // async function getStoriesByUserId(userId) {
 //     try {
 //         const queryParams = `?userId/${userId}`
-//         const story = await httpService.get(`${SROTY_URL}/${queryParams}`)
+//         const story = await httpService.get(`${BASE_URL}/${queryParams}`)
 //         return story
 //         // const storeis = await storageService.query(STORIES_KEY)
 //         // return storeis.filter(story => story.userInfo.userId === userId)
@@ -46,11 +46,8 @@ async function getStoriesByFollowings() {
 async function getStoriesIdByUserId(userId) {
     try {
         const queryParams = `userId/${userId}`
-        const storeis = await httpService.get(SROTY_URL + queryParams)
+        const storeis = await httpService.get(BASE_URL + queryParams)
         return storeis
-        // let storeis = await storageService.query(STORIES_KEY)
-        // storeis = _filetrOver24H(storeis)
-        // return storeis.filter(story => story.userInfo.userId === userId).map(story => story._id)
     } catch (error) {
         console.log('there is a problem with getting stories id', error);
     }
@@ -59,10 +56,8 @@ async function getStoriesIdByUserId(userId) {
 async function getStoryById(stroyId) {
     try {
         const queryParams = `storyId/${stroyId}`
-        console.log('he');
-        const story = await httpService.get(SROTY_URL + queryParams)
+        const story = await httpService.get(BASE_URL + queryParams)
         return story
-        // return await storageService.get(STORIES_KEY, stroyId)
     } catch (error) {
         console.log('there is a problem with getting this story', error);
 
@@ -81,7 +76,7 @@ async function createStory(imgUrl) {
     // }
 
     try {
-        const story = await httpService.post(SROTY_URL, newStory)
+        const story = await httpService.post(BASE_URL, newStory)
         return story
         // await storageService.post(STORIES_KEY, story)
     } catch (error) {
@@ -93,7 +88,7 @@ async function updateStory(storyId) {
     // await storageService.put(STORIES_KEY, story)
 
     try {
-        // await httpService.put(`${SROTY_URL}`, '/update', storyId)
+        // await httpService.put(`${BASE_URL}`, '/update', storyId)
     } catch (error) {
         console.log('there is a problem with updating this story', error);
     }

@@ -1,6 +1,6 @@
-$max-height: 54vw;
-$med-height: 62vw;
-$min-height: 96vw;
+$max-height: 70vw;
+$med-height: 90vw;
+$min-height: 110vw;
 
 .story-slider {
     height: 100vh;
@@ -11,15 +11,17 @@ $min-height: 96vw;
     .bg-container {
         background-color: #1a1a1a;
         position: fixed;
+        z-index: 3;
     }
 
-    &-contaienr {
+    &-container {
         position: relative;
-        left: calc(($max-height / 100) *50);
-        height: $max-height;
+        margin-left: auto;
+        margin-right: auto;
+        min-height: 650px;
         max-height: 837px;
         max-width: calc((837px / 100) *56.24);
-        width: calc(($max-height / 100) *56.24);
+        // width: calc(($max-height / 100) *56.24);
         border-radius: 10px;
         z-index: 4;
 
@@ -36,7 +38,7 @@ $min-height: 96vw;
         .img-container {
             max-width: calc((837px / 100) *56.24);
             width: calc(($max-height / 100) *56.24);
-            height: $max-height;
+            min-height: 650px;
             max-height: 837px;
             background-color: black;
             // background-size: cover;

@@ -97,7 +97,6 @@ async function remove(userId) {
 async function update(user) {
     try {
         let updatedUser = await dbService.updateRecord(picgramUsers, user, user._id)
-        console.log('------------>', updatedUser)
         if (user.imgUrl) {
             for (let index = 0; index < updatedUser.dataValues.numOfPosts; index++) {
                 await dbService.updateRecord(picgramPosts, { userImg: user.imgUrl }, user._id, 'userId')

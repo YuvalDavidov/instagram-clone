@@ -16,9 +16,7 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch({
-      type: "loadStories",
-    });
+    this.$store.dispatch({type: "loadStories"})
   },
   watch: {
     "$store.getters.getStories": {

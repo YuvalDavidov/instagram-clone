@@ -33,7 +33,6 @@ sequelize
 
 async function addRecord(model, data) {
     try {
-        console.log(model, data);
         const result = await model.create(data)
         await model.sync()
         return result
@@ -50,7 +49,6 @@ async function removeRecord(model, itemId) {
         await model.sync()
         return deletedRows
     } catch (error) {
-        console.log(error)
         throw new Error('db.service - failed to remove record', error)
     }
 
@@ -68,7 +66,6 @@ async function updateRecord(model, data, itemId, idName = '_id') {
 }
 
 async function appendToColumn(model, data, columnName, entityId) {
-    console.log('in db service append to column===>', data, columnName, entityId)
     try {
         await model.update(
             {
@@ -78,8 +75,7 @@ async function appendToColumn(model, data, columnName, entityId) {
         )
         await model.sync()
     } catch (error) {
-        console.log(error)
-        // throw new Error('db.service - failed to update/add to column', error)
+        throw new Error('db.service - failed to update/add to column', error)
     }
 }
 
@@ -129,14 +125,11 @@ async function queryOne(model, filterBy, attributes) {
         return entity ? entity.dataValues : entity
 
     } catch (error) {
-        console.log(error)
-        // throw new Error('failed to get record', error)
+        throw new Error('failed to get record', error)
     }
 }
 //  filterByModel1, filterByModel2, numOfDesiredResults = 1000, isLessDetails = false, order = [['createdAt', 'ASC']]
 async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
-    console.log('here - queryAggregate');
-    console.log(model1, model2, filterBy, aggregateCondition);
     let { model1Name, attributes1 } = model1
     let { model2Name, attributes2 } = model2
 
@@ -162,11 +155,10 @@ async function queryAggregate(model1, model2, filterBy, aggregateCondition) {
         return acc
     }, ``)
     let sqlRawCode = (selectFromModel1 + selectFromModel2 + innerJoinStatment + whereStatment + ';')
-    // console.log(sqlRawCode);
     try {
         return await sequelize.query(`${sqlRawCode}`)
     } catch (error) {
-        console.log(error);
+        throw new Error('failed to query aggregate', error)
     }
 }
 
@@ -180,9 +172,9 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
     try {
         if (!filterBy) result = await model.findAll()
         // constructing the conditions for the sql 
-        if (model === picgramStories) return _storyQuery(filterBy)
+        if (model === picgramStories) return await _storyQuery(filterBy)
 
-        else if (model === picgramNotifications) return _noticQuery(numOfDesiredResults, filterBy)
+        else if (model === picgramNotifications) return await _noticQuery(numOfDesiredResults, filterBy)
 
         else if (isLessDetails) {
             whereCondition = []
@@ -236,14 +228,12 @@ async function query(model, filterBy, numOfDesiredResults = 1000, isLessDetails 
 
         return result.map((instance) => instance.dataValues)
     } catch (error) {
-        console.log(error)
         throw new Error('failed to get record', error)
     }
 
 }
 
 async function checkIfChatExist(model, usersIds) {
-    console.log('usersIds', usersIds);
     sqlRawCode = `
   SELECT chat."betweenUsers" , chat."_id"
   FROM "picgramChats" as chat
@@ -281,7 +271,6 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
     try {
         switch (filterBy.type) {
             case 'all':
-                console.log(filterBy.userId);
                 result = await picgramNotifications.findAll({
                     include: picgramUsers,
                     where: {
@@ -307,7 +296,7 @@ async function _noticQuery(numOfDesiredResults, filterBy) {
             default:
                 break;
         }
-        // console.log('result', result);
+        // ('result', result);
         result.forEach((notic, idx) => {
             const data = notic.dataValues
             delete data.picgramUser.dataValues.password
@@ -359,31 +348,29 @@ async function _storyQuery(filterBy) {
     let condition = filterBy[1]
     filterBy = filterBy[0]
     try {
-        switch (condition) {
-            case 'byFollowing' || 'userId':
-                let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
-                Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } })
 
-                result = await picgramStories.findAll({
-                    where: {
-                        [Op.and]: [{
-                            ...whereCondition,
-                            createdAt: {
-                                [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
-                            }
-                        }]
-                    },
+        if (condition === 'byFollowing' || condition === 'userId') {
+            let opertion = Array.isArray(filterBy.userInfo.userId) ? Op.in : Op.eq
+            Object.keys(filterBy).forEach(key => { whereCondition[key] = { userId: { [opertion]: filterBy.userInfo.userId } } })
 
-                })
-                return result
+            result = await picgramStories.findAll({
+                where: {
+                    [Op.and]: [{
+                        ...whereCondition,
+                        createdAt: {
+                            [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
+                        }
+                    }]
+                },
 
-            case 'storyId':
-
-                return queryOne(picgramStories, filterBy)
-            default:
-                break;
+            })
+            return result
         }
-        return ['11', '22']
+        else if (condition === 'storyId') {
+
+            return queryOne(picgramStories, filterBy)
+        }
+
     } catch (error) {
         throw new Error('_storyQuery - failed to get record', error)
 

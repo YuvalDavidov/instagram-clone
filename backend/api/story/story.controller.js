@@ -22,26 +22,21 @@ async function getStoriesByUserId(req, res) {
         const stories = await storyService.query(userId, condition = 'userId')
         res.json(stories)
     } catch (error) {
-        console.log('at storybyids')
-        // logger.error('story controller - cannot get user stories' + error)
-        // res.status(401).send({ error: `Failed to get user stories ${error}` })
+        logger.error('story controller - cannot get user stories' + error)
+        res.status(401).send({ error: `Failed to get user stories ${error}` })
     }
 }
 
 async function getStoryById(req, res) {
     let storyId = req.params._id
-    console.log('sdsdsd');
     const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
-    console.log('getStoryById loggedInUser------->', loggedinUser)
-
     try {
         const story = await storyService.query(storyId, condition = 'storyId')
         if (!story.sawUsers.includes(loggedinUser._id.toString()) && story.userInfo.userId !== loggedinUser._id) await storyService.updateStory(loggedinUser._id.toString(), storyId, res)
         res.json(story)
     } catch (error) {
-        console.log('at getStoryById ')
-        // logger.error('story controller - cannot get story' + error)
-        // res.status(401).send({ error: `Failed to get story ${error}` })
+        logger.error('story controller - cannot get story' + error)
+        res.status(401).send({ error: `Failed to get story ${error}` })
     }
 }
 

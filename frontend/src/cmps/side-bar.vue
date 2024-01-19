@@ -24,11 +24,10 @@
         </RouterLink>
       </div>
       <nav>
-        <RouterLink active-class="active" to="/"
-          ><v-icon scale="1.6" name="fa-home" /><span
-            :class="{ isClosing, isSidebarWindowOpen }"
-            v-if="!isTabletMode"
-            >Home</span
+        <RouterLink @click="()=> {this.isSidebarWindowOpen = false; this.modal = ''; this.isWantToCreate = false}" active-class="active" to="/">
+          <v-icon scale="1.6" name="fa-home" />
+          <span :class="{ isClosing, isSidebarWindowOpen }" v-if="!isTabletMode">
+            Home</span
           ></RouterLink
         >
         <button @click="onToggleSidebarWindow('search')" class="side-bar-btn">

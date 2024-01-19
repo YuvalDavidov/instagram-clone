@@ -16,10 +16,8 @@ function setupSocketAPI(http) {
         })
 
         socket.on('set-chat-topic', async userId => {
-            console.log('userId---', userId);
             if (socket.userId === userId) return
             if (socket.userId) {
-                console.log('sd', userId);
                 socket.leave(socket.userId)
                 logger.info(`Socket is leaving topic ${socket.userId} [id: ${socket.id}]`)
             }
@@ -39,9 +37,6 @@ function setupSocketAPI(http) {
             logger.info(`New chat msg from socket [id: ${socket.id}], emitting to topic ${socket.userId}`)
 
             chatService.addMsgToChat(msg, socket.userId)
-            // console.log("socket.id---->", socket.id)
-            // console.log("socket.userId---->", socket.userId)
-            // console.log("msg---->", msg)
             gIo.to(socket.userId).emit('chat-add-msg', msg)
             // gIo.to()
         })
@@ -49,7 +44,6 @@ function setupSocketAPI(http) {
         socket.on('chat-user-typing', user => {
             logger.info(`User is typing from socket [id: ${socket.id}], emitting to topic ${socket.userId}`)
             socket.broadcast.to(socket.userId).emit('chat-add-typing', user)
-            console.log('user', user);
             // broadcast({ type: 'chat typing', data: user, room: socket.userId, userId: socket.userId })
         })
 

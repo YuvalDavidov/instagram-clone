@@ -6,10 +6,7 @@
   >
     <article v-if="!this.isMobileMode" class="top">
       <div class="img-container">
-        <button
-          @click="onGoToUserStories"
-          :class="{ 'story-btn': userStories }"
-        >
+        <button @click="onGoToUserStories" :class="{ 'story-btn': userStories }" >
           <img :src="`${user.imgUrl}`" />
         </button>
       </div>

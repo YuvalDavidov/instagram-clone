@@ -1,33 +1,26 @@
 <template>
   <section class="notifications-list">
     <article class="today" v-if="sortedNotifics.today.follower.length">
-      <h3>Today</h3>
+      <span>Today</span>
+      <br />
       <div class="notic-follower-prev">
-        <img
-          class="user-img"
-          :src="sortedNotifics.today.follower[0].fromUserInfo.imgUrl"
-        />
+        <img class="user-img" :src="sortedNotifics.today.follower[0].fromUserInfo.imgUrl" />
         <div class="notic-info">
-          <RouterLink
-            :to="`/profile/${sortedNotifics.today.follower[0].fromUserInfo.userId}`"
-          >
+          <RouterLink :to="`/profile/${sortedNotifics.today.follower[0].fromUserInfo.userId}`">
             <span class="username-link">
               {{ sortedNotifics.today.follower[0].fromUserInfo.username }}
             </span>
           </RouterLink>
-          <span
-            @click="toggleListModal()"
-            class="and-others"
-            v-if="sortedNotifics.today.follower.length >= 2"
-          >
-            and others</span
-          >
+          <!-- &nbsp;
+          <span @click="toggleListModal()" class="and-others" v-if="sortedNotifics.today.follower.length >= 2">
+            and others
+            </span> -->
 
-          <span>
+          <span style="font-weight: normal;">
             started {{ "\n" }} following you.
             {{
               this.noticTimeToShow(sortedNotifics.today.follower[0].createdAt)
-            }}
+            }} ago 
           </span>
         </div>
         <button
@@ -52,7 +45,6 @@
           }}
         </button>
       </div>
-      <!-- <div></div> -->
     </article>
   </section>
 </template>

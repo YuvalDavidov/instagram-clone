@@ -17,9 +17,8 @@ async function query(entity, condition) {
         else return [...new Set(stories.map(story => { return condition === 'userId' ? story._id : story.userInfo.userId }))]
 
     } catch (error) {
-        console.log(error)
-        // logger.error('story.service - cannot get story', error)
-        throw new Error('')
+        logger.error('story.service - cannot get story', error)
+        throw new Error(error)
     }
 }
 

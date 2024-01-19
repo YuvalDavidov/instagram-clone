@@ -7,7 +7,6 @@ async function getUserChatsIds(req, res) {
     const loggedinUser = await tokenService.validateToken(req.cookies.loginToken)
     try {
         const chatIds = await chatService.queryChatIds(loggedinUser._id)
-        console.log('chat Ids ---->', chatIds)
         res.json(chatIds)
     } catch (err) {
         logger.error('Failed to get chatIds' + err)
@@ -21,7 +20,6 @@ async function createNewChat(req, res) {
     let topic
     try {
         const isChatExist = await chatService.checkIfChatExist(betweenUsers)
-        console.log(isChatExist);
         if (!isChatExist) {
             topic = await chatService.createNewChat(betweenUsers)
         } else topic = isChatExist

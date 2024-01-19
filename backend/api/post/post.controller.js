@@ -41,7 +41,6 @@ async function removePost(req, res) {
         const deletedRows = await postService.removePost(req.params.postId, loggedinUser._id)
         if (deletedRows) res.status(200).send(true)
     } catch (err) {
-        console.log(err)
         logger.error('post controller - cannot remove post' + err)
         res.status(401).send({ err: `Failed to remove post ${err}` })
     }
