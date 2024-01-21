@@ -2,7 +2,7 @@
   <section>
     <PostListHome :posts="posts" />
     <div v-if="isLoadingPosts" class="loader-container-post-index">
-      <Loader v-if="isLoadingPosts || !posts.length" style="position: static; margin-left: auto;
+      <Loader v-if="isLoadingPosts" style="position: static; margin-left: auto;
       margin-right: auto;" />
     </div>
   </section>
@@ -18,12 +18,13 @@ export default {
     return {
       // scrollPositionY = null,
       currNumOfPostsToQuerry: 4,
-      isLoadingPosts: false,
+      isLoadingPosts: true,
     };
   },
   async created() {
     window.addEventListener("scroll", this.onWindowScroll);
     await this.$store.dispatch({ type: "loadPosts", userId: this.$store.getters.GetUser._id, numOfPostsToQuerry: this.currNumOfPostsToQuerry})
+    setTimeout(()=> {this.isLoadingPosts = false}, 500)
   },
   computed: {
     posts() {
