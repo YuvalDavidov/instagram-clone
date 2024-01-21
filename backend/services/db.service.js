@@ -357,9 +357,9 @@ async function _storyQuery(filterBy) {
                 where: {
                     [Op.and]: [{
                         ...whereCondition,
-                        createdAt: {
-                            [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
-                        }
+                        // createdAt: {
+                        //     [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000) // Subtracting 24 hours from the current time
+                        // }
                     }]
                 },
 

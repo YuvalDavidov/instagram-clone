@@ -7,12 +7,7 @@
         class="post-img"
       />
 
-      <PostModal
-        v-if="isModalOpen && postIndex === index"
-        :post="post"
-        :isAtHomePage="false"
-        :postsLength="posts.length"
-        :postIndex="index"
+      <PostModal v-if="isModalOpen && postIndex === index" :post="post" :isAtHomePage="false" :postsLength="posts.length" :postIndex="index" 
         :isOwnProfile="isOwnProfile"
         @onChangePostIndex="onChangePostIndex"
         @onCloseModal="onCloseModal"

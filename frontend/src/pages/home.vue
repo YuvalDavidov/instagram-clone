@@ -65,7 +65,7 @@
             <span class="OR">OR</span>
             <div class="line"></div>
           </div>
-          <button @click="onLogin({username: 'dummy1', password: 'A1B2C3D4'})" v-if="!isSignUp" class="login-btn">
+          <button @click="onLogin({username: 'razi1', password: 'A1B2C3D4E5D6'})" v-if="!isSignUp" class="login-btn">
             Try with dummy user!
           </button>
         </div>
@@ -97,7 +97,7 @@ export default {
   },
   data() {
     return {
-      loginCredentials: { username: "", password: "" },
+      loginCredentials: { username: "", password: "A1B2C3D4E5F6" },
       isSignUp: false,
       newUser: userService.getEmptyUser(),
       error: '',

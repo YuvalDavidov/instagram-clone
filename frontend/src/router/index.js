@@ -7,7 +7,7 @@ import Messages from '../pages/messages.vue'
 import Notifications from '../pages/notifications.vue'
 import StorySlider from '../cmps/story-slider.vue'
 import EditProfile from '../pages/edit-profile.vue'
-import Post from '../pages/post.vue'
+// import Post from '../pages/post.vue'
 
 const routerOptions = {
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -48,10 +48,10 @@ const routerOptions = {
             path: '/account/edit',
             component: EditProfile
         },
-        {
-            path: '/post/:postId',
-            component: Post
-        },
+        // {
+        //     path: '/post/:postId',
+        //     component: Post
+        // },
 
 
     ],

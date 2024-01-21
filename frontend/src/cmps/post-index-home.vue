@@ -15,7 +15,7 @@ export default {
   components: { PostListHome, Loader, Fragment },
   data() {
     return {
-      maxPageScroll: null,
+      // scrollPositionY = null,
       currNumOfPostsToQuerry: 4,
       isLoadingPosts: false,
     };
@@ -37,7 +37,7 @@ export default {
       let maxScroll = document.body.scrollHeight - window.innerHeight;
       let scrollPosition = window.scrollY;
       const targetHeight = maxScroll * 0.7; // 70% of window height
-
+      // this.scrollPositionY = window.scrollY
       if (scrollPosition >= targetHeight) {
         this.isLoadingPosts = true;
         this.currNumOfPostsToQuerry += 4;

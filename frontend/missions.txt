@@ -1,13 +1,23 @@
 Todo list: 
     1. Fix the pic of user above the post at post index - Done!
-    2. Make the front page and user page pixel perfect 
+    2. Make the front page and user page pixel perfect  - Done
     3. Fix the warning I get when entring the settings - Now!, fuck it I cant find a solution And a lot of other fucks in emit functions across the app
     4. Add - when changing the userphotos at all the posts - Done! 
     5. Fix the notifications to work + make it pixel perfect - Done!
     6. Fix the loading at the post index, use calc() 
     7. Make dummies users
     8. Make env variables 
-    9. Fix the story. - Now
-    10. notifications and story on mobile - 
+    9. Fix the story. - Done!
+    10. notifications and story on mobile - story done, notifications not yet 
+    11. Fix the time on post preview - Done
+    12. Make the post modal appear in the middle of the screen 
+    13. At the comments, there is a problem
     *posts length  - Done!
     That's it! Everything above that is plus
+
+
+
+    Dummy users :
+    razi1 - A1B2C3D4E5F6
+    dorn1
+    Shak1

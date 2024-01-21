@@ -144,7 +144,7 @@ function getTime(postTimeStamp) {
     let postTime = new Date(postTimeStamp).getTime();
     let diff = (now - postTime) / 1000;
     diff /= 60 * 60;
-    let hoursDiff = Math.abs(Math.round(diff));
+    let hoursDiff = Math.abs(Math.round(diff))
     if (hoursDiff >= 24 && hoursDiff <= 168)
         return Math.round(hoursDiff / 24) + " DAYS AGO";
     else if (hoursDiff >= 168) {

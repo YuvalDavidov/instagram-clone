@@ -1,21 +1,8 @@
 <template>
   <section class="posts-container">
-    <section 
-      class="post-preview-home"
-      v-for="(post, index) in posts"
-      :key="post._id"
-    >
-      <PostPreviewHome
-        :post="post"
-        @onOpenPostModal="onOpenPostModal(index)"
-      />
-      <PostModal
-        v-if="isModalOpen && postIndex === index"
-        :post="post"
-        :user="this.$store.getters.GetUser"
-        :isAtHomePage="true"
-        @onCloseModal="onCloseModal"
-      />
+    <section class="post-preview-home" v-for="(post, index) in posts" :key="post._id">
+      <PostPreviewHome :post="post" @onOpenPostModal="onOpenPostModal(index)" />
+      <PostModal v-if="isModalOpen && postIndex === index" :post="post" :user="this.$store.getters.GetUser" :isAtHomePage="true" @onCloseModal="onCloseModal" />
     </section>
   </section>
 </template>

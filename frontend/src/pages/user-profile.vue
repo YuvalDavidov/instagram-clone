@@ -109,7 +109,7 @@ export default {
     window.removeEventListener("scroll", this.onWindowScroll);
   },
   async created() {
-    if (this.$route.params._id === this.$store.getters.GetUser._id) this.$store.dispatch({type: 'updateUser', user: userService.getLoggedinUser()})
+    // if (this.$route.params._id === this.$store.getters.GetUser._id) this.$store.dispatch({type: 'updateUser', user: userService.getLoggedinUser()})
     this.$store.dispatch({type: 'toggleLoader'})
     window.addEventListener("scroll", this.onWindowScroll);
     this.maxPageScroll = document.body.scrollHeight - window.innerHeight;
@@ -187,8 +187,9 @@ export default {
       immediate: true,
       async handler(params) {
         // Fetch data for the new route
-        if (this.$route.params._id === (await this.$store.getters.GetUser._id)) this.user = this.$store.getters.GetUser;
-        else this.user = await userService.getUserById(params._id)
+        // if (this.$route.params._id === (await this.$store.getters.GetUser._id)) this.user = this.$store.getters.GetUser;
+        // else 
+        this.user = await userService.getUserById(params._id)
         await this.$store.dispatch({type: "loadUserPosts", userId: this.$route.params._id, numOfPostsToQuerry: this.currNumOfPostsToQuerry})
         await this.$store.dispatch({ type: "loadUserStories", userId: this.$route.params._id})
         this.isFollowing = await followService.checkIfFollowing(this.$route.params._id)

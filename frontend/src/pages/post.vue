@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <section class="post-page">
     <PostModal v-if="post" :post="post" :isAtPostPage="true" />
 
@@ -94,4 +94,4 @@ export default {
 </script>
 
 <style>
-</style>
+</style> -->

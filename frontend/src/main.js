@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { VueQueryPlugin } from "vue-query"
 import './assets/main.scss'
+
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import {
     BiSearch,
@@ -37,8 +38,7 @@ import {
     MdKeyboardarrowupRound,
     MdCheckcircleoutlineRound,
     IoPerson
-} from "oh-vue-icons/icons";
-
+} from "oh-vue-icons/icons"
 addIcons(
     BiSearch,
     FaHome,

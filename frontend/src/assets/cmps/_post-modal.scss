@@ -43,7 +43,7 @@
         border-radius: 5px;
         display: flex;
         position: absolute;
-        top: calc(20% - 3vw);
+        // top: calc(20% - 3vw);
         left: 50%;
         transform: translateX(-50%);
         z-index: 8;
@@ -327,7 +327,7 @@
     .post-modal {
 
         .post {
-            top: calc(20% - 7vw);
+            // top: calc(20% - 7vw);
             max-height: calc(100vw - 70%);
             max-width: 1070px;
         }

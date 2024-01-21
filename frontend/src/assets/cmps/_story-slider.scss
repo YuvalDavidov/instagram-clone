@@ -1,6 +1,6 @@
-$max-height: 70vw;
-$med-height: 90vw;
-$min-height: 110vw;
+$max-height: 54vw;
+$med-height: 62vw;
+$min-height: 120vw;
 
 .story-slider {
     height: 100vh;
@@ -21,7 +21,7 @@ $min-height: 110vw;
         min-height: 650px;
         max-height: 837px;
         max-width: calc((837px / 100) *56.24);
-        // width: calc(($max-height / 100) *56.24);
+        width: calc(($max-height / 100) *56.24);
         border-radius: 10px;
         z-index: 4;
 
@@ -175,8 +175,9 @@ $min-height: 110vw;
 
 @media (max-width:1350px) {
     .story-slider {
-        &-contaienr {
+        &-container {
             height: $med-height;
+            // min-width: 380px;
             width: calc(($med-height / 100) *56.24);
 
             .img-container {
@@ -193,7 +194,7 @@ $min-height: 110vw;
 
 @media (max-width:870px) {
     .story-slider {
-        &-contaienr {
+        &-container {
             height: $min-height;
             width: calc(($min-height / 100) *56.24);
 

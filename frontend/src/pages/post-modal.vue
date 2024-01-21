@@ -14,7 +14,7 @@
         <v-icon name="md-keyboardarrowright-round" scale="2" />
       </button>
     </section>
-    <section class="post">
+    <section class="post" :style="modalPositionScrollY">
       <section class="post-images">
         <ImgSlider :imgsUrl="post.imgsUrl" />
       </section>
@@ -152,6 +152,7 @@ export default {
       isSettingsOpen: false,
       isCreateOpen: false,
       isPost: true,
+      modalPositionScrollY: null
     };
   },
   props: {
@@ -179,6 +180,10 @@ export default {
       type: Boolean,
       required: false,
     },
+  },
+  created() {
+    this.modalPositionScrollY = `top: ${window.scrollY + 100}px;`
+    console.log('===========>',window.scrollY)
   },
   methods: {
     closePost() {
