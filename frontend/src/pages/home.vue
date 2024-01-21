@@ -97,7 +97,7 @@ export default {
   },
   data() {
     return {
-      loginCredentials: { username: "", password: "A1B2C3D4E5F6" },
+      loginCredentials: { username: "", password: "" },
       isSignUp: false,
       newUser: userService.getEmptyUser(),
       error: '',

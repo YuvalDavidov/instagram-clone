@@ -5,16 +5,19 @@ Todo list:
     4. Add - when changing the userphotos at all the posts - Done! 
     5. Fix the notifications to work + make it pixel perfect - Done!
     6. Fix the loading at the post index, use calc() - Done!
-    7. Make dummies users
-    8. Make env variables 
+    7. Make dummies users - Done!
     9. Fix the story. - Done!
     10. notifications and story on mobile - story done, notifications not yet 
     11. Fix the time on post preview - Done
     12. Make the post modal appear in the middle of the screen - Done!
     13. At the comments, there is a problem - Done!
     *posts length  - Done!
+    8. Make env variables - Today
     14. update menually stories user img - run a script to to that
-    That's it! Everything above that is plus
+    15. Build a unique route for dummy user login instead of putting the password and username in the vue component and also an env variable for this password and username in the backend
+    16. Fixed the problem that occures when you upload a post in the user profile - there is a problem there
+    17. That's it for good! 
+       That's it! Everything above that is plus
 
 
 
