@@ -127,12 +127,17 @@
                         span {
                             font-size: 14px;
                         }
+
+                        .post-username {
+                            font-weight: bold;
+                            padding-right: 5px;
+                        }
                     }
                 }
 
                 .post-comment {
                     position: relative;
-                    margin-top: 5px;
+                    margin-top: 15px;
                     min-height: 50px;
                     display: flex;
                     justify-content: space-between;
@@ -152,7 +157,7 @@
 
                     .comment-like-n-comments {
                         position: absolute;
-                        bottom: 0;
+                        bottom: -9px;
                         left: 40px;
                         display: flex;
                         gap: 5px;
@@ -170,7 +175,7 @@
                         .comment-txt {
                             max-height: 32px;
                             font-size: 14px;
-                            overflow: hidden;
+                            // overflow: hidden;
                             text-overflow: ellipsis;
                             display: -webkit-box;
                             -webkit-line-clamp: 2;

@@ -2,7 +2,8 @@
   <section>
     <PostListHome :posts="posts" />
     <div v-if="isLoadingPosts" class="loader-container-post-index">
-      <Loader v-if="isLoadingPosts" />
+      <Loader v-if="isLoadingPosts" style="position: static; margin-left: auto;
+      margin-right: auto;" />
     </div>
   </section>
 </template>

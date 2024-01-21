@@ -40,7 +40,7 @@
           <li class="post-summery" v-if="haveSummery">
             <img :src="post.userImg" class="summery-img" />
             <section class="summery-info">
-              <h5>{{ post.username }}</h5>
+              <span class="post-username">{{ post.username }}</span>
               <span>{{ post.summery }}</span>
             </section>
           </li>
