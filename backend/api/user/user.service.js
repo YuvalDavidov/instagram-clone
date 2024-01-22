@@ -1,8 +1,9 @@
 
 const utilService = require('../../services/util.service')
 const dbService = require('../../services/db.service')
+const storyService = require('../story/story.service')
 const logger = require('../../services/logger.service')
-const { picgramUsers, picgramPosts } = require('../../services/models/models')
+const { picgramUsers, picgramPosts, picgramStories } = require('../../services/models/models')
 const tokenService = require('../../services/token.service')
 
 
@@ -156,7 +157,6 @@ async function validatePassword(userId, password) {
 }
 
 async function encrypt(password) {
-
     try {
         const hash = await bcrypt.hash(password, saltRounds)
         return hash
@@ -166,3 +166,22 @@ async function encrypt(password) {
 }
 
 
+// async function specialUpdateScript(userId) {
+//     let user = await dbService.queryOne(picgramUsers, { _id: userId })
+//     let stories = await storyService.query(userId, condition = 'userId')
+//     console.log('=====>', stories, 'img:', user.imgUrl)
+//     for (let i = 0; i < stories.length; i++) {
+//         let story = await storyService.query(stories[i], condition = 'storyId')
+//         await dbService.updateRecord(picgramStories, { userInfo: { userId, username: user.username, userImgUrl: user.imgUrl } }, story._id)
+
+//     }
+
+//     // for (let index = 0; index < user.numOfPosts; index++) {
+//     //     await dbService.updateRecord(picgramPosts, { username: user.username }, user._id, 'userId')
+//     // }
+//     // user = { ...user, username: 'roni1', fullname: 'Roni Sherman' }
+//     // await dbService.updateRecord(picgramUsers, user, user._id)
+
+// }
+
+// specialUpdateScript('2879169354')

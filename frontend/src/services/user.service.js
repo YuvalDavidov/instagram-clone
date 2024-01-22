@@ -92,16 +92,18 @@ function updateSessionStorage(user, profile) {
 async function login(userCred) {
     try {
         let vipProfile
-        const user = await httpService.post(AUTH_URL + 'login', userCred)
+        let user
+        if (!userCred) user = await httpService.post(AUTH_URL + 'login/dummy',)
+        else user = await httpService.post(AUTH_URL + 'login', userCred)
         socketService.login(user._id)
         if (user.vipProfiles.length) {
             user.vipProfiles.forEach(async (profileId) => {
                 vipProfile = await httpService.get(USER_URL + profileId)
                 saveVipProfile(vipProfile)
             })
-        }
-        return saveLocalUser(user)
 
+            return saveLocalUser(user)
+        }
     } catch (err) {
         throw new Error('coudnlt preform query', err)
     }

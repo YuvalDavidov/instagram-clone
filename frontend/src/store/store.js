@@ -60,6 +60,16 @@ export const myStore = createStore({
                 return false
             }
         },
+        async loginDummy({ commit }) {
+            try {
+                const user = await userService.login()
+                commit({ type: 'setUser', user })
+                return false
+            } catch (err) {
+                console.error(err, 'couldnt login')
+                return false
+            }
+        },
         async signUp({ commit }, { user }) {
             try {
                 user = await userService.signup(user)

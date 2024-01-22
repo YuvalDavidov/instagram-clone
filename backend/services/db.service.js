@@ -1,10 +1,11 @@
+require('dotenv').config()
 const { Sequelize, DataTypes } = require('sequelize');
 const { Op } = require('sequelize');
 const { picgramUsers, picgramPosts, picgramStories, picgramChats, picgramNotifications } = require('./models/models');
 
 
-const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
-    host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
+const sequelize = new Sequelize('postgres', 'postgres', process.env.POSTGRE_SQL_DB_PASSWORD, {
+    host: process.env.DB_AWS_INSTANCE,
     dialect: 'postgres',
     port: 5432, // default port for PostgreSQL
     logging: false, // disable logging
@@ -16,7 +17,7 @@ sequelize
         console.log('Database connection established successfully.');
     })
     .catch((err) => {
-        console.error('db.service - Unable to connect to the database:', err);
+        // console.error('db.service - Unable to connect to the database:', err);
     });
 
 
@@ -56,7 +57,10 @@ async function removeRecord(model, itemId) {
 
 async function updateRecord(model, data, itemId, idName = '_id') {
     try {
-        await model.update(data, { where: { [idName]: itemId } })
+        if (idName === 'userInfo') {
+            await model.update(data, { where: { userInfo: { userId: itemId } } })
+        }
+        else await model.update(data, { where: { [idName]: itemId } })
         await model.sync()
         return await model.findOne({ where: { [idName]: itemId } })
     } catch (error) {

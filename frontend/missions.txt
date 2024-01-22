@@ -13,10 +13,12 @@ Todo list:
     13. At the comments, there is a problem - Done!
     *posts length  - Done!
     8. Make env variables - Today
-    14. update menually stories user img - run a script to to that
-    15. Build a unique route for dummy user login instead of putting the password and username in the vue component and also an env variable for this password and username in the backend
-    16. Fixed the problem that occures when you upload a post in the user profile - there is a problem there
-    17. That's it for good! 
+    14. update menually stories user img - run a script to to that - Done!
+    15. Build a unique route for dummy user login instead of putting the password 
+         and username in the vue component and also an env variable for this password and username in the backend - Done!
+    16. Fix the problem that occures when you upload a post in the user profile - there is a problem  - Today!
+    17. Fix the story when pressing next (the loading bar returns to the start) - Today! 
+    18. That's it for good! 
        That's it! Everything above that is plus
 
 

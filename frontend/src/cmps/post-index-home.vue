@@ -18,13 +18,14 @@ export default {
     return {
       // scrollPositionY = null,
       currNumOfPostsToQuerry: 4,
-      isLoadingPosts: true,
+      isLoadingPosts: false,
     };
   },
   async created() {
+    this.$store.dispatch({type: 'toggleLoader'})
     window.addEventListener("scroll", this.onWindowScroll);
     await this.$store.dispatch({ type: "loadPosts", userId: this.$store.getters.GetUser._id, numOfPostsToQuerry: this.currNumOfPostsToQuerry})
-    setTimeout(()=> {this.isLoadingPosts = false}, 500)
+    setTimeout(()=> {this.$store.dispatch({type: 'toggleLoader'})}, 500)
   },
   computed: {
     posts() {
@@ -63,7 +64,7 @@ export default {
   "$store.getters.followingPosts": {
     deep: true,
     async handler(newValue) {
-      this.isLoadingPosts = false
+      this.isLoadingPosts = true
     },
   },
 },

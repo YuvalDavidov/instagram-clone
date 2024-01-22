@@ -65,7 +65,7 @@
             <span class="OR">OR</span>
             <div class="line"></div>
           </div>
-          <button @click="onLogin({username: 'razi1', password: 'A1B2C3D4E5D6'})" v-if="!isSignUp" class="login-btn">
+          <button @click="onLoginDummy()" v-if="!isSignUp" class="login-btn">
             Try with dummy user!
           </button>
         </div>
@@ -127,7 +127,7 @@ export default {
     window.removeEventListener("resize", this.windowSizeHandeler);
   },
   methods: {
-    async onLogin(credentials = null) {
+    async onLogin() {
       if (this.isDisabled) {
         if (credentials) '' // do nothing 
         else {
@@ -137,10 +137,15 @@ export default {
          
       }  
       await this.$store.dispatch({type: 'toggleLoader'})
-      const loginRes = await this.$store.dispatch({
-        type: "login",
-        credentials: !credentials ? this.loginCredentials : credentials,
-      })
+      const loginRes = await this.$store.dispatch({ type: "login", credentials: !credentials ? this.loginCredentials : credentials})
+      if (!loginRes) this.error = `Wrong username or password. Try again.`
+      else this.error = false 
+      if (this.error) setTimeout(()=> this.error = false ,2500)
+      await this.$store.dispatch({type: 'toggleLoader'})
+    },
+    async onLoginDummy() {
+      await this.$store.dispatch({type: 'toggleLoader'})
+      const loginRes = await this.$store.dispatch({ type: "loginDummy"})
       if (!loginRes) this.error = `Wrong username or password. Try again.`
       else this.error = false 
       if (this.error) setTimeout(()=> this.error = false ,2500)

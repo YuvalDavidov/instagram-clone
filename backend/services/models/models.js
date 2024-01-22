@@ -1,7 +1,8 @@
+require('dotenv').config()
 const { Sequelize, DataTypes, Op } = require('sequelize');
 
-const sequelize = new Sequelize('postgres', 'postgres', 'hippitipi2022', {
-    host: 'databaseig.caryhww4odza.eu-north-1.rds.amazonaws.com',
+const sequelize = new Sequelize('postgres', 'postgres', process.env.POSTGRE_SQL_DB_PASSWORD, {
+    host: process.env.DB_AWS_INSTANCE,
     dialect: 'postgres',
     port: 5432, // default port for PostgreSQL
     logging: false, // disable logging
@@ -230,7 +231,7 @@ sequelize
 
     })
     .catch((err) => {
-        console.error('Error creating user table:', err);
+        // console.error('Error creating user table:', err);
     });
 
 module.exports = { picgramUsers, picgramPosts, picgramStories, picgramChats, picgramNotifications }

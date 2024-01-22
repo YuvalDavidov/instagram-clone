@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
@@ -9,7 +11,6 @@ const http = require('http').createServer(app)
 // Express App Config
 app.use(cookieParser())
 app.use(express.json())
-
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.resolve(__dirname, 'public')))
