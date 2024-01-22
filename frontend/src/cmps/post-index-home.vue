@@ -64,7 +64,7 @@ export default {
   "$store.getters.followingPosts": {
     deep: true,
     async handler(newValue) {
-      this.isLoadingPosts = true
+      this.isLoadingPosts = false
     },
   },
 },
