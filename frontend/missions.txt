@@ -20,10 +20,3 @@ Todo list:
     17. Fix the story when pressing next (the loading bar returns to the start) - Today! 
     18. That's it for good! 
        That's it! Everything above that is plus
-
-
-
-    Dummy users :
-    razi1 - A1B2C3D4E5F6
-    dorn1
-    Shak1
