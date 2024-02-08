@@ -20,3 +20,4 @@ Todo list:
     17. Fix the story when pressing next (the loading bar returns to the start) - Today! 
     18. That's it for good! 
        That's it! Everything above that is plus
+Wow! 
