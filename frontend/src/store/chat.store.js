@@ -18,7 +18,8 @@ export const chatStore = {
     actions: {
         async loadChatIds({ commit }) {
             try {
-                const chatsIds = await chatService.query()
+                const chatsIds = (await chatService.query())[0]
+                console.log('chats', chatsIds)
                 commit({ type: 'setChatIds', chatsIds })
             } catch (error) {
                 throw new Error('coudl\'nt get chatIds', error)
