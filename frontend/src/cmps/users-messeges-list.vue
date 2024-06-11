@@ -1,13 +1,13 @@
 <template>
   <section class="users-messeges-list">
     <li
-      v-for="messegesId in messegesIds"
+      v-for="messegesId in messagesIds"
       :key="messegesId"
       class="msg-list"
       :class="isActive(messegesId._id) ? 'active' : ''"
     >
       <div class="user-msg-container" @click="moveToChat(messegesId._id)">
-        <img :src="messegesId.imgUrl" />
+        <img :src="messegesId.imgUrl" style="height: 60px; width: 60px; object-fit: cover;" />
         <div class="msg-info">
           <span>{{ messegesId.username }}</span>
           <!-- <span>{{ messegesId.fullname }}</span> -->
@@ -20,10 +20,13 @@
 <script>
 export default {
   props: {
-    messegesIds: {
+    messagesIds: {
       type: Array,
       required: false,
     },
+  },
+  created() {
+    console.log('checking the msgs:',  this.messagesIds)
   },
   methods: {
     moveToChat(chatId) {
