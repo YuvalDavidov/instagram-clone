@@ -9,7 +9,7 @@
           </button>
         </div>
 
-        <UsersMessegesList :messegesIds="getChatsIds" @replace="replaceTopic" />
+        <UsersMessegesList :messagesIds="getChatsIds" @replace="replaceTopic" />
       </article>
 
       <article class="messages-chat">
@@ -180,7 +180,17 @@ export default {
       else return false;
     },
     getChatsIds() {
-      return this.$store.getters.getChatsIds;
+      return this.$store.getters.getChatsIds
+    },
+  },
+  watch: {
+    "$route.params": { // Handle changes in case params is changing but the component doesnt rerender (in case of transfer from one profile to another)
+      immediate: true,
+      async handler(params) {
+        await this.$store.dispatch({
+        type: "loadChatIds",
+      });
+      },
     },
   },
 };
