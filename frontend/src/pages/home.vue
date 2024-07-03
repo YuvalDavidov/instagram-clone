@@ -129,15 +129,16 @@ export default {
   methods: {
     async onLogin() {
       if (this.isDisabled) {
-        if (credentials) '' // do nothing 
+        if (this.loginCredentials) '' // do nothing 
         else {
           this.error = `Username or password doesnt meet the right requirments, Try again plaese`
         setTimeout(()=> this.error = false ,2500)
-        return} 
-         
+        return
+        } 
       }  
       await this.$store.dispatch({type: 'toggleLoader'})
-      const loginRes = await this.$store.dispatch({ type: "login", credentials: !credentials ? this.loginCredentials : credentials})
+      const loginRes = await this.$store.dispatch({ type: "login", credentials: this.loginCredentials})
+      console.log('s:', loginRes)
       if (!loginRes) this.error = `Wrong username or password. Try again.`
       else this.error = false 
       if (this.error) setTimeout(()=> this.error = false ,2500)

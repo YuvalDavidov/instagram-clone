@@ -4,11 +4,17 @@ const { Op } = require('sequelize');
 const { picgramUsers, picgramPosts, picgramStories, picgramChats, picgramNotifications } = require('./models/models');
 
 
-const sequelize = new Sequelize('postgres', 'postgres', process.env.POSTGRE_SQL_DB_PASSWORD, {
-    host: process.env.DB_AWS_INSTANCE,
+const sequelize = new Sequelize('picgram_db', 'shaked', process.env.POSTGRE_SQL_DB_PASSWORD, {
+    host: process.env.DB_RENDER_INSTANCE,
     dialect: 'postgres',
     port: 5432, // default port for PostgreSQL
     logging: false, // disable logging
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: true, // You might want to make this true if you have the proper SSL certificates
+        },
+    },
 });
 
 sequelize

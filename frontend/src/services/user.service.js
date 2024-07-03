@@ -101,9 +101,8 @@ async function login(userCred) {
                 vipProfile = await httpService.get(USER_URL + profileId)
                 saveVipProfile(vipProfile)
             })
-
-            return saveLocalUser(user)
         }
+        return saveLocalUser(user)
     } catch (err) {
         throw new Error('coudnlt preform query', err)
     }
