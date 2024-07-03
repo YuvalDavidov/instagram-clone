@@ -112,10 +112,10 @@
           ></RouterLink
         >
       </nav>
-      <!-- <button @click="onToggleSettings()" class="settings-btn" v-bind:class="((modal==='settings') ? 'settings' : '')">
+      <button @click="onToggleSettings()" class="settings-btn" v-bind:class="((modal==='settings') ? 'settings' : '')">
         <v-icon scale="1.6" name="co-hamburger-menu" />
         <span :class="{ isClosing, isSidebarWindowOpen }" v-if="!isTabletMode">More</span>
-      </button> -->
+      </button>
     </section>
 
     <section class="mobile-bar" v-if="isMobileMode">
@@ -189,7 +189,7 @@
     </article>
 
     <article v-if="(modal === 'settings')" class="settings-modal">
-      <section class="general-settings">
+      <!-- <section class="general-settings">
         <a href=""
           ><span>Settings</span>
           <v-icon scale="1.2" name="ri-settings-5-line" />
@@ -207,9 +207,9 @@
         <a href=""
           ><span>Report a problem</span><v-icon scale="1.2" name="oi-report"
         /></a>
-      </section>
+      </section> -->
       <section class="account-settings">
-        <a href=""><span>Switch account</span></a>
+        <!-- <a href=""><span>Switch account</span></a> -->
         <a href="/" @click="onLogout()"><span>Log out</span></a>
       </section>
     </article>
