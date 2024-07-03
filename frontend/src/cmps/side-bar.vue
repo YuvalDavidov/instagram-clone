@@ -47,7 +47,7 @@
         >
         <!-- TODO -->
 
-        <button class="notifications-btn side-bar-btn" @click="onToggleSidebarWindow('notic')">
+        <!-- <button class="notifications-btn side-bar-btn" @click="onToggleSidebarWindow('notic')">
           <div class="btn-container">
             <div
               class="dot-notic"
@@ -74,7 +74,7 @@
             "
             :notifications="notifications"
           />
-        </button>
+        </button> -->
 
         <button v-if="!isWantToCreate" @click="wantToCreate()" class="side-bar-btn">
           <v-icon scale="1.6" name="bi-plus-square" />
@@ -112,10 +112,10 @@
           ></RouterLink
         >
       </nav>
-      <button @click="onToggleSettings()" class="settings-btn" v-bind:class="((modal==='settings') ? 'settings' : '')">
+      <!-- <button @click="onToggleSettings()" class="settings-btn" v-bind:class="((modal==='settings') ? 'settings' : '')">
         <v-icon scale="1.6" name="co-hamburger-menu" />
         <span :class="{ isClosing, isSidebarWindowOpen }" v-if="!isTabletMode">More</span>
-      </button>
+      </button> -->
     </section>
 
     <section class="mobile-bar" v-if="isMobileMode">

@@ -44,18 +44,18 @@
       </div>
       <section class="bottom">
         
-        <ImgSlider v-if="isPost" :imgsUrl="postToEdit.imgsUrl" style="{visibility: !$store.getters.IsLoading ? 'visible' : 'hidden'}" />
+        <ImgSlider v-if="isPost" :imgsUrl="postToEdit.imgsUrl" />
         <img
           class="story-img-create"
           v-if="!isPost && !$store.getters.IsLoading"
           :src="postToEdit.imgsUrl"
         />
-        <div style="{visibility: !$store.getters.IsLoading ? 'visible' : 'hidden'}" class="post-details">
+        <div v-if="isPost" :hidden="this.$store.getters.IsLoading" class="post-details">
           <section class="user">
             <span><img :src="user.imgUrl" /></span>
             <span class="user-name"> {{ user.username }} </span>
           </section>
-          <textarea
+          <textarea 
             v-model="postToEdit.summery"
             class="textarea-summery"
             name="post-summery"
